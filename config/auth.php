@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -93,9 +97,9 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
-            'expire' => 60,
-            'throttle' => 60,
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_resets'),
+            'expire' => env('AUTH_PASSWORD_EXPIRE', 60),
+            'throttle' => env('AUTH_PASSWORD_THROTTLE', 60),
         ],
     ],
 

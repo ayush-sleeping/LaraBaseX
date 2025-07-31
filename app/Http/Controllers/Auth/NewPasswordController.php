@@ -17,9 +17,7 @@ use Inertia\Response;
 
 class NewPasswordController extends Controller
 {
-    /**
-     * Show the password reset page.
-     */
+    /* Show the password reset page. */
     public function create(Request $request): Response
     {
         return Inertia::render('auth/reset-password', [
@@ -28,9 +26,8 @@ class NewPasswordController extends Controller
         ]);
     }
 
-    /**
+    /*
      * Handle an incoming new password request.
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
