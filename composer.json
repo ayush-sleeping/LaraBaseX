@@ -14,6 +14,7 @@
         "laravel/framework": "^12.0",
         "laravel/passport": "^13.0",
         "laravel/tinker": "^2.10.1",
+        "mobiledetect/mobiledetectlib": "^4.8",
         "spatie/laravel-permission": "^6.21",
         "tightenco/ziggy": "^2.4",
         "vinkla/hashids": "^13.0"
@@ -33,7 +34,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
