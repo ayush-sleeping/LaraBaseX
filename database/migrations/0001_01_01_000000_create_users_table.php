@@ -6,11 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    /* Run the migrations. */
+    // -----------------------------------------------------------------------------------
     public function up(): void
     {
+        // Create the users table with necessary fields
+        // -----------------------------------------------------------------------------------
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->text("parent_id")->nullable();
@@ -26,7 +27,6 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });
@@ -47,9 +47,8 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    /* Reverse the migrations. */
+    // -----------------------------------------------------------------------------------
     public function down(): void
     {
         Schema::dropIfExists('users');
