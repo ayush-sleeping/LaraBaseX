@@ -52,7 +52,20 @@ return [
     |
     */
 
+
     'url' => env('APP_URL', 'http://localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Asset URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used by the asset helper for generating asset URLs. You can
+    | set this to a CDN or custom domain if needed.
+    |
+    */
+
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
