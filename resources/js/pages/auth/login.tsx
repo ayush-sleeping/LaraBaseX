@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { GalleryVerticalEnd, LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
@@ -38,8 +38,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <>
             <Head title="Log in" />
-            <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
-                <div className="w-full max-w-sm md:max-w-3xl">
+            <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+                <div className="flex w-full max-w-sm flex-col gap-6 md:max-w-3xl">
+                    <a href="#" className="flex items-center gap-2 self-center font-medium">
+                        <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                            <GalleryVerticalEnd className="size-4" />
+                        </div>
+                        LaraBaseX
+                    </a>
                     <div className="flex flex-col gap-6">
                         <Card className="overflow-hidden p-0">
                             <CardContent className="grid p-0 md:grid-cols-2">
