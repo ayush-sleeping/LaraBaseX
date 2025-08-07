@@ -16,16 +16,16 @@ const allNavItems: (NavItem & { permission?: string })[] = [
         permission: 'dashboard-view',
     },
     {
-        title: 'Users',
-        href: '/admin/users',
-        icon: Users,
-        permission: 'user-view',
-    },
-    {
         title: 'Roles',
         href: '/admin/roles',
         icon: Notebook,
         permission: 'role-view',
+    },
+    {
+        title: 'Users',
+        href: '/admin/users',
+        icon: Users,
+        permission: 'user-view',
     },
     {
         title: 'Employees',

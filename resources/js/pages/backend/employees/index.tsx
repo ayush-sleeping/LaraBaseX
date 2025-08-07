@@ -13,10 +13,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -29,7 +30,7 @@ import {
     useReactTable,
     VisibilityState,
 } from '@tanstack/react-table';
-import { AlertTriangle, ArrowUpDown, Briefcase, ChevronDown, MoreHorizontal, Trash2 } from 'lucide-react';
+import { AlertTriangle, ArrowUpDown, Briefcase, ChevronDown, Filter, MoreHorizontal, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
@@ -42,6 +43,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface EmployeePageProps {
     employees: Employee[];
+    filters: {
+        status?: string;
+    };
     [key: string]: any;
 }
 
@@ -250,8 +254,12 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
 export default function Index() {
     const pageProps = usePage<EmployeePageProps>().props;
     const flashFromGlobal = (usePage().props.flash as { success?: string; error?: string }) || {};
-    const { employees = [] } = pageProps;
+    const { employees = [], filters = {} } = pageProps;
     const { processing, delete: destroy } = useForm();
+
+    // Filter states
+    // ----------------------------------------------------------------------- ::
+    const [statusFilter, setStatusFilter] = useState<string>(filters.status || 'all');
 
     // TanStack Table states
     // ----------------------------------------------------------------------- ::
@@ -285,6 +293,33 @@ export default function Index() {
             employee: employee || null,
         });
     };
+
+    // ----------------------------------------------------------------------- ::
+    const handleStatusFilter = (value: string) => {
+        setStatusFilter(value);
+
+        const params = new URLSearchParams(window.location.search);
+
+        if (value === 'all') {
+            params.delete('status');
+        } else {
+            params.set('status', value);
+        }
+
+        const queryString = params.toString();
+        const url = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+
+        router.get(url, {}, { preserveState: true, preserveScroll: true });
+    };
+
+    // ----------------------------------------------------------------------- ::
+    const clearFilters = () => {
+        setStatusFilter('all');
+        router.get(window.location.pathname, {}, { preserveState: true, preserveScroll: true });
+    };
+
+    // ----------------------------------------------------------------------- ::
+    const hasActiveFilters = statusFilter !== 'all';
 
     // ----------------------------------------------------------------------- ::
     const confirmDelete = () => {
@@ -352,13 +387,35 @@ export default function Index() {
 
                 {/* Filters and Column Visibility */}
                 {/* ----------------------------------------------------------------------- :: */}
-                <div className="flex items-center py-4">
+                <div className="flex items-center gap-4 py-4">
                     <Input
                         placeholder="Filter employees..."
                         value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
                         onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
                         className="max-w-sm"
                     />
+
+                    <Select value={statusFilter} onValueChange={handleStatusFilter}>
+                        <SelectTrigger className="w-40">
+                            <div className="flex items-center gap-2">
+                                <Filter className="h-4 w-4" />
+                                <SelectValue placeholder="Status" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Status</SelectItem>
+                            <SelectItem value="ACTIVE">Active</SelectItem>
+                            <SelectItem value="INACTIVE">Inactive</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    {hasActiveFilters && (
+                        <Button variant="outline" onClick={clearFilters} className="flex items-center gap-2">
+                            <X className="h-4 w-4" />
+                            Clear Filters
+                        </Button>
+                    )}
+
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="ml-auto">

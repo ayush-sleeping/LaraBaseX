@@ -21,10 +21,23 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     /* Display a listing of users :: */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $users = User::all();
-        return Inertia::render('backend/users/index', compact('users'));
+        $query = User::query();
+
+        // Apply status filter if provided
+        if ($request->filled('status') && in_array($request->status, ['ACTIVE', 'INACTIVE'])) {
+            $query->where('status', $request->status);
+        }
+
+        $users = $query->get();
+
+        return Inertia::render('backend/users/index', [
+            'users' => $users,
+            'filters' => [
+                'status' => $request->status
+            ]
+        ]);
     }
 
     /* Show the form for creating a new user :: */

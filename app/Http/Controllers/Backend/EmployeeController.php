@@ -23,8 +23,23 @@ class EmployeeController extends Controller
     /* Display a listing of employees :: */
     public function index(Request $request)
     {
-        $employees = Employee::with('user:id,first_name,last_name,email,mobile,status')->get();
-        return Inertia::render('backend/employees/index', compact('employees'));
+        $query = Employee::with('user:id,first_name,last_name,email,mobile,status');
+
+        // Apply status filter if provided
+        if ($request->filled('status') && in_array($request->status, ['ACTIVE', 'INACTIVE'])) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('status', $request->status);
+            });
+        }
+
+        $employees = $query->get();
+
+        return Inertia::render('backend/employees/index', [
+            'employees' => $employees,
+            'filters' => [
+                'status' => $request->status
+            ]
+        ]);
     }
 
     /* Show the form for creating a new employee :: */
