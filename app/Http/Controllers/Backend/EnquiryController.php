@@ -18,10 +18,29 @@ use Inertia\Response;
 class EnquiryController extends Controller
 {
     /* Display a listing of enquiries :: */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $enquiries = Enquiry::all();
-        return Inertia::render('backend/enquiries/index', compact('enquiries'));
+        $query = Enquiry::query();
+
+        // Apply remark filter if provided
+        if ($request->filled('remark_status')) {
+            if ($request->remark_status === 'with_remark') {
+                $query->whereNotNull('remark')->where('remark', '!=', '');
+            } elseif ($request->remark_status === 'without_remark') {
+                $query->where(function ($q) {
+                    $q->whereNull('remark')->orWhere('remark', '');
+                });
+            }
+        }
+
+        $enquiries = $query->get();
+
+        return Inertia::render('backend/enquiries/index', [
+            'enquiries' => $enquiries,
+            'filters' => [
+                'remark_status' => $request->remark_status
+            ]
+        ]);
     }
 
     /* Display the specified enquiry :: */

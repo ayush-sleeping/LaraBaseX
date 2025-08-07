@@ -13,10 +13,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -29,7 +30,7 @@ import {
     useReactTable,
     VisibilityState,
 } from '@tanstack/react-table';
-import { AlertTriangle, ArrowUpDown, ChevronDown, Mail, MessageSquare, MoreHorizontal, Phone, Trash2 } from 'lucide-react';
+import { AlertTriangle, ArrowUpDown, ChevronDown, Circle, Filter, Mail, MessageSquare, MoreHorizontal, Phone, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
@@ -42,6 +43,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface EnquiryPageProps {
     enquiries: Enquiry[];
+    filters: {
+        remark_status?: string;
+    };
     [key: string]: any;
 }
 
@@ -201,10 +205,42 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
         },
         cell: ({ row }) => {
             const message = row.getValue('message') as string;
-            const truncatedMessage = message.length > 50 ? message.substring(0, 50) + '...' : message;
+            const truncatedMessage = message.length > 20 ? message.substring(0, 20) + '...' : message;
             return (
                 <div className="max-w-xs text-center" title={message}>
                     {truncatedMessage}
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: 'remark',
+        header: ({ column }) => {
+            return (
+                <div className="flex justify-center">
+                    {/* ----------------------------------------------------------------------- :: */}
+                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                        Remark
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            );
+        },
+        cell: ({ row }) => {
+            const remark = row.getValue('remark') as string;
+
+            if (!remark || remark.trim() === '') {
+                return (
+                    <div className="flex justify-center">
+                        <Circle className="h-3 w-3 fill-gray-400 text-gray-400" />
+                    </div>
+                );
+            }
+
+            const truncatedRemark = remark.length > 20 ? remark.substring(0, 20) + '...' : remark;
+            return (
+                <div className="max-w-xs text-center" title={remark}>
+                    {truncatedRemark}
                 </div>
             );
         },
@@ -233,8 +269,12 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
 export default function Index() {
     const pageProps = usePage<EnquiryPageProps>().props;
     const flashFromGlobal = (usePage().props.flash as { success?: string; error?: string }) || {};
-    const { enquiries = [] } = pageProps;
+    const { enquiries = [], filters = {} } = pageProps;
     const { processing, delete: destroy } = useForm();
+
+    // Filter states
+    // ----------------------------------------------------------------------- ::
+    const [remarkFilter, setRemarkFilter] = useState<string>(filters.remark_status || 'all');
 
     // Toast notification effect for flash messages
     useEffect(() => {
@@ -268,6 +308,33 @@ export default function Index() {
             enquiry: enquiry || null,
         });
     };
+
+    // ----------------------------------------------------------------------- ::
+    const handleRemarkFilter = (value: string) => {
+        setRemarkFilter(value);
+
+        const params = new URLSearchParams(window.location.search);
+
+        if (value === 'all') {
+            params.delete('remark_status');
+        } else {
+            params.set('remark_status', value);
+        }
+
+        const queryString = params.toString();
+        const url = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+
+        router.get(url, {}, { preserveState: true, preserveScroll: true });
+    };
+
+    // ----------------------------------------------------------------------- ::
+    const clearFilters = () => {
+        setRemarkFilter('all');
+        router.get(window.location.pathname, {}, { preserveState: true, preserveScroll: true });
+    };
+
+    // ----------------------------------------------------------------------- ::
+    const hasActiveFilters = remarkFilter !== 'all';
 
     // ----------------------------------------------------------------------- ::
     const confirmDelete = () => {
@@ -330,13 +397,35 @@ export default function Index() {
 
                 {/* Filters and Column Visibility */}
                 {/* ----------------------------------------------------------------------- :: */}
-                <div className="flex items-center py-4">
+                <div className="flex items-center gap-4 py-4">
                     <Input
                         placeholder="Filter enquiries..."
                         value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
                         onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
                         className="max-w-sm"
                     />
+
+                    <Select value={remarkFilter} onValueChange={handleRemarkFilter}>
+                        <SelectTrigger className="w-44">
+                            <div className="flex items-center gap-2">
+                                <Filter className="h-4 w-4" />
+                                <SelectValue placeholder="Remark Status" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Enquiries</SelectItem>
+                            <SelectItem value="with_remark">With Remark</SelectItem>
+                            <SelectItem value="without_remark">Without Remark</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    {hasActiveFilters && (
+                        <Button variant="outline" onClick={clearFilters} className="flex items-center gap-2">
+                            <X className="h-4 w-4" />
+                            Clear Filters
+                        </Button>
+                    )}
+
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="ml-auto">
