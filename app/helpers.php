@@ -39,6 +39,7 @@
 
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 // 🔠 String Helpers
 if (!function_exists('str_ends_with')) {
@@ -435,5 +436,33 @@ if (!function_exists('sanitize_string')) {
      */
     function sanitize_string($string): string {
         return htmlspecialchars(strip_tags(trim($string)));
+    }
+}
+
+// 🔐 Permission System Helpers
+if (!function_exists('getModelForGuard')) {
+    /**
+     * Get the model class for the given guard.
+     */
+    function getModelForGuard(string $guard = null): string {
+        $guard = $guard ?: config('auth.defaults.guard');
+        return config("auth.guards.{$guard}.provider")
+            ? config("auth.providers." . config("auth.guards.{$guard}.provider") . ".model")
+            : config('auth.providers.users.model', App\Models\User::class);
+    }
+}
+
+if (!function_exists('getPermissionsTeamId')) {
+    /**
+     * Get the team ID for permissions (if teams are enabled).
+     */
+    function getPermissionsTeamId(): ?int {
+        if (!config('permission.teams')) {
+            return null;
+        }
+
+        // This should return the current team ID if you're using teams
+        // For now, returning null as teams are not enabled
+        return Auth::check() ? Auth::user()->current_team_id ?? null : null;
     }
 }

@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use App\Http\Controllers\Controller;
+use App\Models\Enquiry;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+
+/**
+ * EnquiryController
+ *
+ * Handles enquiry management for the backend administration.
+ * Provides CRUD operations and data tables for enquiries.
+ */
+class EnquiryController extends Controller
+{
+    /* Display a listing of enquiries :: */
+    public function index(): Response
+    {
+        $enquiries = Enquiry::all();
+        return Inertia::render('backend/enquiries/index', compact('enquiries'));
+    }
+
+    /* Display the specified enquiry :: */
+    public function show(Enquiry $enquiry): Response
+    {
+        $enquiry->load(['createdBy:id,first_name,last_name', 'updatedBy:id,first_name,last_name']);
+        return Inertia::render('backend/enquiries/show', compact('enquiry'));
+    }
+
+    /* Update remark for the specified enquiry :: */
+    public function updateRemark(Request $request, Enquiry $enquiry)
+    {
+        $request->validate([
+            'remark' => 'required|string|max:1000'
+        ], [
+            'remark.required' => 'Remark is required',
+            'remark.max' => 'Remark cannot exceed 1000 characters'
+        ]);
+
+        try {
+            $enquiry->remark = $request->remark;
+            $enquiry->save();
+
+            return redirect()->back()->with('success', 'Remark updated successfully');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update remark: ' . $e->getMessage());
+        }
+    }
+
+    /* Remove the specified enquiry from storage :: */
+    public function destroy(Enquiry $enquiry)
+    {
+        $enquiry->delete();
+        return redirect()->route('admin.enquiries.index')->with('success', 'Enquiry deleted successfully.');
+    }
+
+    /* Get enquiry statistics :: */
+    public function stats(): JsonResponse
+    {
+        $stats = [
+            'total' => Enquiry::count(),
+            'today' => Enquiry::whereDate('created_at', today())->count(),
+            'this_week' => Enquiry::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+            'this_month' => Enquiry::whereMonth('created_at', now()->month)->count(),
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'stats' => $stats
+        ], 200);
+    }
+}

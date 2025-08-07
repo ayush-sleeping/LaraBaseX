@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\HomeController;
 */
 
 // Public API routes (with basic authentication)
+// -------------------------------------------------------------------------------------------------------- ::
 Route::middleware(['basic_auth'])->group(function () {
     // App version check
     Route::post('get-app-version', [AuthController::class, 'getAppVersion'])->name('api.get-app-version');

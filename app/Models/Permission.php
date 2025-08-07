@@ -62,8 +62,8 @@ class Permission extends CoreModel implements PermissionContract
         return $this->belongsToMany(
             config('permission.models.role'),
             config('permission.table_names.role_has_permissions'),
-            PermissionRegistrar::$pivotPermission,
-            PermissionRegistrar::$pivotRole
+            config('permission.column_names.permission_pivot_key', 'permission_id'),
+            config('permission.column_names.role_pivot_key', 'role_id')
         );
     }
 
@@ -76,12 +76,12 @@ class Permission extends CoreModel implements PermissionContract
             getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_permissions'),
-            PermissionRegistrar::$pivotPermission,
+            config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.model_morph_key')
         );
     }
 
-    public static function findByName(string $name, $guardName = null): PermissionContract
+    public static function findByName(string $name, ?string $guardName = null): PermissionContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermission(['name' => $name, 'guard_name' => $guardName]);
@@ -91,7 +91,7 @@ class Permission extends CoreModel implements PermissionContract
         return $permission;
     }
 
-    public static function findById(int $id, $guardName = null): PermissionContract
+    public static function findById(string|int $id, ?string $guardName = null): PermissionContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermission(['id' => $id, 'guard_name' => $guardName]);
@@ -101,7 +101,7 @@ class Permission extends CoreModel implements PermissionContract
         return $permission;
     }
 
-    public static function findOrCreate(string $name, $guardName = null): PermissionContract
+    public static function findOrCreate(string $name, ?string $guardName = null): PermissionContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermission(['name' => $name, 'guard_name' => $guardName]);

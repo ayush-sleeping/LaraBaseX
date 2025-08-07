@@ -11,8 +11,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
-
 // Guest routes: registration, login, and password reset
+// -------------------------------------------------------------------------------------------------------- ::
 Route::middleware('guest')->group(function () {
     // Registration
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -31,6 +31,7 @@ Route::middleware('guest')->group(function () {
 
 
 // Authenticated user routes: email verification, password confirmation, and logout
+// -------------------------------------------------------------------------------------------------------- ::
 Route::middleware('auth')->group(function () {
     // Email verification
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');

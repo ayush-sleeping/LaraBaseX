@@ -17,6 +17,7 @@ class VerifyEmailController extends Controller
         }
         // fulfill() marks the email as verified and fires the Verified event
         $request->fulfill();
+
         return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
     }
 }

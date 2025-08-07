@@ -8,6 +8,8 @@ interface AppLayoutProps {
 }
 
 export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
+    // Using app-sidebar-layout -> app-sidebar
+    // ------------------------------------------------------------ ::
     <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
         {children}
     </AppLayoutTemplate>

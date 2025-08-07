@@ -29,18 +29,24 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'status' => 'INACTIVE', // New users start as INACTIVE until admin approves
         ]);
+        // Assign default "User" role to new registrations for proper authorization
+        // This ensures the user has basic permissions once activated by admin
+        $user->assignRole('User');
         event(new Registered($user));
-        Auth::login($user);
-        // Use RouteServiceProvider::HOME for centralized and maintainable home path
-        return redirect()->intended(RouteServiceProvider::HOME);
+
+        // Don't auto-login INACTIVE users - redirect to login with message
+        return redirect()->route('login')->with('status', 'Registration successful! Your account is pending approval by an administrator.');
     }
 }

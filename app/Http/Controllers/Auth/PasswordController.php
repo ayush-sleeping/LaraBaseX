@@ -22,18 +22,15 @@ class PasswordController extends Controller
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
-
         $user = $request->user();
         $user->update([
             'password' => Hash::make($validated['password']),
         ]);
 
         // Log out other devices for security
-        Auth::logoutOtherDevices($validated['password']);
-
         // Log the password change event
+        Auth::logoutOtherDevices($validated['password']);
         Log::info('User password updated', ['user_id' => $user->id]);
-
         // Return a JSON response if requested, otherwise redirect back
         if ($request->expectsJson()) {
             return response()->json(['status' => 'password-updated']);

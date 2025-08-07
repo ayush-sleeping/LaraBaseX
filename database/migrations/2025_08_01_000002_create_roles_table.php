@@ -15,7 +15,6 @@ return new class extends Migration {
      *   - name: Role name (unique per guard)
      *   - guard_name: Guard name (e.g., 'web', 'api')
      *   - created_by, updated_by: User IDs for auditing
-     *   - timestampsTz: Created/updated at with timezone
      *
      * Indexes:
      *   - team_foreign_key, name, guard_name, created_by, updated_by for fast lookups
@@ -40,16 +39,18 @@ return new class extends Migration {
             $table->string('guard_name', 125)->default('web')->comment('Guard name for the role');
             $table->unsignedBigInteger('created_by')->nullable()->comment('User who created the role');
             $table->unsignedBigInteger('updated_by')->nullable()->comment('User who last updated the role');
-            $table->timestampsTz();
+            $table->timestamps();
             if ($teams || config('permission.testing')) {
                 $table->unique([$columnNames['team_foreign_key'], 'name', 'guard_name']);
             } else {
                 $table->unique(['name', 'guard_name']);
             }
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->index('name');
             $table->index('guard_name');
+
+
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

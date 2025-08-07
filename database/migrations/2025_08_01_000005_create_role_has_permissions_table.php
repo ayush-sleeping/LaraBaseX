@@ -24,26 +24,38 @@ return new class extends Migration {
     public function up(): void
     {
         $tableNames = config('permission.table_names');
-        Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
-            $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission)->comment('Foreign key to permissions table');
-            $table->unsignedBigInteger(PermissionRegistrar::$pivotRole)->comment('Foreign key to roles table');
-            $table->foreign(PermissionRegistrar::$pivotPermission)
+        $columnNames = config('permission.column_names');
+
+        // Use direct column names instead of PermissionRegistrar static properties
+        $permissionPivotKey = $columnNames['permission_pivot_key'] ?? 'permission_id';
+        $rolePivotKey = $columnNames['role_pivot_key'] ?? 'role_id';
+
+        Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames, $permissionPivotKey, $rolePivotKey) {
+            $table->unsignedBigInteger($permissionPivotKey)->comment('Foreign key to permissions table');
+            $table->unsignedBigInteger($rolePivotKey)->comment('Foreign key to roles table');
+
+            // Foreign key constraints
+            $table->foreign($permissionPivotKey)
                 ->references('id')
                 ->on($tableNames['permissions'])
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreign(PermissionRegistrar::$pivotRole)
+
+            $table->foreign($rolePivotKey)
                 ->references('id')
                 ->on($tableNames['roles'])
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+
+            // Primary key
             $table->primary([
-                PermissionRegistrar::$pivotPermission,
-                PermissionRegistrar::$pivotRole
+                $permissionPivotKey,
+                $rolePivotKey
             ], 'role_has_permissions_permission_id_role_id_primary');
+
             // Indexes for performance
-            $table->index(PermissionRegistrar::$pivotPermission);
-            $table->index(PermissionRegistrar::$pivotRole);
+            $table->index($permissionPivotKey);
+            $table->index($rolePivotKey);
         });
     }
 

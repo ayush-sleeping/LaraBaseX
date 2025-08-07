@@ -28,36 +28,47 @@ return new class extends Migration {
         $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
         $teams = config('permission.teams');
-        // -----------------------------------------------------------------------------------------------
-        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
-            $table->unsignedBigInteger(PermissionRegistrar::$pivotRole)->comment('Foreign key to roles table');
+
+        // Use direct column names instead of PermissionRegistrar static properties
+        $rolePivotKey = $columnNames['role_pivot_key'] ?? 'role_id';
+        $modelMorphKey = $columnNames['model_morph_key'];
+        $teamForeignKey = $columnNames['team_foreign_key'];
+
+        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $rolePivotKey, $modelMorphKey, $teamForeignKey, $teams) {
+            $table->unsignedBigInteger($rolePivotKey)->comment('Foreign key to roles table');
             $table->string('model_type')->comment('Model class name');
-            $table->unsignedBigInteger($columnNames['model_morph_key'])->comment('Model primary key');
-            $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
-            $table->foreign(PermissionRegistrar::$pivotRole)
+            $table->unsignedBigInteger($modelMorphKey)->comment('Model primary key');
+
+            // Create indexes
+            $table->index([$modelMorphKey, 'model_type'], 'model_has_roles_model_id_model_type_index');
+
+            // Foreign key constraint
+            $table->foreign($rolePivotKey)
                 ->references('id')
                 ->on($tableNames['roles'])
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+
             if ($teams) {
-                $table->unsignedBigInteger($columnNames['team_foreign_key'])->comment('Foreign key to teams table');
-                $table->index($columnNames['team_foreign_key'], 'model_has_roles_team_foreign_key_index');
+                $table->unsignedBigInteger($teamForeignKey)->comment('Foreign key to teams table');
+                $table->index($teamForeignKey, 'model_has_roles_team_foreign_key_index');
                 $table->primary([
-                    $columnNames['team_foreign_key'],
-                    PermissionRegistrar::$pivotRole,
-                    $columnNames['model_morph_key'],
+                    $teamForeignKey,
+                    $rolePivotKey,
+                    $modelMorphKey,
                     'model_type'
                 ], 'model_has_roles_role_model_type_primary');
             } else {
                 $table->primary([
-                    PermissionRegistrar::$pivotRole,
-                    $columnNames['model_morph_key'],
+                    $rolePivotKey,
+                    $modelMorphKey,
                     'model_type'
                 ], 'model_has_roles_role_model_type_primary');
             }
+
             // Additional indexes for performance
             $table->index('model_type');
-            $table->index($columnNames['model_morph_key']);
+            $table->index($modelMorphKey);
         });
     }
 

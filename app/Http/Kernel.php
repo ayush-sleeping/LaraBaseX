@@ -61,9 +61,11 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,
-        // Custom middleware (uncomment if implemented)
-        // 'preventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
-        // 'basic_auth' => \App\Http\Middleware\BasicAuth::class,
-        // 'token' => \App\Http\Middleware\Token::class,
+        // Custom middleware ::
+        'admin' => \App\Http\Middleware\AdminAccess::class,
+        'preventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
+        'basic_auth' => \App\Http\Middleware\BasicAuth::class,
+        'token' => \App\Http\Middleware\Token::class,
+        'trustHosts' => \App\Http\Middleware\TrustHosts::class,
     ];
 }
