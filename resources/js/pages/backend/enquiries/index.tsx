@@ -45,6 +45,8 @@ interface EnquiryPageProps {
     enquiries: Enquiry[];
     filters: {
         remark_status?: string;
+        date_from?: string;
+        date_to?: string;
     };
     [key: string]: any;
 }
@@ -275,6 +277,8 @@ export default function Index() {
     // Filter states
     // ----------------------------------------------------------------------- ::
     const [remarkFilter, setRemarkFilter] = useState<string>(filters.remark_status || 'all');
+    const [dateFromFilter, setDateFromFilter] = useState<string>(filters.date_from || '');
+    const [dateToFilter, setDateToFilter] = useState<string>(filters.date_to || '');
 
     // Toast notification effect for flash messages
     useEffect(() => {
@@ -328,13 +332,49 @@ export default function Index() {
     };
 
     // ----------------------------------------------------------------------- ::
+    const handleDateFromFilter = (value: string) => {
+        setDateFromFilter(value);
+        applyDateFilters(value, dateToFilter);
+    };
+
+    // ----------------------------------------------------------------------- ::
+    const handleDateToFilter = (value: string) => {
+        setDateToFilter(value);
+        applyDateFilters(dateFromFilter, value);
+    };
+
+    // ----------------------------------------------------------------------- ::
+    const applyDateFilters = (dateFrom: string, dateTo: string) => {
+        const params = new URLSearchParams(window.location.search);
+
+        if (dateFrom) {
+            params.set('date_from', dateFrom);
+        } else {
+            params.delete('date_from');
+        }
+
+        if (dateTo) {
+            params.set('date_to', dateTo);
+        } else {
+            params.delete('date_to');
+        }
+
+        const queryString = params.toString();
+        const url = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+
+        router.get(url, {}, { preserveState: true, preserveScroll: true });
+    };
+
+    // ----------------------------------------------------------------------- ::
     const clearFilters = () => {
         setRemarkFilter('all');
+        setDateFromFilter('');
+        setDateToFilter('');
         router.get(window.location.pathname, {}, { preserveState: true, preserveScroll: true });
     };
 
     // ----------------------------------------------------------------------- ::
-    const hasActiveFilters = remarkFilter !== 'all';
+    const hasActiveFilters = remarkFilter !== 'all' || dateFromFilter !== '' || dateToFilter !== '';
 
     // ----------------------------------------------------------------------- ::
     const confirmDelete = () => {
@@ -393,38 +433,6 @@ export default function Index() {
                         <h1 className="text-2xl font-bold tracking-tight">Enquiries Management</h1>
                         <p className="text-muted-foreground">Manage customer enquiries and responses.</p>
                     </div>
-                </div>
-
-                {/* Filters and Column Visibility */}
-                {/* ----------------------------------------------------------------------- :: */}
-                <div className="flex items-center gap-4 py-4">
-                    <Input
-                        placeholder="Filter enquiries..."
-                        value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-                        onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
-                        className="max-w-sm"
-                    />
-
-                    <Select value={remarkFilter} onValueChange={handleRemarkFilter}>
-                        <SelectTrigger className="w-44">
-                            <div className="flex items-center gap-2">
-                                <Filter className="h-4 w-4" />
-                                <SelectValue placeholder="Remark Status" />
-                            </div>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Enquiries</SelectItem>
-                            <SelectItem value="with_remark">With Remark</SelectItem>
-                            <SelectItem value="without_remark">Without Remark</SelectItem>
-                        </SelectContent>
-                    </Select>
-
-                    {hasActiveFilters && (
-                        <Button variant="outline" onClick={clearFilters} className="flex items-center gap-2">
-                            <X className="h-4 w-4" />
-                            Clear Filters
-                        </Button>
-                    )}
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -450,6 +458,56 @@ export default function Index() {
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
+                </div>
+
+                {/* Filters and Column Visibility */}
+                {/* ----------------------------------------------------------------------- :: */}
+                <div className="flex flex-wrap items-center gap-4 py-4">
+                    <Input
+                        placeholder="Filter enquiries..."
+                        value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                        onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+                        className="max-w-sm"
+                    />
+
+                    <div className="flex items-center gap-2">
+                        <Input
+                            type="date"
+                            placeholder="From Date"
+                            value={dateFromFilter}
+                            onChange={(e) => handleDateFromFilter(e.target.value)}
+                            className="w-40"
+                        />
+                        <span className="text-gray-500">to</span>
+                        <Input
+                            type="date"
+                            placeholder="To Date"
+                            value={dateToFilter}
+                            onChange={(e) => handleDateToFilter(e.target.value)}
+                            className="w-40"
+                        />
+                    </div>
+
+                    {hasActiveFilters && (
+                        <Button variant="outline" onClick={clearFilters} className="flex items-center gap-2">
+                            <X className="h-4 w-4" />
+                            Clear Filters
+                        </Button>
+                    )}
+
+                    <Select value={remarkFilter} onValueChange={handleRemarkFilter}>
+                        <SelectTrigger className="w-44">
+                            <div className="flex items-center gap-2">
+                                <Filter className="h-4 w-4" />
+                                <SelectValue placeholder="Remark Status" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent align="end">
+                            <SelectItem value="all">All Enquiries</SelectItem>
+                            <SelectItem value="with_remark">With Remark</SelectItem>
+                            <SelectItem value="without_remark">Without Remark</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
                 {/* Data Table */}

@@ -33,17 +33,26 @@ class EnquiryController extends Controller
             }
         }
 
-        $enquiries = $query->get();
+        // Apply date range filter if provided
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $enquiries = $query->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('backend/enquiries/index', [
             'enquiries' => $enquiries,
             'filters' => [
-                'remark_status' => $request->remark_status
+                'remark_status' => $request->remark_status,
+                'date_from' => $request->date_from,
+                'date_to' => $request->date_to,
             ]
         ]);
-    }
-
-    /* Display the specified enquiry :: */
+    }    /* Display the specified enquiry :: */
     public function show(Enquiry $enquiry): Response
     {
         $enquiry->load(['createdBy:id,first_name,last_name', 'updatedBy:id,first_name,last_name']);
