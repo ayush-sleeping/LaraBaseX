@@ -166,7 +166,7 @@ class PermissionSeeder extends Seeder
         'User' => [
             #Dashboard - basic users can view dashboard
             'dashboard-view',
-            
+
             #Basic permissions for regular users
             //End of Role Permission
         ],

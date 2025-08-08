@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
         } catch (\Exception $e) {
             // Role doesn't exist - create it or log the issue
             Log::warning('User role assignment failed', [
-                'user_id' => $user->id, 
+                'user_id' => $user->id,
                 'error' => $e->getMessage()
             ]);
         }
