@@ -114,10 +114,10 @@ These features protect your app, data, and server from attacks:
 ### 📦 3. Packages to Include
 - ✅ Spatie Laravel Permission – roles/permissions
 - ✅ Laravel Sanctum or Passport – token-based auth
-- ❌ Laravel Telescope (local/dev) – debugging, request log
-- ❌ Laravel Debugbar (local/dev) – performance analysis
-- ❌ Spatie Backup – scheduled database/file backups
-- ❌ Spatie Activity Log – audit logs for user actions
+- ✅ Laravel Telescope (local/dev) – debugging, request log
+- ✅ Laravel Debugbar (local/dev) – performance analysis
+- ✅ Spatie Backup – scheduled database/file backups
+- ✅ Spatie Activity Log – audit logs for user actions
 
 
 ### 🧠 4. Developer Experience (DX)
