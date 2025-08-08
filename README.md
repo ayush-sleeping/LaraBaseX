@@ -39,19 +39,20 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 ### 🔒 1. Security Essentials
 These features protect your app, data, and server from attacks:
 
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ HTTPS enforced (Force HTTPS in AppServiceProvider)
     <details>
-    <summary>
-    <strong>🔐 Implementation Details</strong> (Click to expand)</summary>
+    <summary><strong>Implementation Details</strong> (Click to expand) ::</summary>
 
-    **📁 Files Modified:**
+    **Files Modified:**
     - `/app/Providers/AppServiceProvider.php` - Force HTTPS URL generation
     - `/config/app.php` - Added `force_https` configuration
     - `/app/Http/Middleware/ForceHttps.php` - HTTP to HTTPS redirects
     - `/app/Http/Kernel.php` - Middleware registration
     - `/.env.example` - Added `APP_FORCE_HTTPS` variable
 
-    **🔧 How It Works:**
+    **How It Works:**
     ```php
     // AppServiceProvider - URL generation
     if (config('app.env') === 'production') {
@@ -64,7 +65,7 @@ These features protect your app, data, and server from attacks:
     }
     ```
 
-    **⚙️ Configuration:**
+    **Configuration:**
     ```bash
     # Production
     APP_ENV=production
@@ -77,7 +78,7 @@ These features protect your app, data, and server from attacks:
     APP_URL=http://localhost
     ```
 
-    **✅ Features:**
+    **Features:**
     - Automatic HTTPS enforcement in production
     - Environment-based configuration
     - 301 redirects for SEO
@@ -85,22 +86,187 @@ These features protect your app, data, and server from attacks:
     - Dual-layer protection (AppServiceProvider + Middleware)
 
     </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ CORS configured properly (config/cors.php)
+    <details>
+    <summary><strong>Implementation Details</strong> (Click to expand) ::</summary>
+
+    **Files Modified:**
+    - `/config/cors.php` - CORS policy configuration
+    - `/.env.example` - Added CORS environment variables
+    - `/bootstrap/app.php` - HandleCors middleware auto-registered
+    - `/config/sanctum.php` - Sanctum CORS integration
+
+    **How It Works:**
+    ```php
+    // CORS Configuration - Dynamic via environment
+    'allowed_origins' => array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', '*')))),
+    'allowed_methods' => array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_METHODS', '*')))),
+    'supports_credentials' => env('CORS_SUPPORTS_CREDENTIALS', false),
+
+    // Sanctum CSRF Cookie endpoint included
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    ```
+
+    **Configuration:**
+    ```bash
+    # Production - Specific domains
+    CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://app.yourdomain.com
+    CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
+    CORS_SUPPORTS_CREDENTIALS=true
+
+    # Development - Allow all
+    CORS_ALLOWED_ORIGINS=*
+    CORS_ALLOWED_METHODS=*
+    CORS_SUPPORTS_CREDENTIALS=false
+    ```
+
+    **Features:**
+    - Environment-based origin control
+    - Support for credentials (cookies/auth)
+    - Sanctum integration for SPA authentication
+    - Comma-separated multiple domains
+    - Automatic OPTIONS preflight handling
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ CSRF protection (even for APIs, use Sanctum or tokens)
+    <details>
+    <summary><strong>Implementation Details</strong> (Click to expand) ::</summary>
+
+    **Files Modified:**
+    - `/app/Http/Middleware/VerifyCsrfToken.php` - CSRF token validation
+    - `/config/sanctum.php` - Sanctum CSRF middleware configuration
+    - `/bootstrap/app.php` - CSRF middleware registration
+    - `/resources/js/lib/csrf.ts` - Frontend CSRF handling
+
+    **How It Works:**
+    ```php
+    // VerifyCsrfToken Middleware - Validates all state-changing requests
+    protected $except = [
+        'api/*',  // API routes use Sanctum instead
+        'webhooks/*'
+    ];
+
+    // Sanctum CSRF for SPA authentication
+    'verify_csrf_token' => env('SANCTUM_VERIFY_CSRF_MIDDLEWARE', VerifyCsrfToken::class),
+    ```
+
+    **Configuration:**
+    ```bash
+    # Environment variables
+    SANCTUM_STATEFUL_DOMAINS=localhost,localhost:3000,127.0.0.1,your-domain.com
+    SANCTUM_VERIFY_CSRF_MIDDLEWARE=App\Http\Middleware\VerifyCsrfToken
+    SESSION_DRIVER=cookie
+    SESSION_DOMAIN=.yourdomain.com
+    ```
+
+    **Features:**
+    - CSRF protection for all web forms
+    - Sanctum CSRF for SPA authentication
+    - API routes use Bearer tokens instead
+    - Automatic CSRF token injection in forms
+    - Frontend CSRF cookie management
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Rate Limiting for APIs (ThrottleRequests middleware)
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Validation layer using FormRequest (php artisan make:request)
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Use policies/gates for authorization (php artisan make:policy)
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Avoid mass assignment bugs ($fillable vs $guarded)
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Escape output or sanitize input if user-generated data is stored
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Sanitize uploaded files & validate MIME types
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Use environment variables for all secrets (never hardcode keys)
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Disable debug mode on production (APP_DEBUG=false)
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Log all authentication attempts and system errors
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Do not expose Laravel version in headers
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 
 
 ### 🧱 2. Architecture & Structure Essentials
 - ✅ Keep controllers thin, use Services for logic
+    <details>
+    <summary><strong>🔐 Implementation Details</strong> (Click to expand) ::</summary>
+
+    </details>
+
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
+<!-- --------------------------------------------------------------------------------------------------------------::  -->
 - ✅ Helpers.php for reusable functions (as you're doing)
 - ✅ Job Queues setup (Redis + Supervisor in production)
 - ✅ Use resource() routes & API standards (api.php)
@@ -1729,7 +1895,7 @@ You already have many! Add:
 
     </Details>
 - ✅ Health check route (/health)
-- ❌ Use Laravel Forge or Ploi or GitHub Actions for CI/CD
+- ✅ Use Laravel Forge or Ploi or GitHub Actions for CI/CD
 
 
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
