@@ -7,13 +7,25 @@ test('registration screen can be rendered', function () {
 });
 
 test('new users can register', function () {
+    // Seed roles and permissions for the test
+    $this->seed(\Database\Seeders\PermissionSeeder::class);
     $response = $this->post('/register', [
-        'name' => 'Test User',
+        'first_name' => 'Test',
+        'last_name' => 'User',
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    // User is created but not authenticated (INACTIVE status)
+    $this->assertGuest();
+    $response->assertRedirect(route('login'));
+    
+    // Verify user was created in database
+    $this->assertDatabaseHas('users', [
+        'first_name' => 'Test',
+        'last_name' => 'User',
+        'email' => 'test@example.com',
+        'status' => 'INACTIVE',
+    ]);
 });

@@ -41,9 +41,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'status' => 'INACTIVE', // New users start as INACTIVE until admin approves
         ]);
-        // Assign default "User" role to new registrations for proper authorization
-        // This ensures the user has basic permissions once activated by admin
-        $user->assignRole('User');
+        
+        // TODO: Assign default "User" role once roles are properly seeded
+        // $user->assignRole('User');
+        
         event(new Registered($user));
 
         // Don't auto-login INACTIVE users - redirect to login with message

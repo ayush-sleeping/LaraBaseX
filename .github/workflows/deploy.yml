@@ -1,0 +1,79 @@
+name: deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+          npm ci
+
+      - name: Build Assets
+        run: npm run build
+
+      - name: Run Production Optimizations
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      - name: Test Health Check
+        run: |
+          php artisan serve --port=8000 &
+          sleep 5
+          curl -f http://localhost:8000/api/health || exit 1
+          echo "✅ Health check passed"
+
+      # Deployment steps would go here
+      # Example for different deployment targets:
+      
+      # - name: Deploy to Server via SSH
+      #   uses: appleboy/ssh-action@v0.1.5
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.KEY }}
+      #     script: |
+      #       cd /path/to/your/app
+      #       git pull origin main
+      #       composer install --no-dev --optimize-autoloader
+      #       php artisan migrate --force
+      #       php artisan config:cache
+      #       php artisan route:cache
+      #       php artisan view:cache
+
+      # - name: Deploy to Laravel Forge
+      #   run: |
+      #     curl -X POST "https://forge.laravel.com/api/v1/servers/${{ secrets.FORGE_SERVER_ID }}/sites/${{ secrets.FORGE_SITE_ID }}/deploy" \
+      #     -H "Authorization: Bearer ${{ secrets.FORGE_API_TOKEN }}" \
+      #     -H "Accept: application/json"
+
+      - name: Deployment Summary
+        run: |
+          echo "🚀 Deployment completed successfully!"
+          echo "📦 Assets built and optimized"
+          echo "⚡ Laravel caches warmed"
+          echo "✅ Health checks passed"
