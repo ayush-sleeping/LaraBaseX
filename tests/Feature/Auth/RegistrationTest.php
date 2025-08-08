@@ -38,7 +38,7 @@ test('new users can register', function () {
 test('newly registered users cannot access dashboard until activated', function () {
     // Seed roles and permissions for the test
     $this->seed(\Database\Seeders\PermissionSeeder::class);
-    
+
     // Register a new user
     $this->post('/register', [
         'first_name' => 'Test',
@@ -47,10 +47,10 @@ test('newly registered users cannot access dashboard until activated', function 
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
-    
+
     $user = \App\Models\User::where('email', 'inactive@example.com')->first();
     expect($user->status)->toBe('INACTIVE');
-    
+
     // Try to access dashboard as the inactive user
     $this->actingAs($user);
     $this->get('/dashboard')->assertRedirect('/login');
@@ -59,20 +59,20 @@ test('newly registered users cannot access dashboard until activated', function 
 test('users can access dashboard after admin activation', function () {
     // Seed roles and permissions for the test
     $this->seed(\Database\Seeders\PermissionSeeder::class);
-    
+
     // Create an inactive user
     $user = \App\Models\User::factory()->create([
         'status' => 'INACTIVE'
     ]);
     $user->assignRole('User');
-    
+
     // Verify cannot access when inactive
     $this->actingAs($user);
     $this->get('/dashboard')->assertRedirect('/login');
-    
+
     // Admin activates the user
     $user->update(['status' => 'ACTIVE']);
-    
+
     // Now user can access dashboard
     $this->actingAs($user);
     $this->get('/dashboard')->assertOk();
