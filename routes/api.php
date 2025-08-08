@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\HealthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,13 @@ use App\Http\Controllers\Api\HomeController;
 | middleware group. Organize your API for clarity and scalability.
 |
 */
+
+// Health Check Routes (Public - No Authentication Required)
+// -------------------------------------------------------------------------------------------------------- ::
+Route::prefix('health')->group(function () {
+    Route::get('/', [HealthController::class, 'index'])->name('api.health');
+    Route::get('/detailed', [HealthController::class, 'detailed'])->name('api.health.detailed');
+});
 
 // Public API routes (with basic authentication)
 // -------------------------------------------------------------------------------------------------------- ::
