@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -41,10 +42,20 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'status' => 'INACTIVE', // New users start as INACTIVE until admin approves
         ]);
-        
-        // TODO: Assign default "User" role once roles are properly seeded
-        // $user->assignRole('User');
-        
+
+        // Assign default "User" role to new registrations for proper authorization
+        // This ensures the user has basic permissions once activated by admin
+        try {
+            $user->assignRole('User');
+            Log::info('User role assigned successfully', ['user_id' => $user->id]);
+        } catch (\Exception $e) {
+            // Role doesn't exist - create it or log the issue
+            Log::warning('User role assignment failed', [
+                'user_id' => $user->id, 
+                'error' => $e->getMessage()
+            ]);
+        }
+
         event(new Registered($user));
 
         // Don't auto-login INACTIVE users - redirect to login with message

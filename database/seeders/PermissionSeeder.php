@@ -163,6 +163,13 @@ class PermissionSeeder extends Seeder
             //End of Role Permission
 
         ],
+        'User' => [
+            #Dashboard - basic users can view dashboard
+            'dashboard-view',
+            
+            #Basic permissions for regular users
+            //End of Role Permission
+        ],
     ];
 
     private $users = [
