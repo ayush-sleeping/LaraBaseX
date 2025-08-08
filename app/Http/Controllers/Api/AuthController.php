@@ -110,7 +110,7 @@ class AuthController extends Controller
         // TODO: Integrate actual OTP sending logic here
         // Log::info('OTP sent to user', ['mobile' => $user->mobile, 'otp' => $otp]);
 
-        return response()->json(['message' => 'OTP sent successfully'], 201);
+        return api_success_message('otp_sent');
     }
 
     /**
@@ -181,9 +181,9 @@ class AuthController extends Controller
             // TODO: Integrate actual OTP sending logic here
             // Log::info('OTP sent to user', ['mobile' => $user->mobile, 'otp' => $otp]);
 
-            return response()->json(['message' => 'OTP sent successfully'], 200);
+            return api_success_message('otp_sent');
         } else {
-            return response()->json(['errors' => ['mobile' => ['Mobile number does not exist']]], 401);
+            return api_error_message('unauthorized', 401);
         }
     }
 
@@ -259,13 +259,13 @@ class AuthController extends Controller
             }
             $token->save();
             return response()->json([
-                'message' => 'User logged in successfully',
+                'message' => api_message('otp_verified'),
                 'access_token' => $tokenResult->accessToken,
                 'token_type' => 'Bearer',
                 'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
             ], 200);
         } else {
-            return response()->json(['message' => 'OTP does not match, please enter correct OTP'], 401);
+            return api_error_message('otp_invalid', 401);
         }
     }
 
@@ -331,9 +331,9 @@ class AuthController extends Controller
             // TODO: Integrate actual OTP sending logic here
             // Log::info('OTP resent to user', ['mobile' => $user->mobile, 'otp' => $otp]);
 
-            return response()->json(['message' => 'OTP sent successfully'], 200);
+            return api_success_message('otp_sent');
         } else {
-            return response()->json(['message' => 'Mobile number does not exist'], 401);
+            return api_error_message('not_found', 401);
         }
     }
 
@@ -370,7 +370,7 @@ class AuthController extends Controller
                 $token->revoke();
             });
         }
-        return response()->json(['message' => 'User logged out successfully'], 200);
+        return api_success_message('logout_successful');
     }
 
     /**
@@ -481,7 +481,7 @@ class AuthController extends Controller
 
         $user->fill($request->all());
         $user->save();
-        return response()->json(['message' => 'User updated successfully'], 200);
+        return api_success_message('updated', $user);
     }
 
     /**
@@ -538,8 +538,8 @@ class AuthController extends Controller
             Storage::disk('public')->delete($user->photo);
             $user->photo = Storage::disk('public')->put('user-photos', $request->photo);
             $user->save();
-            return response()->json(['message' => 'Photo updated successfully'], 200);
+            return api_success_message('file.uploaded');
         }
-        return response()->json(['message' => 'No photo uploaded'], 400);
+        return api_error_message('validation_failed', 400);
     }
 }

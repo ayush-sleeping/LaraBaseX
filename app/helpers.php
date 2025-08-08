@@ -625,3 +625,92 @@ if (!function_exists('get_random_code')) {
         }
     }
 }
+
+// 💬 Message Helper Functions
+if (!function_exists('message')) {
+    /**
+     * Get a message from the messages language file.
+     */
+    function message(string $key, array $replace = []): string {
+        return __("messages.{$key}", $replace);
+    }
+}
+
+if (!function_exists('auth_message')) {
+    /**
+     * Get an authentication message.
+     */
+    function auth_message(string $key, array $replace = []): string {
+        return message("auth.{$key}", $replace);
+    }
+}
+
+if (!function_exists('api_message')) {
+    /**
+     * Get an API message.
+     */
+    function api_message(string $key, array $replace = []): string {
+        return message("api.{$key}", $replace);
+    }
+}
+
+if (!function_exists('user_message')) {
+    /**
+     * Get a user management message.
+     */
+    function user_message(string $key, array $replace = []): string {
+        return message("user.{$key}", $replace);
+    }
+}
+
+if (!function_exists('validation_message')) {
+    /**
+     * Get a validation message.
+     */
+    function validation_message(string $key, array $replace = []): string {
+        return message("validation.{$key}", $replace);
+    }
+}
+
+if (!function_exists('api_success_message')) {
+    /**
+     * Standard API success response with centralized message.
+     */
+    function api_success_message(string $messageKey = 'success', $data = [], array $replace = []) {
+        return response()->json([
+            'status' => true,
+            'message' => api_message($messageKey, $replace),
+            'data' => $data
+        ]);
+    }
+}
+
+if (!function_exists('api_error_message')) {
+    /**
+     * Standard API error response with centralized message.
+     */
+    function api_error_message(string $messageKey = 'server_error', int $status = 400, array $replace = []) {
+        return response()->json([
+            'status' => false,
+            'message' => api_message($messageKey, $replace)
+        ], $status);
+    }
+}
+
+if (!function_exists('success_message')) {
+    /**
+     * Get a success message for web responses.
+     */
+    function success_message(string $category, string $action = 'success'): string {
+        return message("{$category}.{$action}");
+    }
+}
+
+if (!function_exists('error_message')) {
+    /**
+     * Get an error message for web responses.
+     */
+    function error_message(string $category, string $error = 'error'): string {
+        return message("{$category}.{$error}");
+    }
+}
