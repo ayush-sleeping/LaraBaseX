@@ -92,12 +92,12 @@ return [
          *
          * If you do not want any compressor at all, set it to null.
          */
-        'database_dump_compressor' => null,
+        'database_dump_compressor' => \Spatie\DbDumper\Compressors\GzipCompressor::class,
 
         /*
          * If specified, the database dumped file name will contain a timestamp (e.g.: 'Y-m-d-H-i-s').
          */
-        'database_dump_file_timestamp_format' => null,
+        'database_dump_file_timestamp_format' => 'Y-m-d_H-i-s',
 
         /*
          * The base of the dump filename, either 'database' or 'connection'
@@ -152,6 +152,8 @@ return [
              */
             'disks' => [
                 'local',
+                // Uncomment to enable cloud storage
+                // 's3',
             ],
         ],
 
@@ -211,7 +213,7 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => 'your@example.com',
+            'to' => env('BACKUP_NOTIFICATION_EMAIL', 'admin@larabasex.com'),
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
