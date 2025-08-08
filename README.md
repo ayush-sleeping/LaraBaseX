@@ -125,11 +125,223 @@ These features protect your app, data, and server from attacks:
 - ✅ Standard API Response format using success(), error() helpers
 - ✅ Seeder & Factory files for test data
 - ✅ Well-structured .env.example file
-- ❌ API Documentation via Swagger or Postman
+- ✅ API Documentation via Swagger or Postman
+
+    <details>
+    <summary>
+    <strong>🔐 Implementation Details</strong> (Click to expand)</summary>
+        includes comprehensive API documentation powered by **Swagger (OpenAPI)** which provides interactive documentation for all API endpoints.
+
+    ## 🔗 Quick Access
+
+    - **Swagger UI**: [http://127.0.0.1:8001/api/documentation](http://127.0.0.1:8001/api/documentation)
+    - **JSON Documentation**: [http://127.0.0.1:8001/docs/api-docs.json](http://127.0.0.1:8001/docs/api-docs.json)
+    - **YAML Documentation**: [http://127.0.0.1:8001/docs/api-docs.yaml](http://127.0.0.1:8001/docs/api-docs.yaml)
+
+    ## 📋 API Endpoints Summary
+
+    ### Authentication Endpoints
+
+    | Method | Endpoint | Description | Auth Required |
+    |--------|----------|-------------|---------------|
+    | `GET` | `/api/app-version` | Get app version and store URL | ❌ No |
+    | `POST` | `/api/register` | Register new user and send OTP | ❌ No |
+    | `POST` | `/api/login` | Login with mobile number and send OTP | ❌ No |
+    | `POST` | `/api/verify-otp` | Verify OTP and get access token | ❌ No |
+    | `POST` | `/api/resend-otp` | Resend OTP to mobile number | ❌ No |
+    | `POST` | `/api/logout` | Logout and revoke access token | ✅ Yes |
+
+    ### User Management Endpoints
+
+    | Method | Endpoint | Description | Auth Required |
+    |--------|----------|-------------|---------------|
+    | `POST` | `/api/user` | Get authenticated user details | ✅ Yes |
+    | `POST` | `/api/user/update` | Update user profile information | ✅ Yes |
+    | `POST` | `/api/user/update-photo` | Upload/update profile photo | ✅ Yes |
+
+    ### Home/Content Endpoints
+
+    | Method | Endpoint | Description | Auth Required |
+    |--------|----------|-------------|---------------|
+    | `POST` | `/api/sliders` | Get home page sliders | ✅ Yes |
+
+    ## 🔐 Authentication
+
+    The API uses **Bearer Token Authentication** (Laravel Passport):
+
+    1. **Register/Login**: Use `/api/register` or `/api/login` to get OTP
+    2. **Verify OTP**: Use `/api/verify-otp` to get your access token
+    3. **Use Token**: Include in headers: `Authorization: Bearer YOUR_TOKEN_HERE`
+
+    ### Example Authentication Flow
+
+    ```bash
+    # 1. Register or Login
+    curl -X POST http://127.0.0.1:8001/api/login \
+    -H "Content-Type: application/json" \
+    -d '{
+        "mobile": "9876543210",
+        "device_id": "abc123device"
+    }'
+
+    # 2. Verify OTP (example OTP from logs)
+    curl -X POST http://127.0.0.1:8001/api/verify-otp \
+    -H "Content-Type: application/json" \
+    -d '{
+        "mobile": "9876543210",
+        "otp": "1234"
+    }'
+
+    # 3. Use the returned access_token for authenticated requests
+    curl -X POST http://127.0.0.1:8001/api/user \
+    -H "Authorization: Bearer YOUR_ACCESS_TOKEN_HERE" \
+    -H "Content-Type: application/json"
+    ```
+
+    ## 🚀 Using Swagger UI
+
+    ### Interactive Testing
+
+    1. **Open Swagger UI**: Navigate to `http://127.0.0.1:8001/api/documentation`
+    2. **Authenticate**:
+    - Click "Authorize" button
+    - Enter your bearer token: `Bearer YOUR_TOKEN_HERE`
+    3. **Test Endpoints**: Click "Try it out" on any endpoint to test it directly
+
+    ### Features Available
+
+    - ✅ **Interactive Testing**: Test all endpoints directly from the browser
+    - ✅ **Request/Response Examples**: See example data for all endpoints
+    - ✅ **Schema Validation**: View required fields and data types
+    - ✅ **Authentication Support**: Built-in token authentication
+    - ✅ **Export Options**: Download as JSON/YAML for external tools
+
+    ## 📱 Mobile App Integration
+
+    ### Headers Required
+
+    ```javascript
+    {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN" // For protected endpoints
+    }
+    ```
+
+    ### Error Responses
+
+    All endpoints return consistent error responses:
+
+    ```json
+    {
+    "errors": {
+        "field_name": ["Error message here"]
+    }
+    }
+    ```
+
+    ### Success Responses
+
+    Most endpoints return:
+    - `200`: Success with data
+    - `201`: Created successfully
+    - `400`: Validation error
+    - `401`: Unauthorized/Invalid token
+
+    ## 🛠️ For Developers
+
+    ### Adding New API Endpoints
+
+    1. **Create Controller Method** with OpenAPI annotations:
+
+    ```php
+    /**
+     * @OA\Post(
+     *     path="/api/your-endpoint",
+     *     operationId="yourMethod",
+     *     tags={"Your Tag"},
+     *     summary="Your endpoint description",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="field", type="string", example="value")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Success")
+     * )
+     */
+    public function yourMethod(Request $request) {
+        // Your code here
+    }
+    ```
+
+    2. **Add Route** in `routes/api.php`
+    3. **Regenerate Documentation**:
+    ```bash
+    php artisan l5-swagger:generate
+    ```
+
+    ### Configuration
+
+    - **Config File**: `config/l5-swagger.php`
+    - **Generated Files**: `storage/api-docs/`
+    - **Views**: `resources/views/vendor/l5-swagger/`
+
+    ## 📋 Postman Collection
+
+    You can import the API documentation into Postman:
+
+    1. **Import from URL**: Use `http://127.0.0.1:8001/docs/api-docs.json`
+    2. **Or Download**: Save the JSON file and import it manually
+
+    ## 🔄 Regenerating Documentation
+
+    When you add new endpoints or modify existing ones:
+
+    ```bash
+    # Regenerate documentation
+    php artisan l5-swagger:generate
+
+    # Clear cache if needed
+    php artisan config:clear
+    php artisan route:clear
+    ```
+
+    ## 📝 Environment Configuration
+
+    Add these to your `.env` file for production:
+
+    ```env
+    L5_SWAGGER_USE_ABSOLUTE_PATH=true
+    L5_FORMAT_TO_USE_FOR_DOCS=json
+    ```
+
+    ## 🎯 Benefits of This Implementation
+
+    1. **✅ Complete Documentation**: All endpoints documented with examples
+    2. **✅ Interactive Testing**: Test APIs directly from browser
+    3. **✅ Mobile-Friendly**: Perfect for mobile app development
+    4. **✅ Export Ready**: JSON/YAML formats for external tools
+    5. **✅ Security Documented**: Clear authentication requirements
+    6. **✅ Validation Info**: Request/response schemas included
+    7. **✅ Professional**: Industry-standard OpenAPI specification
+
+    ## 🔗 Related Documentation
+
+    - [Laravel Passport Authentication](routes/auth.php)
+    - [Package Documentation](PACKAGES_DOCUMENTATION.md)
+    - [Database Backup System](app/Console/Commands/BackupDatabase.php)
+
+    ---
+
+    **✅ Status**: API Documentation implementation complete!
+    **🌐 Access**: http://127.0.0.1:8001/api/documentation
+    **📱 Mobile Ready**: All endpoints documented and testable
+
+    </details>
 - ❌ Postman Collection for APIs preloaded
 - ❌ PHPStan or Larastan for static analysis
 - ❌ Predefined Error messages in lang/en/messages.php
-- ❌ Custom Artisan commands (php artisan make:command)
 
 
 ### 🧰 5. Frontend Integration (ReactJS)

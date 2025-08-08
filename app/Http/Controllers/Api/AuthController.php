@@ -15,7 +15,23 @@ use Carbon\Carbon;
 
 class AuthController extends Controller
 {
-    /* Get the current app version and store URL. */
+    /**
+     * @OA\Get(
+     *     path="/api/app-version",
+     *     operationId="getAppVersion",
+     *     tags={"Authentication"},
+     *     summary="Get application version and store URL",
+     *     description="Returns the current application version and app store URL",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="app_version", type="string", example="1.0.0+0", description="Current app version"),
+     *             @OA\Property(property="url", type="string", example="https://play.google.com/store/apps/details?id=com.example.app", description="App store URL")
+     *         )
+     *     )
+     * )
+     */
     public function getAppVersion()
     {
         $data = [
@@ -25,8 +41,43 @@ class AuthController extends Controller
         return response()->json($data, 200);
     }
 
-
-    /* Register a new user and send OTP. */
+    /**
+     * @OA\Post(
+     *     path="/api/register",
+     *     operationId="registerUser",
+     *     tags={"Authentication"},
+     *     summary="Register a new user",
+     *     description="Register a new user and send OTP for verification",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"first_name","email","mobile","device_id"},
+     *             @OA\Property(property="first_name", type="string", maxLength=191, example="John", description="User's first name"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com", description="User's email address"),
+     *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number"),
+     *             @OA\Property(property="device_id", type="string", maxLength=191, example="abc123device", description="Unique device identifier")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User registered successfully, OTP sent",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="OTP sent successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="first_name", type="array", @OA\Items(type="string", example="Please enter name")),
+     *                 @OA\Property(property="email", type="array", @OA\Items(type="string", example="Please enter valid email")),
+     *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Mobile number already exists"))
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -62,8 +113,48 @@ class AuthController extends Controller
         return response()->json(['message' => 'OTP sent successfully'], 201);
     }
 
-
-    /* Login user and send OTP. */
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     operationId="loginUser",
+     *     tags={"Authentication"},
+     *     summary="Login user",
+     *     description="Login user with mobile number and send OTP",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"mobile","device_id"},
+     *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number"),
+     *             @OA\Property(property="device_id", type="string", maxLength=191, example="abc123device", description="Unique device identifier")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OTP sent successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="OTP sent successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Please enter valid mobile"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Mobile number not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Mobile number does not exist"))
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -96,8 +187,51 @@ class AuthController extends Controller
         }
     }
 
-
-    /*  Verify OTP and issue access token. */
+    /**
+     * @OA\Post(
+     *     path="/api/verify-otp",
+     *     operationId="verifyOTP",
+     *     tags={"Authentication"},
+     *     summary="Verify OTP and get access token",
+     *     description="Verify the OTP sent to user's mobile and issue access token",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"mobile","otp"},
+     *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number"),
+     *             @OA\Property(property="otp", type="string", pattern="^[0-9]{4}$", example="1234", description="4-digit OTP code"),
+     *             @OA\Property(property="remember_me", type="boolean", example=true, description="Remember login for extended period")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User authenticated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User logged in successfully"),
+     *             @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...", description="JWT access token"),
+     *             @OA\Property(property="token_type", type="string", example="Bearer", description="Token type"),
+     *             @OA\Property(property="expires_at", type="string", format="date-time", example="2024-01-15 10:30:00", description="Token expiration date")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Please enter valid mobile")),
+     *                 @OA\Property(property="otp", type="array", @OA\Items(type="string", example="Please enter 4 digits for OTP"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid OTP",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="OTP does not match, please enter correct OTP")
+     *         )
+     *     )
+     * )
+     */
     public function verifyOTP(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -135,8 +269,45 @@ class AuthController extends Controller
         }
     }
 
-
-    /* Resend OTP to user. */
+    /**
+     * @OA\Post(
+     *     path="/api/resend-otp",
+     *     operationId="resendOTP",
+     *     tags={"Authentication"},
+     *     summary="Resend OTP",
+     *     description="Resend OTP to user's mobile number",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"mobile"},
+     *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OTP resent successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="OTP sent successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Please enter valid mobile"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Mobile number not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Mobile number does not exist")
+     *         )
+     *     )
+     * )
+     */
     public function resendOTP(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -166,8 +337,30 @@ class AuthController extends Controller
         }
     }
 
-
-    /* Logout the authenticated user (revoke token). */
+    /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     operationId="logoutUser",
+     *     tags={"Authentication"},
+     *     summary="Logout user",
+     *     description="Logout authenticated user and revoke access token",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged out successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User logged out successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
     public function logout(Request $request)
     {
         $user = $request->user('api');
@@ -180,16 +373,91 @@ class AuthController extends Controller
         return response()->json(['message' => 'User logged out successfully'], 200);
     }
 
-
-    /* Get the authenticated user's details. */
+    /**
+     * @OA\Post(
+     *     path="/api/user",
+     *     operationId="getUser",
+     *     tags={"User"},
+     *     summary="Get authenticated user details",
+     *     description="Returns authenticated user's profile information",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User details retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="integer", example=1, description="User ID"),
+     *             @OA\Property(property="first_name", type="string", example="John", description="User's first name"),
+     *             @OA\Property(property="last_name", type="string", example="Doe", description="User's last name"),
+     *             @OA\Property(property="email", type="string", example="john@example.com", description="User's email"),
+     *             @OA\Property(property="mobile", type="string", example="9876543210", description="User's mobile number"),
+     *             @OA\Property(property="business_name", type="string", example="John's Business", description="Business name"),
+     *             @OA\Property(property="state", type="string", example="California", description="User's state"),
+     *             @OA\Property(property="city", type="string", example="Los Angeles", description="User's city"),
+     *             @OA\Property(property="photo", type="string", nullable=true, example="user-photos/photo.jpg", description="Profile photo path"),
+     *             @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-01T10:00:00.000000Z"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-01T10:00:00.000000Z")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
     public function getUser(Request $request)
     {
         $user = $request->user('api');
         return response()->json($user, 200);
     }
 
-
-    /* Update the authenticated user's details. */
+    /**
+     * @OA\Post(
+     *     path="/api/user/update",
+     *     operationId="updateUser",
+     *     tags={"User"},
+     *     summary="Update authenticated user details",
+     *     description="Update authenticated user's profile information",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"business_name","first_name","last_name","state","city"},
+     *             @OA\Property(property="business_name", type="string", maxLength=50, example="John's Updated Business", description="Business name"),
+     *             @OA\Property(property="first_name", type="string", maxLength=50, example="John", description="User's first name"),
+     *             @OA\Property(property="last_name", type="string", maxLength=50, example="Doe", description="User's last name"),
+     *             @OA\Property(property="state", type="string", example="California", description="User's state"),
+     *             @OA\Property(property="city", type="string", example="Los Angeles", description="User's city")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User updated successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="business_name", type="array", @OA\Items(type="string", example="Please enter business name")),
+     *                 @OA\Property(property="first_name", type="array", @OA\Items(type="string", example="Please enter first name"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
     public function updateUser(Request $request)
     {
         $user = $request->user('api');
@@ -216,8 +484,47 @@ class AuthController extends Controller
         return response()->json(['message' => 'User updated successfully'], 200);
     }
 
-
-    /* Update the authenticated user's photo. */
+    /**
+     * @OA\Post(
+     *     path="/api/user/update-photo",
+     *     operationId="updateUserPhoto",
+     *     tags={"User"},
+     *     summary="Update user profile photo",
+     *     description="Upload and update authenticated user's profile photo",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"photo"},
+     *                 @OA\Property(property="photo", type="string", format="binary", description="Profile photo file (JPEG, JPG, PNG)")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Photo updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Photo updated successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error or no photo uploaded",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No photo uploaded")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
     public function updateUserPhoto(Request $request)
     {
         $validator = Validator::make($request->all(), [

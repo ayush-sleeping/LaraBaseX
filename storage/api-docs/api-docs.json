@@ -1,0 +1,965 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "LaraBaseX API Documentation",
+        "description": "A comprehensive API documentation for LaraBaseX - Laravel 12 + ReactJS Full Stack Boilerplate",
+        "contact": {
+            "email": "admin@larabasex.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "LaraBaseX API Server"
+        }
+    ],
+    "paths": {
+        "/api/app-version": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get application version and store URL",
+                "description": "Returns the current application version and app store URL",
+                "operationId": "getAppVersion",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "app_version": {
+                                            "description": "Current app version",
+                                            "type": "string",
+                                            "example": "1.0.0+0"
+                                        },
+                                        "url": {
+                                            "description": "App store URL",
+                                            "type": "string",
+                                            "example": "https://play.google.com/store/apps/details?id=com.example.app"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new user",
+                "description": "Register a new user and send OTP for verification",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "email",
+                                    "mobile",
+                                    "device_id"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 191,
+                                        "example": "John"
+                                    },
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "mobile": {
+                                        "description": "10-digit mobile number",
+                                        "type": "string",
+                                        "pattern": "^[0-9]{10}$",
+                                        "example": "9876543210"
+                                    },
+                                    "device_id": {
+                                        "description": "Unique device identifier",
+                                        "type": "string",
+                                        "maxLength": 191,
+                                        "example": "abc123device"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully, OTP sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP sent successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "first_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter name"
+                                                    }
+                                                },
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter valid email"
+                                                    }
+                                                },
+                                                "mobile": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Mobile number already exists"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "description": "Login user with mobile number and send OTP",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "mobile",
+                                    "device_id"
+                                ],
+                                "properties": {
+                                    "mobile": {
+                                        "description": "10-digit mobile number",
+                                        "type": "string",
+                                        "pattern": "^[0-9]{10}$",
+                                        "example": "9876543210"
+                                    },
+                                    "device_id": {
+                                        "description": "Unique device identifier",
+                                        "type": "string",
+                                        "maxLength": 191,
+                                        "example": "abc123device"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP sent successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "mobile": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter valid mobile"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Mobile number not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "mobile": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Mobile number does not exist"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/verify-otp": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Verify OTP and get access token",
+                "description": "Verify the OTP sent to user's mobile and issue access token",
+                "operationId": "verifyOTP",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "mobile",
+                                    "otp"
+                                ],
+                                "properties": {
+                                    "mobile": {
+                                        "description": "10-digit mobile number",
+                                        "type": "string",
+                                        "pattern": "^[0-9]{10}$",
+                                        "example": "9876543210"
+                                    },
+                                    "otp": {
+                                        "description": "4-digit OTP code",
+                                        "type": "string",
+                                        "pattern": "^[0-9]{4}$",
+                                        "example": "1234"
+                                    },
+                                    "remember_me": {
+                                        "description": "Remember login for extended period",
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User authenticated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged in successfully"
+                                        },
+                                        "access_token": {
+                                            "description": "JWT access token",
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+                                        },
+                                        "token_type": {
+                                            "description": "Token type",
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        },
+                                        "expires_at": {
+                                            "description": "Token expiration date",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-15 10:30:00"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "mobile": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter valid mobile"
+                                                    }
+                                                },
+                                                "otp": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter 4 digits for OTP"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid OTP",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP does not match, please enter correct OTP"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/resend-otp": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Resend OTP",
+                "description": "Resend OTP to user's mobile number",
+                "operationId": "resendOTP",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "mobile"
+                                ],
+                                "properties": {
+                                    "mobile": {
+                                        "description": "10-digit mobile number",
+                                        "type": "string",
+                                        "pattern": "^[0-9]{10}$",
+                                        "example": "9876543210"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP resent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP sent successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "mobile": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter valid mobile"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Mobile number not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mobile number does not exist"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "description": "Logout authenticated user and revoke access token",
+                "operationId": "logoutUser",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get authenticated user details",
+                "description": "Returns authenticated user's profile information",
+                "operationId": "getUser",
+                "responses": {
+                    "200": {
+                        "description": "User details retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "User ID",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "first_name": {
+                                            "description": "User's first name",
+                                            "type": "string",
+                                            "example": "John"
+                                        },
+                                        "last_name": {
+                                            "description": "User's last name",
+                                            "type": "string",
+                                            "example": "Doe"
+                                        },
+                                        "email": {
+                                            "description": "User's email",
+                                            "type": "string",
+                                            "example": "john@example.com"
+                                        },
+                                        "mobile": {
+                                            "description": "User's mobile number",
+                                            "type": "string",
+                                            "example": "9876543210"
+                                        },
+                                        "business_name": {
+                                            "description": "Business name",
+                                            "type": "string",
+                                            "example": "John's Business"
+                                        },
+                                        "state": {
+                                            "description": "User's state",
+                                            "type": "string",
+                                            "example": "California"
+                                        },
+                                        "city": {
+                                            "description": "User's city",
+                                            "type": "string",
+                                            "example": "Los Angeles"
+                                        },
+                                        "photo": {
+                                            "description": "Profile photo path",
+                                            "type": "string",
+                                            "example": "user-photos/photo.jpg",
+                                            "nullable": true
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T10:00:00.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T10:00:00.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/update": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update authenticated user details",
+                "description": "Update authenticated user's profile information",
+                "operationId": "updateUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "business_name",
+                                    "first_name",
+                                    "last_name",
+                                    "state",
+                                    "city"
+                                ],
+                                "properties": {
+                                    "business_name": {
+                                        "description": "Business name",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "John's Updated Business"
+                                    },
+                                    "first_name": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Doe"
+                                    },
+                                    "state": {
+                                        "description": "User's state",
+                                        "type": "string",
+                                        "example": "California"
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "example": "Los Angeles"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "business_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter business name"
+                                                    }
+                                                },
+                                                "first_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Please enter first name"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/update-photo": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user profile photo",
+                "description": "Upload and update authenticated user's profile photo",
+                "operationId": "updateUserPhoto",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "photo"
+                                ],
+                                "properties": {
+                                    "photo": {
+                                        "description": "Profile photo file (JPEG, JPG, PNG)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Photo updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Photo updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error or no photo uploaded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No photo uploaded"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sliders": {
+            "post": {
+                "tags": [
+                    "Home"
+                ],
+                "summary": "Get home page sliders",
+                "description": "Retrieve all active sliders for the home page",
+                "operationId": "getSliders",
+                "responses": {
+                    "200": {
+                        "description": "Sliders retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "Slider ID",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "description": "Slider title",
+                                                "type": "string",
+                                                "example": "Welcome to LaraBaseX"
+                                            },
+                                            "description": {
+                                                "description": "Slider description",
+                                                "type": "string",
+                                                "example": "Best platform for your needs"
+                                            },
+                                            "image": {
+                                                "description": "Slider image path",
+                                                "type": "string",
+                                                "example": "sliders/slider1.jpg"
+                                            },
+                                            "link": {
+                                                "description": "Optional link URL",
+                                                "type": "string",
+                                                "example": "https://example.com",
+                                                "nullable": true
+                                            },
+                                            "is_active": {
+                                                "description": "Whether slider is active",
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "order": {
+                                                "description": "Display order",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter token in format (Bearer <token>)",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            },
+            "basicAuth": {
+                "type": "http",
+                "description": "Basic authentication for public endpoints",
+                "scheme": "basic"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "API Endpoints for User Authentication and Registration"
+        },
+        {
+            "name": "User",
+            "description": "API Endpoints for User Profile Management"
+        },
+        {
+            "name": "Home",
+            "description": "API Endpoints for Home/Public Content"
+        }
+    ]
+}
