@@ -1,0 +1,1105 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method App\\Console\\Commands\\BackupDatabase\:\:handle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Console/Commands/BackupDatabase.php
+
+		-
+			message: '#^Access to protected property Laravel\\Passport\\PersonalAccessTokenResult\:\:\$token\.$#'
+			identifier: property.protected
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Models\\User and ''tokens'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:getAppVersion\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:getUser\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:login\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:logout\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:register\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:resendOTP\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:updateUser\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:updateUserPhoto\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\AuthController\:\:verifyOTP\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Facades\\Hash\:\:make\(\) expects string, int\<1000, 9999\> given\.$#'
+			identifier: argument.type
+			count: 3
+			path: app/Http/Controllers/Api/AuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\HomeController\:\:getSliders\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/HomeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\PasswordController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Auth/PasswordController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Employee\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Enquiry\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Relation ''createdBy'' is not found in App\\Models\\Employee model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Relation ''createdBy'' is not found in App\\Models\\Enquiry model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Relation ''user'' is not found in App\\Models\\Employee model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Employee\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Enquiry\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>email" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Backend/DashboardController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\Employee\>\:\:findByHashid\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:changeStatus\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:show\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:syncUserPermissions\(\) has parameter \$roleNames with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:syncUserPermissions\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EmployeeController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Relation ''user'' is not found in App\\Models\\Employee model\.$#'
+			identifier: larastan.relationExistence
+			count: 4
+			path: app/Http/Controllers/Backend/EmployeeController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EnquiryController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EnquiryController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\EnquiryController\:\:updateRemark\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/EnquiryController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\RoleController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\RoleController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\RoleController\:\:permissionsUpdate\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\RoleController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\RoleController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Backend\\RoleController\:\:\$customMessages type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Backend\\RoleController\:\:\$rules type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Relation ''permissions'' is not found in App\\Models\\Permissiongroup model\.$#'
+			identifier: larastan.relationExistence
+			count: 2
+			path: app/Http/Controllers/Backend/RoleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:assignRolesAndPermissions\(\) has parameter \$roleIds with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:changeStatus\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:export\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Backend\\UserController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Backend\\UserController\:\:\$customMessages type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Backend\\UserController\:\:\$rules type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/Backend/UserController.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\AdminAccess\:\:extractRouteInformation\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/AdminAccess.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\AdminAccess\:\:hasPermissionAccess\(\) has parameter \$routeInfo with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/AdminAccess.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\AdminAccess\:\:logAccess\(\) has parameter \$routeInfo with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/AdminAccess.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\AdminAccess\:\:logAccessDenied\(\) has parameter \$routeInfo with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/AdminAccess.php
+
+		-
+			message: '#^Property App\\Http\\Middleware\\AdminAccess\:\:\$superAdminRoles type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/AdminAccess.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\Authenticate\:\:redirectTo\(\) should return string\|null but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: app/Http/Middleware/Authenticate.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Http/Middleware/BasicAuth.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\RedirectIfAuthenticated\:\:handle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Middleware/RedirectIfAuthenticated.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\RedirectIfAuthenticated\:\:handle\(\) has parameter \$guards with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Middleware/RedirectIfAuthenticated.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\Token\:\:getSafeHeaders\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/Token.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: app/Http/Middleware/TrustHosts.php
+
+		-
+			message: '#^Class App\\Models\\CoreModel uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:createdBy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:decodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:decodeKey\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:encodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:encodeKey\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:findByHashid\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:findByHashid\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:fullAuditInfo\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\CoreModel\:\:updatedBy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>first_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>last_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Models/CoreModel.php
+
+		-
+			message: '#^Method App\\Models\\Employee\:\:user\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Employee.php
+
+		-
+			message: '#^Interface Spatie\\Permission\\Contracts\\Permission requires implementing class to extend Spatie\\Permission\\Models\\Permission, but App\\Models\\Permission does not\.$#'
+			identifier: class.missingExtends
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:create\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:decodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:decodeKey\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:encodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:encodeKey\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:findByHashid\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:findByHashid\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:getPermission\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:getPermission\(\) should return Spatie\\Permission\\Contracts\\Permission\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:getPermissions\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:getPermissions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:permissiongroup\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:roles\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permission\:\:users\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:belongsToMany\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:morphedByMany\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/Permission.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:decodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:decodeKey\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:encodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:encodeKey\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:findByHashid\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:findByHashid\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Method App\\Models\\Permissiongroup\:\:permissions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/Permissiongroup.php
+
+		-
+			message: '#^Interface Spatie\\Permission\\Contracts\\Role requires implementing class to extend Spatie\\Permission\\Models\\Role, but App\\Models\\Role does not\.$#'
+			identifier: class.missingExtends
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:decodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:decodeKey\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:encodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:encodeKey\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:findByHashid\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:findByHashid\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:permissions\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:scopeForGuard\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:scopeForGuard\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:scopeWithPermissionsCount\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:scopeWithPermissionsCount\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Method App\\Models\\Role\:\:users\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\MorphToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^PHPDoc type array\<string, string\> of property App\\Models\\Role\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Property App\\Models\\Role\:\:\$fillable \(array\<string, string\>\) does not accept default value of type array\<int, string\>\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:belongsToMany\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Unable to resolve the template type TRelatedModel in call to method Illuminate\\Database\\Eloquent\\Model\:\:morphedByMany\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/Role.php
+
+		-
+			message: '#^Class App\\Models\\User uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:creator\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:decodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:decodeKey\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:encodeKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:encodeKey\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:findByHashid\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:findByHashid\(\) has parameter \$hash with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:updator\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^PHPDoc type array\<string\> of property App\\Models\\User\:\:\$appends is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$appends\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Trait Laravel\\Passport\\HasApiTokens requires using class to implement Laravel\\Passport\\Contracts\\OAuthenticatable, but App\\Models\\User does not\.$#'
+			identifier: class.missingImplements
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Providers\\AuthServiceProvider\:\:boot\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Providers/AuthServiceProvider.php
+
+		-
+			message: '#^Method App\\Providers\\BroadcastServiceProvider\:\:boot\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Providers/BroadcastServiceProvider.php
+
+		-
+			message: '#^Method App\\Scopes\\HierarchyScope\:\:apply\(\) has parameter \$builder with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Scopes/HierarchyScope.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_error\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_error_message\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_error_message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_success\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_success\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_success_message\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_success_message\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function api_success_message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function asset_timestamped\(\) has parameter \$path with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function auth_message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function carbon\(\) has parameter \$date with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function current_user\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function dd_log\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function file_size_readable\(\) has parameter \$bytes with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function format_mobile\(\) has parameter \$mobile with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function get_env\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function get_env\(\) has parameter \$default with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function get_env\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function human_readable_time\(\) has parameter \$datetime with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function in_rupee\(\) has parameter \$num with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function json_response\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function json_response\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function log_activity\(\) has parameter \$properties with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function sanitize_string\(\) has parameter \$string with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function send_sms\(\) has parameter \$numbers with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function str_ends_with\(\) has parameter \$needles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function upload_file\(\) has parameter \$file with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function user_message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Function validation_message\(\) has parameter \$replace with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/helpers.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<0, max\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/helpers.php
+
+		-
+			message: '#^Parameter \#1 \$string of function substr expects string, float\|int given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/helpers.php
+
+		-
+			message: '#^Return type \(array\<string, mixed\>\) of method Database\\Factories\\UserFactory\:\:definition\(\) should be compatible with return type \(array\<model property of App\\Models\\User, mixed\>\) of method Illuminate\\Database\\Eloquent\\Factories\\Factory\<App\\Models\\User\>\:\:definition\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: database/factories/UserFactory.php
+
+		-
+			message: '#^Method Database\\Seeders\\PermissionSeeder\:\:createPermissions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Method Database\\Seeders\\PermissionSeeder\:\:createRoles\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Method Database\\Seeders\\PermissionSeeder\:\:createUsers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Method Database\\Seeders\\PermissionSeeder\:\:deletePermissions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Method Database\\Seeders\\PermissionSeeder\:\:run\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Property Database\\Seeders\\PermissionSeeder\:\:\$permissions has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Property Database\\Seeders\\PermissionSeeder\:\:\$roles has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Property Database\\Seeders\\PermissionSeeder\:\:\$users has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: database/seeders/PermissionSeeder.php
+
+		-
+			message: '#^Function something\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Pest.php
+
+		-
+			message: '#^Undefined variable\: \$this$#'
+			identifier: variable.undefined
+			count: 1
+			path: tests/Pest.php

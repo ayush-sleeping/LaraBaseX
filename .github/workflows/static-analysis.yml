@@ -1,0 +1,110 @@
+name: Static Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    name: PHPStan Analysis
+
+    strategy:
+      matrix:
+        php-version: [8.2, 8.3]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+        coverage: none
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-${{ matrix.php-version }}-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-interaction --no-suggest --optimize-autoloader
+
+    - name: Create database
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+
+    - name: Copy environment file
+      run: cp .env.example .env
+
+    - name: Generate application key
+      run: php artisan key:generate
+
+    - name: Clear configuration cache
+      run: php artisan config:clear
+
+    - name: Cache PHPStan results
+      uses: actions/cache@v3
+      with:
+        path: .phpstan-result-cache
+        key: phpstan-result-cache-${{ runner.os }}-${{ matrix.php-version }}-${{ github.sha }}
+        restore-keys: |
+          phpstan-result-cache-${{ runner.os }}-${{ matrix.php-version }}-
+
+    - name: Run PHPStan
+      run: vendor/bin/phpstan analyse --memory-limit=2G --error-format=github
+
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Check
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+        coverage: none
+
+    - name: Cache Composer packages
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-code-quality-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-code-quality-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-interaction --no-suggest --optimize-autoloader
+
+    - name: Create database
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+
+    - name: Copy environment file
+      run: cp .env.example .env
+
+    - name: Generate application key
+      run: php artisan key:generate
+
+    - name: Run Laravel Pint (Code Style)
+      run: vendor/bin/pint --test
+
+    - name: Run PHPStan (Static Analysis)
+      run: vendor/bin/phpstan analyse --memory-limit=2G
+
+    - name: Run Tests
+      run: php artisan test

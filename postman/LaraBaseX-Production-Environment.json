@@ -1,0 +1,45 @@
+{
+	"id": "87654321-4321-4321-4321-210987654321",
+	"name": "LaraBaseX Production Environment",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "https://your-production-domain.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "mobile_number",
+			"value": "your-mobile-number",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "device_id",
+			"value": "production-device-id",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_user_email",
+			"value": "test@yourdomain.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_user_password",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-08-08T12:00:00.000Z",
+	"_postman_exported_using": "Postman/10.0.0"
+}

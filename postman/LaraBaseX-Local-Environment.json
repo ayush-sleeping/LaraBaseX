@@ -1,0 +1,45 @@
+{
+	"id": "12345678-1234-1234-1234-123456789012",
+	"name": "LaraBaseX Local Environment",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8001",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "mobile_number",
+			"value": "9876543210",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "device_id",
+			"value": "test-device-postman-local",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_user_email",
+			"value": "john.doe@example.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_user_password",
+			"value": "Password123!",
+			"type": "secret",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-08-08T12:00:00.000Z",
+	"_postman_exported_using": "Postman/10.0.0"
+}

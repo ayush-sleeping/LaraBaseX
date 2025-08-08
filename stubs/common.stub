@@ -1,0 +1,105 @@
+<?php
+
+namespace Illuminate\Http;
+
+/**
+ * @template TKey of array-key
+ * @template TValue
+ */
+class Request
+{
+    /**
+     * @param TKey $key
+     * @param TValue|null $default
+     * @return TValue|mixed
+     */
+    public function input($key = null, $default = null) {}
+
+    /**
+     * @param array<TKey, TValue> $keys
+     * @return array<TKey, TValue>
+     */
+    public function only($keys) {}
+
+    /**
+     * @param array<TKey> $keys
+     * @return array<TKey, TValue>
+     */
+    public function except($keys) {}
+
+    /**
+     * @return array<TKey, TValue>
+     */
+    public function all() {}
+}
+
+namespace Illuminate\Database\Eloquent;
+
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
+class Builder
+{
+    /**
+     * @return TModel|null
+     */
+    public function first() {}
+
+    /**
+     * @return TModel
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function firstOrFail() {}
+
+    /**
+     * @param mixed $id
+     * @return TModel|null
+     */
+    public function find($id) {}
+
+    /**
+     * @param mixed $id
+     * @return TModel
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function findOrFail($id) {}
+}
+
+namespace Illuminate\Support;
+
+/**
+ * @template TKey of array-key
+ * @template TValue
+ */
+class Collection
+{
+    /**
+     * @param callable(TValue, TKey): bool $callback
+     * @return static<TKey, TValue>
+     */
+    public function filter($callback = null) {}
+
+    /**
+     * @template TMapValue
+     * @param callable(TValue, TKey): TMapValue $callback
+     * @return static<TKey, TMapValue>
+     */
+    public function map($callback) {}
+
+    /**
+     * @param TKey $key
+     * @param TValue|null $default
+     * @return TValue|mixed
+     */
+    public function get($key, $default = null) {}
+
+    /**
+     * @return TValue|null
+     */
+    public function first() {}
+
+    /**
+     * @return array<TKey, TValue>
+     */
+    public function toArray() {}
+}

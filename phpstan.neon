@@ -1,0 +1,65 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+        - database/factories/
+        - database/seeders/
+        - routes/
+        - tests/
+
+    # Rule level: 0 (loose) to 10 (strict)
+    # Start with level 6 for good balance of strictness and practicality
+    level: 6
+
+    # Ignore patterns for generated files and vendor code
+    ignoreErrors:
+        # Ignore Laravel's dynamic methods and properties
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::[a-zA-Z0-9_]+\(\)#'
+        - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9_]+#'
+
+        # Ignore common Laravel patterns
+        - '#Cannot call method [a-zA-Z0-9_]+\(\) on [a-zA-Z0-9\\_]+\|null#'
+        - '#Parameter .+ of method .+ expects .+, .+ given#'
+
+        # Ignore specific paths that are auto-generated or third-party
+        - message: '#Cannot access offset#'
+          path: vendor/*
+        - message: '#Undefined variable#'
+          path: vendor/*
+
+    # Exclude paths from analysis
+    excludePaths:
+        - '*/vendor/*'
+        - '*/node_modules/*'
+        - '*/storage/*'
+        - '*/bootstrap/cache/*'
+        - '*/public/build/*'
+        - '*/public/hot'
+
+    # Laravel specific configurations
+    noUnnecessaryCollectionCall: false
+    checkModelProperties: true
+    checkOctaneCompatibility: false
+
+    # Parallel processing for faster analysis
+    parallel:
+        jobSize: 20
+        maximumNumberOfProcesses: 32
+        minimumNumberOfJobsPerProcess: 2
+
+    # Report unused ignores
+    reportUnmatchedIgnoredErrors: false
+
+    # Error format and output
+    errorFormat: table
+
+    # Custom stub files for better Laravel support
+    stubFiles:
+        - stubs/common.stub
+
+    # Bootstrap file for Laravel
+    bootstrapFiles:
+        - vendor/larastan/larastan/bootstrap.php

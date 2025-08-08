@@ -26,6 +26,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.6",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.18",
         "laravel/sail": "^1.41",
@@ -78,6 +79,24 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "phpstan": [
+            "vendor/bin/phpstan analyse --memory-limit=2G"
+        ],
+        "phpstan:baseline": [
+            "vendor/bin/phpstan analyse --generate-baseline"
+        ],
+        "phpstan:clear": [
+            "vendor/bin/phpstan clear-result-cache"
+        ],
+        "code:check": [
+            "vendor/bin/pint --test",
+            "vendor/bin/phpstan analyse --memory-limit=2G",
+            "@test"
+        ],
+        "code:fix": [
+            "vendor/bin/pint",
+            "vendor/bin/phpstan analyse --memory-limit=2G"
         ]
     },
     "extra": {
