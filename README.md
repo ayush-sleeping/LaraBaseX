@@ -16,6 +16,7 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 | 2   | [Authorization Flow Documentation](#authorization-flow-documentation)                   |
 | 3   | [Setting Profile Information Update](#setting-profile-information-update)               |
 | 4   | [Setting Password Update](#setting-password-update)                                     |
+| 5   | [Permission Based UI Implementation](#permission-based-ui-implementation)               |
 
 <br>
 
@@ -38,105 +39,105 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 ### 🔒 1. Security Essentials
 These features protect your app, data, and server from attacks:
 
--  HTTPS enforced (Force HTTPS in AppServiceProvider)
--  CORS configured properly (config/cors.php)
--  CSRF protection (even for APIs, use Sanctum or tokens)
--  Rate Limiting for APIs (ThrottleRequests middleware)
--  Validation layer using FormRequest (php artisan make:request)
--  Use policies/gates for authorization (php artisan make:policy)
--  Avoid mass assignment bugs ($fillable vs $guarded)
--  Escape output or sanitize input if user-generated data is stored
--  Sanitize uploaded files & validate MIME types
--  Use environment variables for all secrets (never hardcode keys)
--  Disable debug mode on production (APP_DEBUG=false)
--  Log all authentication attempts and system errors
--  Do not expose Laravel version in headers
+- ❌ HTTPS enforced (Force HTTPS in AppServiceProvider)
+- ✅ CORS configured properly (config/cors.php)
+- ✅ CSRF protection (even for APIs, use Sanctum or tokens)
+- ✅ Rate Limiting for APIs (ThrottleRequests middleware)
+- ✅ Validation layer using FormRequest (php artisan make:request)
+- ✅ Use policies/gates for authorization (php artisan make:policy)
+- ✅ Avoid mass assignment bugs ($fillable vs $guarded)
+- ✅ Escape output or sanitize input if user-generated data is stored
+- ✅ Sanitize uploaded files & validate MIME types
+- ✅ Use environment variables for all secrets (never hardcode keys)
+- ✅ Disable debug mode on production (APP_DEBUG=false)
+- ✅ Log all authentication attempts and system errors
+- ✅ Do not expose Laravel version in headers
 
 
 ### 🧱 2. Architecture & Structure Essentials
--  Use Service classes for business logic (e.g. App\Services\UserService)
--  Use Repository pattern (clean separation from Eloquent queries)
--  Keep controllers thin, use Services for logic
--  Helpers.php for reusable functions (as you're doing)
--  Use enums for static statuses or types (php artisan make:enum)
--  Event-Listener system for side-effects (e.g. sending email after registration)
--  Job Queues setup (Redis + Supervisor in production)
--  Use resource() routes & API standards (api.php)
--  Transform API response data using Laravel Resource classes
+- ❌ Use Service classes for business logic (e.g. App\Services\UserService)
+- ❌ Use Repository pattern (clean separation from Eloquent queries)
+- ✅ Keep controllers thin, use Services for logic
+- ✅ Helpers.php for reusable functions (as you're doing)
+- ❌ Use enums for static statuses or types (php artisan make:enum)
+- ❌ Event-Listener system for side-effects (e.g. sending email after registration)
+- ✅ Job Queues setup (Redis + Supervisor in production)
+- ✅ Use resource() routes & API standards (api.php)
+- ❌ Transform API response data using Laravel Resource classes
 
 
 ### 📦 3. Packages to Include
--  Spatie Laravel Permission – roles/permissions
--  Laravel Sanctum or Passport – token-based auth
--  Laravel Telescope (local/dev) – debugging, request log
--  Laravel Debugbar (local/dev) – performance analysis
--  Spatie Backup – scheduled database/file backups
--  Spatie Activity Log – audit logs for user actions
+- ✅ Spatie Laravel Permission – roles/permissions
+- ✅ Laravel Sanctum or Passport – token-based auth
+- ❌ Laravel Telescope (local/dev) – debugging, request log
+- ❌ Laravel Debugbar (local/dev) – performance analysis
+- ❌ Spatie Backup – scheduled database/file backups
+- ❌ Spatie Activity Log – audit logs for user actions
 
 
 ### 🧠 4. Developer Experience (DX)
--  API Documentation via Swagger or Postman
--  Postman Collection for APIs preloaded
--  PHPStan or Larastan for static analysis
--  Predefined Error messages in lang/en/messages.php
--  Global Exception Handler for API errors
--  Standard API Response format using success(), error() helpers
--  Custom Artisan commands (php artisan make:command)
--  Seeder & Factory files for test data
--  Well-structured .env.example file
+- ❌ API Documentation via Swagger or Postman
+- ❌ Postman Collection for APIs preloaded
+- ❌ PHPStan or Larastan for static analysis
+- ❌ Predefined Error messages in lang/en/messages.php
+- ✅ Global Exception Handler for API errors
+- ✅ Standard API Response format using success(), error() helpers
+- ❌ Custom Artisan commands (php artisan make:command)
+- ✅ Seeder & Factory files for test data
+- ✅ Well-structured .env.example file
 
 
 ### 🧰 5. Frontend Integration (ReactJS)
 Since Laravel 12 uses Vite + React:
 
--  Serve React app via Vite from Laravel backend
--  Set up proxy in vite.config.js to API routes
--  React routing via React Router DOM
--  Token-based authentication (e.g. Sanctum)
--  Store tokens securely (httpOnly if possible)
--  Axios with global error interceptor
--  Dotenv file in React for API URLs
+- ✅ Serve React app via Vite from Laravel backend
+- ✅ Set up proxy in vite.config.js to API routes
+- ✅ React routing via React Router DOM
+- ✅ Token-based authentication (e.g. Sanctum)
+- ✅ Store tokens securely (httpOnly if possible)
+- ✅ Axios with global error interceptor
+- ✅ Dotenv file in React for API URLs
 
 
 ### 🔐 6. User Management Essentials
--  Register/Login/Logout APIs
--  Change Password / Forgot Password / Email Verify
--  User roles and permissions (admin, user, manager)
--  Login attempt throttling
--  User profile with avatar upload
--  Two-Factor Authentication (optional)
+- ✅ Register/Login/Logout APIs
+- ✅ Change Password / Forgot Password / Email Verify
+- ✅ User roles and permissions (admin, user, manager)
+- ✅ Login attempt throttling
+- ✅ User profile with avatar upload
+- ❌ Two-Factor Authentication (optional)
 
 
 ### 🛠️ 7. Helper Functions You Should Add
 You already have many! Add:
 
--  api_success() / api_error() – standardized response
--  generate_slug() – auto slug from title
--  upload_file() – universal file uploader
--  remove_file() – delete uploaded file
--  get_file_url() – retrieve full file URL from path
--  get_random_code() – for OTP, referral codes
--  human_readable_time() – time ago format
--  log_activity() – wrapper to log user actions
+- ✅ api_success() / api_error() – standardized response
+- ❌ generate_slug() – auto slug from title
+- ❌ upload_file() – universal file uploader
+- ❌ remove_file() – delete uploaded file
+- ❌ get_file_url() – retrieve full file URL from path
+- ✅ get_random_code() – for OTP, referral codes
+- ❌ human_readable_time() – time ago format
+- ❌ log_activity() – wrapper to log user actions
 
 
 ### 💾 8. MySQL Best Practices
--  Use InnoDB, not MyISAM
--  Use foreign keys with onDelete('cascade')
--  Add indexes to frequently searched fields
--  Store timestamps in UTC, convert in app
--  Avoid text or json unless needed
--  Use migrations and version your DB
+- ✅ Use InnoDB, not MyISAM
+- ✅ Use foreign keys with onDelete('cascade')
+- ✅ Add indexes to frequently searched fields
+- ✅ Store timestamps in UTC, convert in app
+- ✅ Avoid text or json unless needed
+- ✅ Use migrations and version your DB
 
 
 ### 🔄 9. Deployment & Production Readiness
--  .env file set up with production keys
--  Use queues and Supervisor (for jobs)
--  Enable caching (config, route, view, queries)
--  Enable Redis or Memcached
--  DB backups automated
--  Health check route (/health)
--  Use Laravel Forge or Ploi or GitHub Actions for CI/CD
+- ✅ .env file set up with production keys
+- ✅ Use queues and Supervisor (for jobs)
+- ❌ Enable caching (config, route, view, queries)
+- ✅ Enable Redis or Memcached
+- ❌ DB backups automated
+- ❌ Health check route (/health)
+- ❌ Use Laravel Forge or Ploi or GitHub Actions for CI/CD
 
 
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
@@ -148,6 +149,9 @@ You already have many! Add:
 #
 
 ## Authentication Flow Documentation
+
+<details>
+<summary><strong>🔐 Complete Login Process Flow</strong> (Click to expand)</summary>
 
 ### Complete Login Process Flow
 Understanding how user authentication works from frontend to backend and database.
@@ -278,6 +282,8 @@ Route::middleware(['auth', 'verified', 'admin', 'preventBackHistory'])->group(fu
 - **admin**: Custom middleware checking admin permissions
 - **preventBackHistory**: Prevents browser back button after logout
 
+</details>
+
 
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
 
@@ -290,6 +296,9 @@ Route::middleware(['auth', 'verified', 'admin', 'preventBackHistory'])->group(fu
 #
 
 ## Authorization Flow Documentation
+
+<details>
+<summary><strong>🛡️ Complete Role-Based Access Control (RBAC) Flow</strong> (Click to expand)</summary>
 
 ### Complete Role-Based Access Control (RBAC) Flow
 Understanding how user authorization works from registration to protected resource access.
@@ -513,6 +522,8 @@ Route::middleware(['auth', 'verified', 'admin', 'preventBackHistory'])->group(fu
 - **✅ Fail-Safe Default**: Deny access when in doubt
 
 
+</details>
+
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
 
 
@@ -524,6 +535,9 @@ Route::middleware(['auth', 'verified', 'admin', 'preventBackHistory'])->group(fu
 #
 
 ## Setting Profile Information Update
+
+<details>
+<summary><strong>👤 Complete Profile Management Flow</strong> (Click to expand)</summary>
 
 ### Complete Profile Management Flow
 Understanding how authenticated users can update their personal information (name and email).
@@ -780,6 +794,7 @@ const { data, setData, patch, errors, processing, recentlySuccessful } = useForm
 
 This profile management system provides a secure, user-friendly way for authenticated users to maintain their personal information while ensuring data integrity and security throughout the process.
 
+</details>
 
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
 
@@ -792,6 +807,9 @@ This profile management system provides a secure, user-friendly way for authenti
 #
 
 ## Setting Password Update
+
+<details>
+<summary><strong>🔐 Complete Password Management Flow</strong> (Click to expand)</summary>
 
 ### Complete Password Management Flow
 Understanding how authenticated users can securely update their account passwords.
@@ -1107,6 +1125,146 @@ const currentPasswordInput = useRef<HTMLInputElement>(null);
 
 This password management system provides enterprise-grade security while maintaining an excellent user experience, ensuring users can easily maintain strong, secure passwords for their accounts.
 
+</details>
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+
+
+<br>
+
+<br>
+
+#
+
+## Permission Based UI Implementation
+
+<details>
+<summary><strong>Permissions management</strong> (Click to expand)</summary>
+
+### Summary
+Implemented a comprehensive permission-based UI system that will solve your 403 error issues and provide a better user experience. Here's what has been created:
+
+### Components Created
+
+#### 1. `PermissionDenied` Component
+**Path:** `/resources/js/components/permission-denied.tsx`
+- Reusable component that shows a professional "Access Denied" message
+- Configurable title, message, and description
+- Includes contact information for requesting permissions
+- Follows your monochrome design system
+
+#### 2. `Error` Page Component
+**Path:** `/resources/js/pages/error.tsx`
+- Global error page that handles 403, 404, 500, and other HTTP errors
+- Uses PermissionDenied component for 403 errors specifically
+- Provides helpful navigation options (Dashboard, Back, Refresh)
+
+#### 3. `usePermissions` Hook
+**Path:** `/resources/js/hooks/use-permissions.ts`
+- React hook for checking user permissions and roles
+- Provides functions like `hasPermission()`, `hasRole()`, `isRootUser()`, etc.
+- Automatically handles RootUser role (bypasses all permission checks)
+
+#### 4. `ProtectedSection` Component
+**Path:** `/resources/js/components/protected-section.tsx`
+- Wrapper component that conditionally renders content based on permissions
+- Can protect individual sections within pages
+- Shows permission denied message or custom fallback
+- Supports multiple permissions/roles with AND/OR logic
+
+### Backend Integration
+
+#### Exception Handler Updated
+**Path:** `/app/Exceptions/Handler.php`
+- Added proper 403 error handling for Inertia requests
+- Automatically renders the error page with permission denied message
+- Handles both `AccessDeniedHttpException` and `AuthorizationException`
+
+### Usage Examples
+
+#### 1. Protecting Navigation (Already Updated)
+```tsx
+// app-sidebar.tsx - Navigation items are filtered by permissions
+const hasAccess = hasPermission(auth.user, 'user-view');
+```
+
+#### 2. Protecting Page Sections (Already Updated in Users Index)
+```tsx
+// Protect Create Button
+<ProtectedSection permission="user-store" showDeniedMessage={false}>
+    <Link href={route('admin.users.create')}>
+        <Button>Create User</Button>
+    </Link>
+</ProtectedSection>
+
+// Protect Edit/Delete in Dropdown
+<ProtectedSection permission="user-update" showDeniedMessage={false}>
+    <DropdownMenuItem asChild>
+        <Link href={route('admin.users.edit', user.id)}>Edit User</Link>
+    </DropdownMenuItem>
+</ProtectedSection>
+
+// Protect Status Toggle
+<ProtectedSection permission="user-update" showDeniedMessage={false}>
+    <Switch checked={isActive} onCheckedChange={() => handleStatusChange(user.id, user.status)} />
+</ProtectedSection>
+```
+
+#### 3. Using the Permission Hook
+```tsx
+import { usePermissions } from '@/hooks/use-permissions';
+
+function MyComponent() {
+    const { hasPermission, hasRole, isRootUser } = usePermissions();
+
+    if (!hasPermission('user-view')) {
+        return <PermissionDenied />;
+    }
+
+    return (
+        <div>
+            {hasPermission('user-store') && <CreateButton />}
+            {hasPermission('user-update') && <EditButton />}
+            {(hasRole('Admin') || isRootUser()) && <AdminOnlySection />}
+        </div>
+    );
+}
+```
+
+### Controller Protection (Recommended)
+
+Add this to your controllers to prevent 403 errors at the source:
+
+```php
+// In UserController.php constructor
+public function __construct()
+{
+    $this->middleware('permission:user-view')->only(['index', 'show']);
+    $this->middleware('permission:user-store')->only(['create', 'store']);
+    $this->middleware('permission:user-update')->only(['edit', 'update', 'changeStatus']);
+}
+```
+
+### Benefits
+
+1. **Better UX**: Users see helpful messages instead of generic 403 errors
+2. **Consistent Design**: All permission denied messages follow your design system
+3. **Reusable**: Components can be used across all pages and sections
+4. **Flexible**: Can protect entire pages, sections, or individual buttons
+5. **Type Safe**: Full TypeScript support with proper interfaces
+6. **Performance**: Frontend filtering prevents unnecessary clicks and requests
+
+### Next Steps
+
+1. **Add middleware to controllers** to prevent backend 403 errors
+2. **Apply ProtectedSection** to other pages (roles, employees, enquiries)
+3. **Test with different user roles** to ensure proper permission handling
+4. **Customize messages** per section if needed
+
+This system ensures users will never see a blank 403 error page again, and will always know why they can't access something and who to contact for help!
+
+</details>
 
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
 
