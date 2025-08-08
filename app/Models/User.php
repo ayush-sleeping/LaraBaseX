@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\Hashidable;
+use App\Traits\Cacheable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, Hashidable, HasApiTokens, LogsActivity;
+    use HasFactory, Notifiable, HasRoles, Hashidable, HasApiTokens, LogsActivity, Cacheable;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +43,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * Cache configuration
+     */
+    protected $cacheTTL = 1800; // 30 minutes
+    protected $cacheTags = ['users', 'auth'];
 
     /**
      * The attributes that should be appended to model's array form.
