@@ -11,6 +11,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class, // Uncomment if implemented
+        \App\Http\Middleware\ForceHttps::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
@@ -67,5 +68,6 @@ class Kernel extends HttpKernel
         'basic_auth' => \App\Http\Middleware\BasicAuth::class,
         'token' => \App\Http\Middleware\Token::class,
         'trustHosts' => \App\Http\Middleware\TrustHosts::class,
+        'force.https' => \App\Http\Middleware\ForceHttps::class,
     ];
 }

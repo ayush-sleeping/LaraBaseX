@@ -39,7 +39,52 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 ### 🔒 1. Security Essentials
 These features protect your app, data, and server from attacks:
 
-- ❌ HTTPS enforced (Force HTTPS in AppServiceProvider)
+- ✅ HTTPS enforced (Force HTTPS in AppServiceProvider)
+    <details>
+    <summary>
+    <strong>🔐 Implementation Details</strong> (Click to expand)</summary>
+
+    **📁 Files Modified:**
+    - `/app/Providers/AppServiceProvider.php` - Force HTTPS URL generation
+    - `/config/app.php` - Added `force_https` configuration
+    - `/app/Http/Middleware/ForceHttps.php` - HTTP to HTTPS redirects
+    - `/app/Http/Kernel.php` - Middleware registration
+    - `/.env.example` - Added `APP_FORCE_HTTPS` variable
+
+    **🔧 How It Works:**
+    ```php
+    // AppServiceProvider - URL generation
+    if (config('app.env') === 'production') {
+        URL::forceScheme('https');
+    }
+
+    // Middleware - Request redirects
+    if ($this->shouldForceHttps($request)) {
+        return redirect()->secure($request->getRequestUri(), 301);
+    }
+    ```
+
+    **⚙️ Configuration:**
+    ```bash
+    # Production
+    APP_ENV=production
+    APP_FORCE_HTTPS=true
+    APP_URL=https://yourdomain.com
+
+    # Development
+    APP_ENV=local
+    APP_FORCE_HTTPS=false
+    APP_URL=http://localhost
+    ```
+
+    **✅ Features:**
+    - Automatic HTTPS enforcement in production
+    - Environment-based configuration
+    - 301 redirects for SEO
+    - Development-friendly (skips local)
+    - Dual-layer protection (AppServiceProvider + Middleware)
+
+    </details>
 - ✅ CORS configured properly (config/cors.php)
 - ✅ CSRF protection (even for APIs, use Sanctum or tokens)
 - ✅ Rate Limiting for APIs (ThrottleRequests middleware)
@@ -55,14 +100,14 @@ These features protect your app, data, and server from attacks:
 
 
 ### 🧱 2. Architecture & Structure Essentials
-- ❌ Use Service classes for business logic (e.g. App\Services\UserService)
-- ❌ Use Repository pattern (clean separation from Eloquent queries)
 - ✅ Keep controllers thin, use Services for logic
 - ✅ Helpers.php for reusable functions (as you're doing)
-- ❌ Use enums for static statuses or types (php artisan make:enum)
-- ❌ Event-Listener system for side-effects (e.g. sending email after registration)
 - ✅ Job Queues setup (Redis + Supervisor in production)
 - ✅ Use resource() routes & API standards (api.php)
+- ❌ Use Service classes for business logic (e.g. App\Services\UserService)
+- ❌ Use Repository pattern (clean separation from Eloquent queries)
+- ❌ Use enums for static statuses or types (php artisan make:enum)
+- ❌ Event-Listener system for side-effects (e.g. sending email after registration)
 - ❌ Transform API response data using Laravel Resource classes
 
 
@@ -76,15 +121,15 @@ These features protect your app, data, and server from attacks:
 
 
 ### 🧠 4. Developer Experience (DX)
+- ✅ Global Exception Handler for API errors
+- ✅ Standard API Response format using success(), error() helpers
+- ✅ Seeder & Factory files for test data
+- ✅ Well-structured .env.example file
 - ❌ API Documentation via Swagger or Postman
 - ❌ Postman Collection for APIs preloaded
 - ❌ PHPStan or Larastan for static analysis
 - ❌ Predefined Error messages in lang/en/messages.php
-- ✅ Global Exception Handler for API errors
-- ✅ Standard API Response format using success(), error() helpers
 - ❌ Custom Artisan commands (php artisan make:command)
-- ✅ Seeder & Factory files for test data
-- ✅ Well-structured .env.example file
 
 
 ### 🧰 5. Frontend Integration (ReactJS)
@@ -112,13 +157,13 @@ Since Laravel 12 uses Vite + React:
 You already have many! Add:
 
 - ✅ api_success() / api_error() – standardized response
-- ❌ generate_slug() – auto slug from title
-- ❌ upload_file() – universal file uploader
-- ❌ remove_file() – delete uploaded file
-- ❌ get_file_url() – retrieve full file URL from path
 - ✅ get_random_code() – for OTP, referral codes
-- ❌ human_readable_time() – time ago format
-- ❌ log_activity() – wrapper to log user actions
+- ✅ generate_slug() – auto slug from title
+- ✅ upload_file() – universal file uploader
+- ✅ remove_file() – delete uploaded file
+- ✅ get_file_url() – retrieve full file URL from path
+- ✅ human_readable_time() – time ago format
+- ✅ log_activity() – wrapper to log user actions
 
 
 ### 💾 8. MySQL Best Practices
@@ -133,8 +178,8 @@ You already have many! Add:
 ### 🔄 9. Deployment & Production Readiness
 - ✅ .env file set up with production keys
 - ✅ Use queues and Supervisor (for jobs)
-- ❌ Enable caching (config, route, view, queries)
 - ✅ Enable Redis or Memcached
+- ❌ Enable caching (config, route, view, queries)
 - ❌ DB backups automated
 - ❌ Health check route (/health)
 - ❌ Use Laravel Forge or Ploi or GitHub Actions for CI/CD

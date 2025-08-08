@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,16 @@ class AppServiceProvider extends ServiceProvider
     {
         // Set default string length for older MySQL versions and utf8mb4 compatibility
         Schema::defaultStringLength(191);
+
+        // Force HTTPS in production environment
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
+        // Alternative: Force HTTPS based on APP_FORCE_HTTPS environment variable
+        // This gives you more control via .env file
+        if (config('app.force_https', false)) {
+            URL::forceScheme('https');
+        }
     }
 }

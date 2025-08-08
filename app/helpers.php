@@ -25,14 +25,13 @@
  * 19. asset_timestamped       - Append filemtime to asset for cache busting.
  * 20. dd_log                  - Dump data to log for debugging.
  * 21. format_mobile           - Standardize mobile numbers (digits only).
- * 22. random_otp              - Generate a random OTP of given digits.
- * 23. api_success             - Standard API success response.
- * 24. api_error               - Standard API error response.
- * 25. client_ip               - Get the real client IP address.
- * 26. is_local_env            - Detect if running in local environment.
- * 27. current_user            - Get the authenticated user (API guard).
- * 28. file_size_readable      - Convert bytes to human-readable file size.
- * 29. sanitize_string         - Remove HTML tags and unwanted chars from a string.
+ * 25. get_random_code() – for OTP, referral codes
+ * 26. generate_slug() – auto slug from title
+ * 27. upload_file() – universal file uploader
+ * 28. remove_file() – delete uploaded file
+ * 29. get_file_url() – retrieve full file URL from path
+ * 30. human_readable_time() – time ago format
+ * 31. log_activity() – wrapper to log user actions
  *
  * Add or update helpers as needed for your project.
  */
@@ -40,6 +39,7 @@
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 // 🔠 String Helpers
 if (!function_exists('str_ends_with')) {
@@ -345,7 +345,7 @@ if (!function_exists('dd_log')) {
      * Dump data to log for debugging.
      */
     function dd_log($data): void {
-        \Log::debug(print_r($data, true));
+        Log::debug(print_r($data, true));
     }
 }
 
@@ -464,5 +464,164 @@ if (!function_exists('getPermissionsTeamId')) {
         // This should return the current team ID if you're using teams
         // For now, returning null as teams are not enabled
         return Auth::check() ? Auth::user()->current_team_id ?? null : null;
+    }
+}
+
+// 🔗 Helper Functions
+if (!function_exists('generate_slug')) {
+    /**
+     * Auto generate slug from title.
+     */
+    function generate_slug(string $title, string $separator = '-'): string {
+        return Str::slug($title, $separator);
+    }
+}
+
+if (!function_exists('upload_file')) {
+    /**
+     * Universal file uploader.
+     */
+    function upload_file($file, string $directory = 'uploads', ?string $filename = null): ?string {
+        if (!$file || !$file->isValid()) {
+            return null;
+        }
+
+        try {
+            $directory = 'storage/' . trim($directory, '/');
+
+            // Create directory if it doesn't exist
+            $fullPath = public_path($directory);
+            if (!file_exists($fullPath)) {
+                mkdir($fullPath, 0755, true);
+            }
+
+            // Generate filename if not provided
+            if (!$filename) {
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            }
+
+            // Move the file
+            $file->move($fullPath, $filename);
+
+            return $directory . '/' . $filename;
+        } catch (\Exception $e) {
+            Log::error('File upload failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+}
+
+if (!function_exists('remove_file')) {
+    /**
+     * Delete uploaded file.
+     */
+    function remove_file(?string $filePath): bool {
+        if (!$filePath) {
+            return false;
+        }
+
+        try {
+            $fullPath = public_path($filePath);
+            if (file_exists($fullPath)) {
+                return unlink($fullPath);
+            }
+            return true; // File doesn't exist, consider it removed
+        } catch (\Exception $e) {
+            Log::error('File deletion failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+}
+
+if (!function_exists('get_file_url')) {
+    /**
+     * Retrieve full file URL from path.
+     */
+    function get_file_url(?string $filePath): ?string {
+        if (!$filePath) {
+            return null;
+        }
+
+        // If already a full URL, return as is
+        if (filter_var($filePath, FILTER_VALIDATE_URL)) {
+            return $filePath;
+        }
+
+        // If path starts with storage/, generate asset URL
+        if (str_starts_with($filePath, 'storage/')) {
+            return asset($filePath);
+        }
+
+        // For other paths, prepend with asset helper
+        return asset('storage/' . ltrim($filePath, '/'));
+    }
+}
+
+if (!function_exists('human_readable_time')) {
+    /**
+     * Time ago format (human readable).
+     */
+    function human_readable_time($datetime): string {
+        try {
+            return Carbon::parse($datetime)->diffForHumans();
+        } catch (\Exception $e) {
+            return 'Unknown time';
+        }
+    }
+}
+
+if (!function_exists('log_activity')) {
+    /**
+     * Wrapper to log user actions.
+     */
+    function log_activity(string $description, ?array $properties = null, ?string $logName = 'default'): void {
+        try {
+            $user = Auth::user();
+
+            $logData = [
+                'description' => $description,
+                'user_id' => $user?->id,
+                'user_email' => $user?->email,
+                'ip_address' => client_ip(),
+                'user_agent' => request()->userAgent(),
+                'url' => request()->fullUrl(),
+                'method' => request()->method(),
+                'properties' => $properties,
+                'created_at' => now(),
+            ];
+
+            // Log to Laravel log system
+            Log::channel($logName)->info('User Activity: ' . $description, $logData);
+
+            // If Spatie Activity Log is installed, use it
+            if (class_exists('\Spatie\Activitylog\Models\Activity')) {
+                activity($logName)
+                    ->performedOn($user)
+                    ->withProperties($properties ?? [])
+                    ->log($description);
+            }
+        } catch (\Exception $e) {
+            Log::error('Activity logging failed: ' . $e->getMessage());
+        }
+    }
+}
+
+if (!function_exists('get_random_code')) {
+    /**
+     * Generate random code for OTP, referral codes, etc.
+     */
+    function get_random_code(int $length = 6, string $type = 'numeric'): string {
+        switch ($type) {
+            case 'numeric':
+                return str_pad(random_int(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);
+            case 'alpha':
+                return Str::random($length);
+            case 'alphanumeric':
+                return substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'), 0, $length);
+            case 'uppercase':
+                return Str::upper(Str::random($length));
+            default:
+                return Str::random($length);
+        }
     }
 }

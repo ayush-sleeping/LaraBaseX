@@ -57,6 +57,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Force HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | When this option is enabled, the application will force all URLs to use
+    | HTTPS scheme. This is particularly useful for production environments
+    | where SSL/TLS encryption should be enforced.
+    |
+    */
+
+    'force_https' => env('APP_FORCE_HTTPS', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Asset URL
     |--------------------------------------------------------------------------
     |
