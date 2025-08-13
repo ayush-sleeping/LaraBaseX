@@ -120,7 +120,7 @@ class BackupMonitoringService
 
         $latest = $backups->first();
         $lastBackupTime = Carbon::createFromTimestamp($latest->getMTime());
-        $hoursOld = $lastBackupTime->diffInHours(now());
+    $hoursOld = (int) $lastBackupTime->diffInHours(now());
 
         // Consider unhealthy if backup is older than 25 hours (daily backup + 1 hour grace)
         $isHealthy = $hoursOld <= 25;
@@ -202,10 +202,12 @@ class BackupMonitoringService
     private function checkStorageSpace(): array
     {
         $path = storage_path();
-        $freeSpace = disk_free_space($path);
-        $totalSpace = disk_total_space($path);
+        $freeSpaceRaw = disk_free_space($path);
+        $totalSpaceRaw = disk_total_space($path);
+        $freeSpace = is_int($freeSpaceRaw) ? $freeSpaceRaw : 0;
+        $totalSpace = is_int($totalSpaceRaw) ? $totalSpaceRaw : 0;
         $usedSpace = $totalSpace - $freeSpace;
-        $usagePercentage = round(($usedSpace / $totalSpace) * 100, 2);
+        $usagePercentage = $totalSpace > 0 ? round(($usedSpace / $totalSpace) * 100, 2) : 0.0;
 
         // Warning if usage is above 80%
         $isHealthy = $usagePercentage < 80;

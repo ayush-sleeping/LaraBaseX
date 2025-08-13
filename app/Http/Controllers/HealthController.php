@@ -109,7 +109,6 @@ class HealthController extends Controller
             'healthy' => 200,
             'degraded' => 200, // Still operational but with warnings
             'unhealthy' => 503, // Service unavailable
-            default => 200
         };
 
         return response()->json($response, $httpStatus);

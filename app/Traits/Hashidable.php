@@ -37,7 +37,10 @@ trait Hashidable
      */
     public static function findByHashid(string $hash): ?static
     {
-        $id = (new static)->decodeKey($hash);
+    $id = (new self())->decodeKey($hash);
+    /**
+     * @return static|null
+     */
         if ($id) {
             return static::find($id);
         }

@@ -38,8 +38,8 @@ class AuthController extends Controller
     public function getAppVersion(): JsonResponse
     {
         $data = [
-            'app_version' => env('APP_VERSION', '1.0.0+0'),
-            'url' => env('PLAY_STORE_URL', 'https://play.google.com/store/apps/details?id=com.example.app'),
+            'app_version' => config('app.version', '1.0.0+0'),
+            'url' => config('app.play_store_url', 'https://play.google.com/store/apps/details?id=com.example.app'),
         ];
 
         return response()->json($data, 200);
@@ -114,11 +114,11 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->messages()], 400);
         }
 
-        $otp = rand(1000, 9999);
-        $user = new User;
-        $user->fill($request->all());
-        $user->password = Hash::make($otp);
-        $user->save();
+    $otp = (string)rand(1000, 9999);
+    $user = new User;
+    $user->fill($request->all());
+    $user->password = Hash::make($otp);
+    $user->save();
 
         // TODO: Integrate actual OTP sending logic here
         // Log::info('OTP sent to user', ['mobile' => $user->mobile, 'otp' => $otp]);
@@ -198,7 +198,7 @@ class AuthController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         if ($user) {
-            $otp = rand(1000, 9999);
+            $otp = (string)rand(1000, 9999);
             $user->password = Hash::make($otp);
             $user->device_id = $request->device_id;
             $user->save();
@@ -290,17 +290,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = $request->user();
             $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
+            $accessToken = method_exists($tokenResult, 'accessToken') ? $tokenResult->accessToken : (method_exists($tokenResult, 'token') ? $tokenResult->token : null);
+            $passportToken = method_exists($tokenResult, 'getToken') ? $tokenResult->getToken() : (property_exists($tokenResult, 'token') ? $tokenResult->token : null);
             if ($request->remember_me) {
-                $token->expires_at = Carbon::now()->addWeeks(1);
+                $passportToken->expires_at = Carbon::now()->addWeeks(1);
+                $passportToken->save();
             }
-            $token->save();
-
             return response()->json([
                 'message' => api_message('otp_verified'),
-                'access_token' => $tokenResult->accessToken,
+                'access_token' => $accessToken,
                 'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
+                'expires_at' => Carbon::parse($passportToken->expires_at)->toDateTimeString(),
             ], 200);
         } else {
             return api_error_message('otp_invalid', 401);
@@ -374,7 +374,7 @@ class AuthController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         if ($user) {
-            $otp = rand(1000, 9999);
+            $otp = (string)rand(1000, 9999);
             $user->password = Hash::make($otp);
             $user->save();
 
@@ -421,10 +421,12 @@ class AuthController extends Controller
     {
         $user = $request->user('api');
         if ($user && method_exists($user, 'tokens')) {
-            // Revoke all tokens for the user (Passport)
-            $user->tokens->each(function ($token) {
-                $token->revoke();
-            });
+            $tokens = $user->tokens;
+            if ($tokens) {
+                $tokens->each(function ($token) {
+                    $token->revoke();
+                });
+            }
         }
 
         return api_success_message('logout_successful');

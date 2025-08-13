@@ -12,8 +12,9 @@ use Spatie\Permission\Guard;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
+use Spatie\Permission\Models\Permission as SpatiePermissionModel;
 
-class Permission extends CoreModel implements PermissionContract
+class Permission extends SpatiePermissionModel implements PermissionContract
 {
     use Hashidable;
     use HasRoles;
@@ -34,6 +35,9 @@ class Permission extends CoreModel implements PermissionContract
         'methods' => 'array',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Permissiongroup, Permission>
+     */
     public function permissiongroup(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\\Models\\Permissiongroup');
@@ -62,33 +66,37 @@ class Permission extends CoreModel implements PermissionContract
      * A permission can be applied to roles.
      */
     /**
-     * @return BelongsToMany<\App\Models\Role>
+     * @return BelongsToMany<Role, Permission>
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(
+    /** @var BelongsToMany<Role, Permission> $relation; */
+    $relation = $this->belongsToMany(
             config('permission.models.role'),
             config('permission.table_names.role_has_permissions'),
             config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.role_pivot_key', 'role_id')
         );
+        return $relation;
     }
 
     /**
      * A permission belongs to some users of the model associated with its guard.
      */
     /**
-     * @return BelongsToMany<\App\Models\User>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany<User, Permission>
      */
-    public function users(): BelongsToMany
+    public function users(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(
+    /** @var \Illuminate\Database\Eloquent\Relations\MorphToMany<User, Permission> $relation; */
+    $relation = $this->morphedByMany(
             getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_permissions'),
             config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.model_morph_key')
         );
+        return $relation;
     }
 
     public static function findByName(string $name, ?string $guardName = null): PermissionContract

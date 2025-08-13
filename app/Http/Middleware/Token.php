@@ -161,6 +161,9 @@ class Token
     /**
      * Get safe headers for logging (exclude sensitive data)
      */
+    /**
+     * @return array<string, array<int, string>|string>
+     */
     protected function getSafeHeaders(Request $request): array
     {
         $headers = $request->headers->all();

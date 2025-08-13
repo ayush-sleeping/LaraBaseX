@@ -271,6 +271,10 @@ class CacheWarmupService
             Log::info('All caches cleared successfully');
         } catch (\Exception $e) {
             $results['clear'] = false;
+            $results['config'] = false;
+            $results['routes'] = false;
+            $results['views'] = false;
+            $results['queries'] = false;
             Log::error('Failed to clear caches', ['error' => $e->getMessage()]);
 
             return $results;

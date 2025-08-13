@@ -14,6 +14,9 @@ class Employee extends CoreModel
         return $this->getRouteKey();
     }
 
+    /**
+     * @return BelongsTo<User, Employee>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

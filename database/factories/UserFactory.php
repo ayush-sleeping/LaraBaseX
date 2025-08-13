@@ -19,7 +19,7 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array<model property of \App\Models\User, mixed>
      */
     public function definition(): array
     {

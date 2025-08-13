@@ -11,6 +11,9 @@ class Permissiongroup extends CoreModel
 
     protected $fillable = ['name', 'controller'];
 
+    /**
+     * @return HasMany<Permission, Permissiongroup>
+     */
     public function permissions(): HasMany
     {
         return $this->hasMany('App\Models\Permission');

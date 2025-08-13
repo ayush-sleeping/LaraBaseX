@@ -148,4 +148,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'version' => env('APP_VERSION', '1.0.0+0'),
+    'play_store_url' => env('PLAY_STORE_URL', 'https://play.google.com/store/apps/details?id=com.example.app'),
+
 ];

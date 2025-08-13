@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\Contracts\OAuthenticatable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements OAuthenticatable
 {
-    use Cacheable, HasApiTokens, HasFactory, Hashidable, HasRoles, LogsActivity, Notifiable;
+    use Cacheable, HasApiTokens, HasFactory /* @phpstan-use HasFactory<User> */, Hashidable, HasRoles, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,8 +48,10 @@ class User extends Authenticatable
     /**
      * Cache configuration
      */
+    /** @var int */
     protected $cacheTTL = 1800; // 30 minutes
 
+    /** @var string[] */
     protected $cacheTags = ['users', 'auth'];
 
     /**
@@ -56,6 +59,7 @@ class User extends Authenticatable
      *
      * @var array<string>
      */
+    /** @var string[] */
     protected $appends = [
         'name',
         'full_name',
@@ -141,6 +145,9 @@ class User extends Authenticatable
     /**
      * Get the user who created this record.
      */
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, User>
+     */
     public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -148,6 +155,9 @@ class User extends Authenticatable
 
     /**
      * Get the user who last updated this record.
+     */
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, User>
      */
     public function updator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -201,6 +211,9 @@ class User extends Authenticatable
         return null;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public static function cachedPluck(string $column): array
     {
         // ...existing code...

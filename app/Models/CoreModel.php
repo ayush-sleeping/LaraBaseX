@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Schema;
  */
 class CoreModel extends Model
 {
-    use HasFactory;
+    use HasFactory; // @phpstan-use HasFactory<CoreModel>
     use Hashidable;
 
     /**
@@ -76,6 +76,9 @@ class CoreModel extends Model
     /**
      * Relationship: The user who created this model.
      */
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, CoreModel>
+     */
     public function createdBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -83,6 +86,9 @@ class CoreModel extends Model
 
     /**
      * Relationship: The user who last updated this model.
+     */
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, CoreModel>
      */
     public function updatedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

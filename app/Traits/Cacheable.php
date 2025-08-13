@@ -11,7 +11,8 @@ trait Cacheable
      */
     public function getCacheTTL(): int
     {
-        return property_exists($this, 'cacheTTL') ? $this->cacheTTL : 3600;
+        // Always true for User, but keep fallback for other models
+        return $this->cacheTTL ?? 3600;
     }
 
     /**
@@ -20,17 +21,24 @@ trait Cacheable
     public function getCacheTags(): array
     {
         $modelName = strtolower(class_basename(static::class));
-        $customTags = property_exists($this, 'cacheTags') ? $this->cacheTags : [];
+        // Always true for User, but keep fallback for other models
+        $customTags = $this->cacheTags ?? [];
 
         return array_merge([$modelName], $customTags);
     }
 
     /**
      * Remember a query result in cache
+     *
+     * @template TCacheValue
+     * @param string $key
+     * @param \Closure():TCacheValue $callback
+     * @param int|null $ttl
+     * @return TCacheValue
      */
     public static function cacheRemember(string $key, \Closure $callback, ?int $ttl = null): mixed
     {
-        $instance = new static;
+        $instance = new self();
         $ttl = $ttl ?? $instance->getCacheTTL();
 
         return QueryCacheService::remember(
@@ -43,10 +51,15 @@ trait Cacheable
 
     /**
      * Remember a query result in cache forever
+     *
+     * @template TCacheValue
+     * @param string $key
+     * @param \Closure():TCacheValue $callback
+     * @return TCacheValue
      */
     public static function cacheRememberForever(string $key, \Closure $callback): mixed
     {
-        $instance = new static;
+        $instance = new self();
 
         return QueryCacheService::rememberForever(
             $instance->buildCacheKey($key),
@@ -60,7 +73,7 @@ trait Cacheable
      */
     public static function cacheForget(string $key): bool
     {
-        $instance = new static;
+        $instance = new self();
 
         return QueryCacheService::forget($instance->buildCacheKey($key));
     }
@@ -70,7 +83,7 @@ trait Cacheable
      */
     public static function flushCache(): bool
     {
-        $instance = new static;
+        $instance = new self();
 
         return QueryCacheService::flushTags($instance->getCacheTags());
     }
@@ -191,7 +204,7 @@ trait Cacheable
      */
     public static function getCacheStats(): array
     {
-        $instance = new static;
+        $instance = new self();
         $stats = QueryCacheService::getStats();
         $stats['model'] = class_basename(static::class);
         $stats['cache_tags'] = $instance->getCacheTags();

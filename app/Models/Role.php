@@ -10,6 +10,7 @@ use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Guard;
+use Spatie\Permission\Models\Role as SpatieRoleModel;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
 
@@ -28,7 +29,7 @@ use Spatie\Permission\Traits\RefreshesPermissionCache;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
-class Role extends CoreModel implements RoleContract
+class Role extends SpatieRoleModel implements RoleContract
 {
     use Hashidable;
     use HasPermissions;
@@ -37,7 +38,7 @@ class Role extends CoreModel implements RoleContract
     /** @var array<string> */
     protected $guarded = [];
 
-    /** @var array<string, string> */
+    /** @var string[] */
     protected $fillable = [
         'name',
         'guard_name',
@@ -103,33 +104,37 @@ class Role extends CoreModel implements RoleContract
      * A role may be given various permissions.
      */
     /**
-     * @return BelongsToMany<\App\Models\Permission, Role>
+     * @return BelongsToMany<Permission, Role>
      */
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(
+        /** @var BelongsToMany<Permission, Role> $relation */
+        $relation = $this->belongsToMany(
             config('permission.models.permission'),
             config('permission.table_names.role_has_permissions'),
             config('permission.column_names.role_pivot_key', 'role_id'),
             config('permission.column_names.permission_pivot_key', 'permission_id')
         );
+        return $relation;
     }
 
     /**
      * A role belongs to some users of the model associated with its guard.
      */
     /**
-     * @return MorphToMany<\App\Models\User, Role>
+     * @return MorphToMany<User, Role>
      */
     public function users(): MorphToMany
     {
-        return $this->morphedByMany(
+        /** @var MorphToMany<User, Role> $relation */
+        $relation = $this->morphedByMany(
             getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_roles'),
             config('permission.column_names.role_pivot_key', 'role_id'),
             config('permission.column_names.model_morph_key')
         );
+        return $relation;
     }
 
     /**

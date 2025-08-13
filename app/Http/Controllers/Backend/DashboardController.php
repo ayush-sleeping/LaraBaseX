@@ -46,38 +46,56 @@ class DashboardController extends Controller
         $recentEmployees = Employee::where('created_at', '>=', now()->subDays(7))->count();
 
         // Latest enquiries for quick overview
+        /**
+         * @var \Illuminate\Support\Collection<int, array<string, mixed>> $latestEnquiries
+         */
         $latestEnquiries = Enquiry::with(['createdBy:id,first_name,last_name'])
             ->latest()
             ->take(5)
             ->get()
-            ->map(function ($enquiry) {
-                return [
-                    'id' => $enquiry->hashid,
-                    'name' => $enquiry->first_name.' '.$enquiry->last_name,
-                    'email' => $enquiry->email,
-                    'mobile' => $enquiry->mobile,
-                    'message' => Str::limit($enquiry->message, 100),
-                    'created_at' => $enquiry->created_at->format('M d, Y'),
-                    'created_by' => $enquiry->createdBy ? $enquiry->createdBy->first_name.' '.$enquiry->createdBy->last_name : null,
-                ];
-            });
+            ->map(
+                /**
+                 * @param Enquiry $enquiry
+                 * @return array<string, mixed>
+                 */
+                function ($enquiry) {
+                    return [
+                        'id' => $enquiry->hashid,
+                        'name' => $enquiry->first_name.' '.$enquiry->last_name,
+                        'email' => $enquiry->email,
+                        'mobile' => $enquiry->mobile,
+                        'message' => Str::limit($enquiry->message, 100),
+                        'created_at' => $enquiry->created_at->format('M d, Y'),
+                        'created_by' => $enquiry->createdBy ? $enquiry->createdBy->first_name.' '.$enquiry->createdBy->last_name : null,
+                    ];
+                }
+            );
 
         // Latest employees
+        /**
+         * @var \Illuminate\Support\Collection<int, array<string, mixed>> $latestEmployees
+         */
         $latestEmployees = Employee::with(['user:id,first_name,last_name,email', 'createdBy:id,first_name,last_name'])
             ->latest()
             ->take(5)
             ->get()
-            ->map(function ($employee) {
-                return [
-                    'id' => $employee->hashid,
-                    'emp_id' => $employee->emp_id,
-                    'name' => $employee->user ? $employee->user->first_name.' '.$employee->user->last_name : 'N/A',
-                    'email' => $employee->user?->email ?? $employee->personal_email,
-                    'designation' => $employee->designation,
-                    'created_at' => $employee->created_at->format('M d, Y'),
-                    'created_by' => $employee->createdBy ? $employee->createdBy->first_name.' '.$employee->createdBy->last_name : null,
-                ];
-            });
+            ->map(
+                /**
+                 * @param Employee $employee
+                 * @return array<string, mixed>
+                 */
+                function ($employee) {
+                    return [
+                        'id' => $employee->hashid,
+                        'emp_id' => $employee->emp_id,
+                        'name' => $employee->user ? $employee->user->first_name.' '.$employee->user->last_name : 'N/A',
+                        'email' => $employee->user ? $employee->user->email : $employee->personal_email,
+                        'designation' => $employee->designation,
+                        'created_at' => $employee->created_at->format('M d, Y'),
+                        'created_by' => $employee->createdBy ? $employee->createdBy->first_name.' '.$employee->createdBy->last_name : null,
+                    ];
+                }
+            );
 
         // Statistics for charts/widgets
         $stats = [

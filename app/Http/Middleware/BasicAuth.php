@@ -71,7 +71,7 @@ class BasicAuth
      */
     protected function getExpectedToken(): ?string
     {
-        return config('auth.basic_token') ?? env('BASIC_AUTH_TOKEN');
+    return config('auth.basic_token') ?? config('app.basic_auth_token');
     }
 
     /**
