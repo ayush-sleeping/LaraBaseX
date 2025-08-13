@@ -40,6 +40,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             <Head title="Log in" />
             <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
                 <div className="flex w-full max-w-sm flex-col gap-6 md:max-w-3xl">
+                    {/* ------------------------------------------------------------ :: */}
                     <a href="#" className="flex items-center gap-2 self-center font-medium">
                         <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
                             <GalleryVerticalEnd className="size-4" />
@@ -47,8 +48,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         LaraBaseX
                     </a>
                     <div className="flex flex-col gap-6">
+                        {/* ------------------------------------------------------------ :: */}
                         <Card className="overflow-hidden p-0">
                             <CardContent className="grid p-0 md:grid-cols-2">
+                                {/* ------------------------------------------------------------ :: */}
                                 <form className="p-6 md:p-8" onSubmit={submit}>
                                     <div className="flex flex-col gap-6">
                                         <div className="flex flex-col items-center text-center">
@@ -160,17 +163,41 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         </div>
                                     </div>
                                 </form>
-                                <div className="relative hidden bg-muted md:block">
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="text-center">
-                                            <div className="mb-4 text-6xl">🚀</div>
-                                            <h2 className="text-2xl font-bold text-foreground">LaraBaseX</h2>
-                                            <p className="mt-2 text-muted-foreground">Modern Laravel starter with React & TypeScript</p>
+                                {/* ------------------------------------------------------------ :: */}
+                                <div className="relative hidden items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black md:flex">
+                                    {/* Subtle glow background */}
+                                    <div className="absolute inset-0">
+                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50"></div>
+                                        <div
+                                            className="pointer-events-none absolute inset-0"
+                                            style={{ boxShadow: 'inset 0 0 120px rgba(0,0,0,0.4)' }}
+                                        />
+                                    </div>
+
+                                    {/* Main content */}
+                                    <div className="relative z-10 px-8 py-12 text-center">
+                                        <div className="mb-4 animate-bounce text-6xl drop-shadow-lg">🚀</div>
+                                        {/* Title (pure white) */}
+                                        <h2 className="text-4xl font-extrabold tracking-tight text-white">LaraBaseX</h2>
+                                        <p className="mt-3 text-lg font-medium text-gray-300">Laravel 12 + React + TypeScript</p>
+
+                                        {/* Feature tags — text is white only */}
+                                        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                                            <span className="inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold text-white">
+                                                Production Ready
+                                            </span>
+                                            <span className="inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold text-white">
+                                                React + Vite Frontend + Shadcn UI
+                                            </span>
+                                            <span className="inline-block rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold text-white">
+                                                Extensible Structure
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </CardContent>
                         </Card>
+                        {/* ------------------------------------------------------------ :: */}
                         <div className="text-center text-xs text-balance text-muted-foreground">
                             By clicking continue, you agree to our{' '}
                             <a href="#" className="underline underline-offset-4 hover:text-primary">

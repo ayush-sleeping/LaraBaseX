@@ -28,7 +28,7 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 ## Tech Stack
 
 - **Backend**: Laravel 12 (REST API)
-- **Frontend**: ReactJS (Vite + Axios)
+- **Frontend**: ReactJS (Vite + Axios) + Shadcn UI
 - **Database**: MySQL
 - **Authentication**: Laravel Sanctum
 - **Deployment Ready**: Docker / Shared Hosting / VPS
