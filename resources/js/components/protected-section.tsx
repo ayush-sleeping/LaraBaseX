@@ -31,7 +31,7 @@ export default function ProtectedSection({
     deniedDescription,
     className = '',
 }: ProtectedSectionProps) {
-    const { hasPermission, hasRole, hasAnyPermission, hasAllPermissions, hasAnyRole } = usePermissions();
+    const { hasAnyPermission, hasAllPermissions, hasAnyRole } = usePermissions();
 
     // Build permissions array
     const allPermissions = [...(permission ? [permission] : []), ...permissions];

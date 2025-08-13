@@ -13,7 +13,7 @@ interface PageProps {
     auth: {
         user: AuthUser | null;
     };
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export function usePermissions() {

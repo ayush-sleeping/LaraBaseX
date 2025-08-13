@@ -67,7 +67,7 @@ interface PageProps {
     auth: {
         user: AuthUser | null;
     };
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 // Helper function to check if user has permission
