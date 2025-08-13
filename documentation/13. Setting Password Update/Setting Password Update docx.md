@@ -108,7 +108,7 @@ Password updates include multiple security layers:
 
 **Frontend Form Handling:**
 - Real-time data binding: `onChange={(e) => setData('password', e.target.value)}`
-- Form submission with error handling: `put(route('password.update'), { ... })`
+- Form submission with error handling: `put(route('settings.password.update'), { ... })`
 - Success feedback: `{recentlySuccessful && <p>Saved</p>}`
 - Error handling: smart field focus and data reset on errors
 

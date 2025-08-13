@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
 
     Route::put('settings/password', [PasswordController::class, 'update'])
         ->middleware('throttle:6,1') // Prevent brute force attacks
-        ->name('password.update');
+        ->name('settings.password.update');
 
     // Display appearance/theme settings (future expansion)
     Route::get('settings/appearance', function () {
