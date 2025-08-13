@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
  * BasicAuth Middleware
  * Provides simple token-based authentication for API endpoints.
  *
- * ✅ Environment-based token configuration
- * ✅ Comprehensive security logging and audit trail
- * ✅ Detailed error handling with rate limiting consideration
- * ✅ Proper request header checking and validation
+ *  Environment-based token configuration
+ *  Comprehensive security logging and audit trail
+ *  Detailed error handling with rate limiting consideration
+ *  Proper request header checking and validation
  *
  * Use Cases:
  * - API authentication before user registration/login

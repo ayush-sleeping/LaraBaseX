@@ -17,10 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
  * - BasicAuth: App-level authentication (before user login)
  * - Token: User-level authentication (after user login)
  *
- * ✅ Comprehensive token validation and user status checking
- * ✅ Detailed audit trail for API access
- * ✅ Detailed error responses with context
- * ✅ Check if user is ACTIVE and token is valid
+ *  Comprehensive token validation and user status checking
+ *  Detailed audit trail for API access
+ *  Detailed error responses with context
+ *  Check if user is ACTIVE and token is valid
  *
  * Use Cases:
  * - Mobile app authenticated API calls

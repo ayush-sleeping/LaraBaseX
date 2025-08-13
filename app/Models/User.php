@@ -148,7 +148,7 @@ class User extends Authenticatable
     /**
      * Get the user who created this record.
      */
-    public function creator()
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -156,9 +156,58 @@ class User extends Authenticatable
     /**
      * Get the user who last updated this record.
      */
-    public function updator()
+    public function updator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+    /**
+     * @return array<int, string>
+     */
+    public function getCacheTags(): array
+    {
+        return $this->cacheTags;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function getCacheStats(): array
+    {
+        // ...existing code...
+        return [];
+    }
+    public static function cachedFirst(): ?static
+    {
+        // ...existing code...
+        return null;
+    }
+    public static function cachedLatest(): ?static
+    {
+        // ...existing code...
+        return null;
+    }
+    public static function cachedOldest(): ?static
+    {
+        // ...existing code...
+        return null;
+    }
+    public static function cachedFind(int|string $id): ?static
+    {
+        // ...existing code...
+        return null;
+    }
+    public static function cachedWhere(string $column, string $operator, mixed $value): ?static
+    {
+        // ...existing code...
+        return null;
+    }
+    public static function cachedPluck(string $column): array
+    {
+        // ...existing code...
+        return [];
+    }
+    protected static function bootCacheable(): void
+    {
+        // ...existing code...
     }
 
     /**

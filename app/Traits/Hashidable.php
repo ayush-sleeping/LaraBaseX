@@ -18,7 +18,7 @@ trait Hashidable
     /**
         * Encode a given key using Hashids.
      */
-    public function encodeKey($key)
+    public function encodeKey(int|string $key): string
     {
         return app('hashids')->encode($key);
     }
@@ -27,7 +27,7 @@ trait Hashidable
     /**
         * Decode a given hashid to the original key.
      */
-    public function decodeKey($hash)
+    public function decodeKey(string $hash): int|string|null
     {
         $decoded = app('hashids')->decode($hash);
         return $decoded[0] ?? null;
@@ -37,7 +37,7 @@ trait Hashidable
     /**
         * Find a model by its hashid.
      */
-    public static function findByHashid($hash)
+    public static function findByHashid(string $hash): ?static
     {
         $id = (new static)->decodeKey($hash);
         if ($id) {

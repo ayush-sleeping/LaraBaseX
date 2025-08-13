@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\CoreModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Employee extends CoreModel
 {
@@ -15,7 +16,8 @@ class Employee extends CoreModel
         return $this->getRouteKey();
     }
 
-    public function user(){
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }

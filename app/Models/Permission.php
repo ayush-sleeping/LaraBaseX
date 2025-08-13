@@ -34,7 +34,7 @@ class Permission extends CoreModel implements PermissionContract
         'methods' => 'array',
     ];
 
-    public function permissiongroup()
+    public function permissiongroup(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\\Models\\Permissiongroup');
     }
@@ -44,7 +44,10 @@ class Permission extends CoreModel implements PermissionContract
         return config('permission.table_names.permissions', parent::getTable());
     }
 
-    public static function create(array $attributes = [])
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    public static function create(array $attributes = []): static
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
         $permission = static::getPermission(['name' => $attributes['name'], 'guard_name' => $attributes['guard_name']]);
@@ -56,6 +59,9 @@ class Permission extends CoreModel implements PermissionContract
 
     /**
      * A permission can be applied to roles.
+     */
+    /**
+     * @return BelongsToMany<\App\Models\Role>
      */
     public function roles(): BelongsToMany
     {
@@ -69,6 +75,9 @@ class Permission extends CoreModel implements PermissionContract
 
     /**
      * A permission belongs to some users of the model associated with its guard.
+     */
+    /**
+     * @return BelongsToMany<\App\Models\User>
      */
     public function users(): BelongsToMany
     {
@@ -106,11 +115,17 @@ class Permission extends CoreModel implements PermissionContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermission(['name' => $name, 'guard_name' => $guardName]);
         if (! $permission) {
-            return static::query()->create(['name' => $name, 'guard_name' => $guardName]);
+            /** @var PermissionContract */
+            $created = static::query()->create(['name' => $name, 'guard_name' => $guardName]);
+            return $created;
         }
         return $permission;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     * @return Collection<int, Permission>
+     */
     protected static function getPermissions(array $params = [], bool $onlyOne = false): Collection
     {
         return app(PermissionRegistrar::class)
@@ -118,6 +133,9 @@ class Permission extends CoreModel implements PermissionContract
             ->getPermissions($params, $onlyOne);
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     protected static function getPermission(array $params = []): ?PermissionContract
     {
         return static::getPermissions($params, true)->first();

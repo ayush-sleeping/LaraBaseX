@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 class PermissionSeeder extends Seeder
 {
-    private $permissions = [
+    /**
+     * @var array<string, array<string, mixed>>
+     */
+    private array $permissions = [
         'Dashboard' => [
             'controller' => 'Backend\DashboardController',
             'permissions' => [
@@ -105,7 +108,10 @@ class PermissionSeeder extends Seeder
     ];
 
 
-    public $roles = [
+    /**
+     * @var array<string, array<int, string>>
+     */
+    public array $roles = [
         'RootUser' => [
 
             #Dashboard
@@ -172,7 +178,10 @@ class PermissionSeeder extends Seeder
         ],
     ];
 
-    private $users = [
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    private array $users = [
         [
             'first_name'  => 'Root',
             'last_name'  => 'User',
@@ -185,7 +194,8 @@ class PermissionSeeder extends Seeder
         ],
     ];
 
-    public function run(){
+    public function run(): void
+    {
         #Groups & Permission
         $this->deletePermissions();
         $this->createPermissions();
@@ -195,7 +205,8 @@ class PermissionSeeder extends Seeder
         $this->createUsers();
     }
 
-    private function deletePermissions(){
+    private function deletePermissions(): void
+    {
         $permissions = Permission::all();
         foreach($permissions as $permission){
             $delete_permission = true;
@@ -225,7 +236,8 @@ class PermissionSeeder extends Seeder
         }
     }
 
-    private function createPermissions(){
+    private function createPermissions(): void
+    {
         foreach($this->permissions as $group => $data){
             $permissiongroup = Permissiongroup::where('name',$group)->first();
             if(!$permissiongroup){
@@ -255,7 +267,8 @@ class PermissionSeeder extends Seeder
         }
     }
 
-    private function createRoles(){
+    private function createRoles(): void
+    {
         foreach($this->roles as $role_name => $permissions){
             $role = Role::where('name',$role_name)->first();
             if(!$role){
@@ -270,7 +283,8 @@ class PermissionSeeder extends Seeder
         }
     }
 
-    private function createUsers(){
+    private function createUsers(): void
+    {
         foreach($this->users as $data){
             $user = User::where('email',$data['email'])->first();
             if(!$user){

@@ -80,7 +80,7 @@ class CoreModel extends Model
     /**
      * Relationship: The user who created this model.
      */
-    public function createdBy()
+    public function createdBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -89,7 +89,7 @@ class CoreModel extends Model
     /**
      * Relationship: The user who last updated this model.
      */
-    public function updatedBy()
+    public function updatedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
@@ -100,8 +100,8 @@ class CoreModel extends Model
      */
     public function creatorName(): string
     {
-        $first = $this->createdBy?->first_name ?? '';
-        $last = $this->createdBy?->last_name ?? '';
+        $first = $this->createdBy ? $this->createdBy->first_name : '';
+        $last = $this->createdBy ? $this->createdBy->last_name : '';
         return trim("$first $last");
     }
 
@@ -111,13 +111,16 @@ class CoreModel extends Model
      */
     public function updatorName(): string
     {
-        $first = $this->updatedBy?->first_name ?? '';
-        $last = $this->updatedBy?->last_name ?? '';
+        $first = $this->updatedBy ? $this->updatedBy->first_name : '';
+        $last = $this->updatedBy ? $this->updatedBy->last_name : '';
         return trim("$first $last");
     }
 
     /**
      * Get a summary of audit info (creator, updater, timestamps).
+     */
+    /**
+     * @return array<string, mixed>
      */
     public function fullAuditInfo(): array
     {

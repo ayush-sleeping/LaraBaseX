@@ -10,10 +10,10 @@ use Illuminate\Http\Middleware\TrustHosts as Middleware;
  * Prevents Host Header Injection attacks by validating trusted hosts.
  *
  * Security Benefits:
- * ✅ Prevents host header injection attacks
- * ✅ Validates incoming host headers against trusted patterns
- * ✅ Supports multiple domains and subdomains
- * ✅ Environment-based configuration
+ *  Prevents host header injection attacks
+ *  Validates incoming host headers against trusted patterns
+ *  Supports multiple domains and subdomains
+ *  Environment-based configuration
  *
  * Use Cases:
  * - Multi-subdomain applications (admin.app.com, api.app.com)
@@ -108,7 +108,6 @@ class TrustHosts extends Middleware
     {
         // Add your load balancer or proxy hosts
         $proxyHosts = env('PROXY_HOSTS', '');
-
         if (empty($proxyHosts)) {
             return [];
         }

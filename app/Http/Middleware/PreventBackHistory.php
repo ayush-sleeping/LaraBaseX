@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
  * Prevents browser back navigation by setting appropriate cache headers.
  * This is essential for admin panels and secure pages to prevent cached access.
  *
- * ✅ Proper key-value pairs for headers
- * ✅ Modern PHP with proper type hints
- * ✅ Comprehensive cache prevention headers
- * ✅ Additional security headers (X-Frame-Options, etc.)
- * ✅ Browser-specific cache control
- * ✅ Better documentation and error handling
+ *  Proper key-value pairs for headers
+ *  Modern PHP with proper type hints
+ *  Comprehensive cache prevention headers
+ *  Additional security headers (X-Frame-Options, etc.)
+ *  Browser-specific cache control
+ *  Better documentation and error handling
  */
 class PreventBackHistory
 {

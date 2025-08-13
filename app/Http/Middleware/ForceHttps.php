@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
  * This provides an additional layer of security beyond URL::forceScheme().
  *
  * Features:
- * ✅ Environment-based HTTPS enforcement
- * ✅ Configurable via APP_FORCE_HTTPS environment variable
- * ✅ 301 permanent redirect for SEO benefits
- * ✅ Skip for local development
+ *  Environment-based HTTPS enforcement
+ *  Configurable via APP_FORCE_HTTPS environment variable
+ *  301 permanent redirect for SEO benefits
+ *  Skip for local development
  */
 class ForceHttps
 {

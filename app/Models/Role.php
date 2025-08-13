@@ -107,6 +107,9 @@ class Role extends CoreModel implements RoleContract
      *
      * @return BelongsToMany
      */
+    /**
+     * @return BelongsToMany<\App\Models\Permission, Role>
+     */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -121,6 +124,9 @@ class Role extends CoreModel implements RoleContract
      * A role belongs to some users of the model associated with its guard.
      *
      * @return MorphToMany
+     */
+    /**
+     * @return MorphToMany<\App\Models\User, Role>
      */
     public function users(): MorphToMany
     {
@@ -275,7 +281,11 @@ class Role extends CoreModel implements RoleContract
      * @param string $guardName
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeForGuard($query, string $guardName)
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<Role> $query
+     * @return \Illuminate\Database\Eloquent\Builder<Role>
+     */
+    public function scopeForGuard($query, string $guardName): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('guard_name', $guardName);
     }
@@ -286,7 +296,11 @@ class Role extends CoreModel implements RoleContract
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithPermissionsCount($query)
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<Role> $query
+     * @return \Illuminate\Database\Eloquent\Builder<Role>
+     */
+    public function scopeWithPermissionsCount($query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->withCount('permissions');
     }

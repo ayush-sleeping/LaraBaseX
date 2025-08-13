@@ -15,25 +15,28 @@ use App\Models\Permission;
  * Provides comprehensive permission-based access control for backend administration.
  *
  * Key Features :
- * ✅ User authentication validation
- * ✅ User status checking (ACTIVE/INACTIVE)
- * ✅ Dynamic permission checking based on controller@method
- * ✅ Route action parsing and controller matching
- * ✅ Method-level permission validation
+ *  User authentication validation
+ *  User status checking (ACTIVE/INACTIVE)
+ *  Dynamic permission checking based on controller@method
+ *  Route action parsing and controller matching
+ *  Method-level permission validation
  *
- * ✅ Type hints and modern PHP syntax
- * ✅ Comprehensive logging and audit trail
- * ✅ Better error handling and responses
- * ✅ Support for API and web responses
- * ✅ Emergency access for SuperAdmin/RootUser
- * ✅ Detailed documentation and comments
- * ✅ Security improvements and rate limiting consideration
+ *  Type hints and modern PHP syntax
+ *  Comprehensive logging and audit trail
+ *  Better error handling and responses
+ *  Support for API and web responses
+ *  Emergency access for SuperAdmin/RootUser
+ *  Detailed documentation and comments
+ *  Security improvements and rate limiting consideration
  */
 class AdminAccess
 {
     /**
      * System roles that bypass permission checks (emergency access)
      * These roles have full access to all admin functions
+     */
+    /**
+     * @var array<int, string>
      */
     protected array $superAdminRoles = ['SuperAdmin', 'RootUser'];
 
@@ -136,6 +139,9 @@ class AdminAccess
      * @param Request $request
      * @return array|null
      */
+    /**
+     * @return array<string, string>|null
+     */
     protected function extractRouteInformation(Request $request): ?array
     {
         $currentAction = Route::currentRouteAction();
@@ -178,6 +184,10 @@ class AdminAccess
      * @param mixed $user
      * @param array $routeInfo
      * @return bool
+     */
+    /**
+     * @param mixed $user
+     * @param array<string, string> $routeInfo
      */
     protected function hasPermissionAccess($user, array $routeInfo): bool
     {
@@ -261,6 +271,12 @@ class AdminAccess
      * @param array|null $routeInfo
      * @return void
      */
+    /**
+     * @param Request $request
+     * @param mixed $user
+     * @param string $accessType
+     * @param array<string, string>|null $routeInfo
+     */
     protected function logAccess(Request $request, $user, string $accessType, ?array $routeInfo = null): void
     {
         Log::info('AdminAccess: Access granted', [
@@ -281,6 +297,11 @@ class AdminAccess
      * @param mixed $user
      * @param array $routeInfo
      * @return void
+     */
+    /**
+     * @param Request $request
+     * @param mixed $user
+     * @param array<string, string> $routeInfo
      */
     protected function logAccessDenied(Request $request, $user, array $routeInfo): void
     {
