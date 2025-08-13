@@ -30,7 +30,7 @@ interface Role {
 interface PageProps {
     roles: Role[];
     emp_id: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Create() {

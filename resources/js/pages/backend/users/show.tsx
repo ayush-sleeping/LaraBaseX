@@ -49,7 +49,7 @@ interface User {
 
 interface Props {
     user: User;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Show() {

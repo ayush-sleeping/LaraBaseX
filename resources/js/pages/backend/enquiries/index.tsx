@@ -48,7 +48,7 @@ interface EnquiryPageProps {
         date_from?: string;
         date_to?: string;
     };
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 interface Enquiry {
@@ -153,6 +153,7 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
         },
         cell: ({ row }) => {
             const enquiry = row.original;
+            // Removed unused variable 'name' to fix lint error
             const fullName = `${enquiry.first_name} ${enquiry.last_name}`.trim();
             return <div className="text-center font-medium">{fullName}</div>;
         },

@@ -47,7 +47,7 @@ interface Props {
         success?: string;
         error?: string;
     };
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Show() {

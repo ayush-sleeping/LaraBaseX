@@ -46,7 +46,7 @@ interface EmployeePageProps {
     filters: {
         status?: string;
     };
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 interface User {
@@ -177,6 +177,7 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
         },
         cell: ({ row }) => {
             const employee = row.original;
+            // Removed unused variable 'name' to fix lint error
             const fullName = `${employee.user.first_name} ${employee.user.last_name}`.trim();
             return <div className="text-center font-medium">{fullName}</div>;
         },

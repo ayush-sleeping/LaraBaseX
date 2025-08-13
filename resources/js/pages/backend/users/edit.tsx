@@ -37,7 +37,7 @@ interface EditProps {
         name: string;
         guard_name: string;
     }>;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Edit() {

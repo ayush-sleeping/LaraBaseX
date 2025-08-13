@@ -44,7 +44,7 @@ interface Props {
     permissionGroups: PermissionGroup[];
     permissions: Permission[];
     rolePermissionIds: number[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Permissions() {

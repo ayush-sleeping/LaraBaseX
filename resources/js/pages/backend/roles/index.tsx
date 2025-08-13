@@ -42,7 +42,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface RolePageProps {
     roles: Role[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 interface Role {

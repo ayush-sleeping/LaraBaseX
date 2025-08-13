@@ -47,7 +47,7 @@ interface UserPageProps {
     filters: {
         status?: string;
     };
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 interface User {
@@ -220,7 +220,7 @@ export default function Index() {
     const pageProps = usePage<UserPageProps>().props;
     const flashFromGlobal = (usePage().props.flash as { success?: string; error?: string }) || {};
     const { users = [], filters = {} } = pageProps;
-    const { processing, delete: destroy, post } = useForm();
+    const { processing, delete: destroy } = useForm();
 
     // Filter states
     // ----------------------------------------------------------------------- ::

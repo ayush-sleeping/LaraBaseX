@@ -56,7 +56,7 @@ interface Employee {
 
 interface Props {
     employee: Employee;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Show() {

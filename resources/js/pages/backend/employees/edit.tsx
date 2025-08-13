@@ -37,7 +37,7 @@ interface PageProps {
     employee: Employee;
     roles: Role[];
     mode: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export default function Edit() {

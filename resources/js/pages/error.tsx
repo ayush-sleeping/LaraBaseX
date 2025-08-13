@@ -9,7 +9,7 @@ import { ArrowLeft, Home, RefreshCw } from 'lucide-react';
 interface ErrorProps {
     status: number;
     message?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
