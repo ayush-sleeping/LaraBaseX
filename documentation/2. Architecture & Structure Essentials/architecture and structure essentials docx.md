@@ -38,6 +38,9 @@ Centralized helper functions for common tasks and utilities.
 - `app/helpers.php`: Main helper functions file.
 - Referenced in: `app/Exceptions/Handler.php`, various controllers.
 
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+
 <br>
 
 <br>
@@ -68,6 +71,9 @@ Background job processing using Laravel Queues, Redis, and Supervisor.
 - `.env.example`: Sets queue driver and Redis connection.
 - Production setup: Supervisor config (see deployment docs).
 
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+
 <br>
 
 <br>
@@ -97,6 +103,9 @@ RESTful routing and standardized API responses using Laravel resource routes.
 - `app/Http/Controllers/`: Resource controllers for models.
 - `app/helpers.php`: Standardizes API responses.
 - `phpunit.xml`, `tests/Feature/`: API tests for endpoints and standards.
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
 
 <br>
 
