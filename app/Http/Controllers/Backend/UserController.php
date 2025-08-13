@@ -11,7 +11,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * UserController
@@ -50,7 +52,7 @@ class UserController extends Controller
     }
 
     /* Store a newly created user in storage :: */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         //dd($request->all());
         $validated = $request->validate($this->rules, $this->customMessages);
@@ -81,7 +83,7 @@ class UserController extends Controller
     }
 
     /* Show the form for editing the specified user :: */
-    public function edit(User $user)
+    public function edit(User $user): Response
     {
         $systemRoles = get_system_roles();
         $roles = Role::whereNotIn('name', $systemRoles)->select('id', 'name', 'guard_name')->orderBy('name')->get();
@@ -91,7 +93,7 @@ class UserController extends Controller
     }
 
     /* Update the specified user in storage :: */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
         // Modify unique rules to exclude current user
         $this->rules['email'] = 'required|email|max:255|unique:users,email,' . $user->id;
@@ -121,6 +123,11 @@ class UserController extends Controller
     }
 
     /* Private Function for : Assign roles and sync permissions for a user :: */
+    /**
+     * Assign roles and sync permissions for a user
+     * @param User $user
+     * @param array<int> $roleIds
+     */
     private function assignRolesAndPermissions(User $user, array $roleIds): void
     {
         // Clear existing roles first
@@ -143,7 +150,7 @@ class UserController extends Controller
     }
 
     /* Remove the specified user from storage :: */
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         // Prevent deletion of RootUser or current user
         if ($user->hasRole('RootUser') || $user->id === auth()->id()) {
@@ -159,7 +166,7 @@ class UserController extends Controller
     }
 
     /* Change user status (ACTIVE/INACTIVE) :: */
-    public function changeStatus(Request $request)
+    public function changeStatus(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -224,7 +231,7 @@ class UserController extends Controller
     }
 
     /* Export users to CSV :: */
-    public function export(Request $request)
+    public function export(Request $request): StreamedResponse
     {
         $systemRoles = get_system_roles();
         $query = User::whereHas('roles', function ($q) use ($systemRoles) {
@@ -274,8 +281,10 @@ class UserController extends Controller
         }, 200, $headers);
     }
 
-
-    /* Validation rules for user operations :: */
+    /**
+     * Validation rules for user operations
+     * @var array<string, mixed>
+     */
     private array $rules = [
         'first_name' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
         'last_name' => 'required|string|max:255|regex:/^[\pL\s\-]+$/u',
@@ -288,7 +297,10 @@ class UserController extends Controller
         'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ];
 
-    /* Custom validation messages :: */
+    /**
+     * Custom validation messages
+     * @var array<string, string>
+     */
     private array $customMessages = [
         'first_name.required' => 'First name is required',
         'first_name.regex' => 'First name should contain only letters, spaces, and hyphens',

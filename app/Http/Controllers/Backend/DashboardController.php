@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Employee;
-use App\Models\Enquiry;
 use App\Models\Role;
-use App\Models\Permission;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Enquiry;
+use App\Models\Employee;
+use App\Models\Permission;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 
 /**
  * DashboardController
@@ -137,7 +138,7 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getStats(Request $request)
+    public function getStats(Request $request): JsonResponse
     {
         $systemRoles = get_system_roles();
 
@@ -159,7 +160,7 @@ class DashboardController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSystemInfo(Request $request)
+    public function getSystemInfo(Request $request): JsonResponse
     {
         return response()->json([
             'php_version' => PHP_VERSION,

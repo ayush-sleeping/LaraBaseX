@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Enquiry;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Enquiry;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * EnquiryController
- *
  * Handles enquiry management for the backend administration.
  * Provides CRUD operations and data tables for enquiries.
  */
@@ -52,7 +52,9 @@ class EnquiryController extends Controller
                 'date_to' => $request->date_to,
             ]
         ]);
-    }    /* Display the specified enquiry :: */
+    }
+
+    /* Display the specified enquiry :: */
     public function show(Enquiry $enquiry): Response
     {
         $enquiry->load(['createdBy:id,first_name,last_name', 'updatedBy:id,first_name,last_name']);
@@ -60,7 +62,7 @@ class EnquiryController extends Controller
     }
 
     /* Update remark for the specified enquiry :: */
-    public function updateRemark(Request $request, Enquiry $enquiry)
+    public function updateRemark(Request $request, Enquiry $enquiry): RedirectResponse
     {
         $request->validate([
             'remark' => 'required|string|max:1000'
@@ -81,7 +83,7 @@ class EnquiryController extends Controller
     }
 
     /* Remove the specified enquiry from storage :: */
-    public function destroy(Enquiry $enquiry)
+    public function destroy(Enquiry $enquiry): RedirectResponse
     {
         $enquiry->delete();
         return redirect()->route('admin.enquiries.index')->with('success', 'Enquiry deleted successfully.');

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class HealthController extends Controller
 {
@@ -16,7 +17,7 @@ class HealthController extends Controller
      * Basic health check endpoint
      * Returns simple OK status for load balancers
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'status' => 'OK',
@@ -29,7 +30,7 @@ class HealthController extends Controller
     /**
      * Comprehensive health check with detailed service status
      */
-    public function detailed()
+    public function detailed(): JsonResponse
     {
         $startTime = microtime(true);
         $checks = [];
@@ -118,6 +119,9 @@ class HealthController extends Controller
     /**
      * Check database connectivity and performance
      */
+    /**
+     * @return array<string, mixed>
+     */
     private function checkDatabase(): array
     {
         $startTime = microtime(true);
@@ -160,6 +164,9 @@ class HealthController extends Controller
 
     /**
      * Check cache service health
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function checkCache(): array
     {
@@ -209,6 +216,9 @@ class HealthController extends Controller
 
     /**
      * Check storage systems
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function checkStorage(): array
     {
@@ -263,6 +273,9 @@ class HealthController extends Controller
     /**
      * Check specific storage disk
      */
+    /**
+     * @return array<string, mixed>
+     */
     private function checkStorageDisk(string $disk): array
     {
         try {
@@ -299,6 +312,9 @@ class HealthController extends Controller
 
     /**
      * Check disk space
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function checkDiskSpace(): array
     {
@@ -340,6 +356,9 @@ class HealthController extends Controller
 
     /**
      * Check queue system
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function checkQueue(): array
     {
@@ -385,6 +404,9 @@ class HealthController extends Controller
 
     /**
      * Check application configuration and environment
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function checkApplication(): array
     {
@@ -458,6 +480,9 @@ class HealthController extends Controller
 
     /**
      * Check backup system health
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function checkBackupSystem(): array
     {
@@ -536,6 +561,9 @@ class HealthController extends Controller
 
     /**
      * Get application uptime
+     */
+    /**
+     * @return array<string, mixed>
      */
     private function getUptime(): array
     {

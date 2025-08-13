@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -32,7 +33,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function getAppVersion()
+    public function getAppVersion(): JsonResponse
     {
         $data = [
             'app_version' => env('APP_VERSION', '1.0.0+0'),
@@ -78,7 +79,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:191',
@@ -155,7 +156,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|numeric|digits:10',
@@ -232,7 +233,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function verifyOTP(Request $request)
+    public function verifyOTP(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|numeric|digits:10',
@@ -308,7 +309,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function resendOTP(Request $request)
+    public function resendOTP(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|numeric|digits:10',
@@ -361,7 +362,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $user = $request->user('api');
         if ($user && method_exists($user, 'tokens')) {
@@ -407,7 +408,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function getUser(Request $request)
+    public function getUser(Request $request): JsonResponse
     {
         $user = $request->user('api');
         return response()->json($user, 200);
@@ -458,7 +459,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function updateUser(Request $request)
+    public function updateUser(Request $request): JsonResponse
     {
         $user = $request->user('api');
         $validator = Validator::make($request->all(), [
@@ -525,7 +526,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function updateUserPhoto(Request $request)
+    public function updateUserPhoto(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'photo' => 'required|mimes:jpeg,jpg,png',

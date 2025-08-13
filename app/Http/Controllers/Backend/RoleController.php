@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Role;
-use App\Models\Permission;
-use App\Models\Permissiongroup;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Permission;
+use Illuminate\Http\Request;
+use App\Models\Permissiongroup;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * RoleController
@@ -36,7 +37,7 @@ class RoleController extends Controller
     }
 
     /* Store a newly created role in storage. */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate($this->rules, $this->customMessages);
         // Set default guard if not provided
@@ -60,12 +61,13 @@ class RoleController extends Controller
     }
 
     /* Show the form for editing the specified role. */
-    public function edit(Role $role){
+    public function edit(Role $role): Response
+    {
         return Inertia::render('backend/roles/edit', compact('role'));
     }
 
     /* Update the specified role in storage. */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Role $role): RedirectResponse
     {
         // Modify unique rule to exclude current role
         $this->rules['name'] = 'required|string|max:125|regex:/^[\pL\s\-]+$/u|unique:roles,name,' . $role->id;
@@ -76,7 +78,7 @@ class RoleController extends Controller
     }
 
     /* Remove the specified role from storage. */
-    public function destroy(Role $role)
+    public function destroy(Role $role): RedirectResponse
     {
         // Check if role has users assigned
         if ($role->users()->count() > 0) {
@@ -121,7 +123,7 @@ class RoleController extends Controller
     }
 
     /* Update role permissions. */
-    public function permissionsUpdate(Request $request, Role $role)
+    public function permissionsUpdate(Request $request, Role $role): RedirectResponse
     {
         $validated = $request->validate([
             'permissions' => 'nullable|array',
@@ -205,13 +207,19 @@ class RoleController extends Controller
         ], 200);
     }
 
-    /* Validation rules for role operations. */
+    /**
+     * Validation rules for role operations.
+     * @var array<string, string>
+     */
     private array $rules = [
         'name' => 'required|string|max:125|regex:/^[\pL\s\-]+$/u|unique:roles',
         'guard_name' => 'nullable|string|max:125',
     ];
 
-    /* Custom validation messages. */
+    /**
+     * Custom validation messages.
+     * @var array<string, string>
+     */
     private array $customMessages = [
         'name.required' => 'Role name is required',
         'name.unique' => 'The role name has already been taken',

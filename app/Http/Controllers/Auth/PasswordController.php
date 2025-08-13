@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +17,7 @@ class PasswordController extends Controller
      * Update the authenticated user's password.
      * Supports both web and API requests.
      */
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse|RedirectResponse
     {
         // Use a named error bag for better UX on multi-form pages
         $validated = $request->validateWithBag('updatePassword', [

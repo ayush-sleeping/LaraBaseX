@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Employee;
-use App\Models\User;
 use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Employee;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * EmployeeController
@@ -21,7 +23,7 @@ use Inertia\Response;
 class EmployeeController extends Controller
 {
     /* Display a listing of employees :: */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Employee::with('user:id,first_name,last_name,email,mobile,status');
 
@@ -66,7 +68,7 @@ class EmployeeController extends Controller
     }
 
     /* Store a newly created employee :: */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate($this->rules, $this->customMessages);
 
@@ -75,13 +77,8 @@ class EmployeeController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        $permissions = [];
         $user->assignRole($request->roles);
-		foreach($request->roles as $role_name){
-			$role = Role::where('name',$role_name)->first();
-			array_push($permissions,$role->permissions()->get());
-		}
-		$user->syncPermissions($permissions);
+        $this->syncUserPermissions($user, $request->roles);
 
         $employee = new Employee;
         $employee->fill($request->all());
@@ -92,7 +89,7 @@ class EmployeeController extends Controller
     }
 
     /* Display the specified employee :: */
-    public function show(Employee $employee)
+    public function show(Employee $employee): Response
     {
         // Load the user relationship if not already loaded
         $employee->load('user.roles');
@@ -123,7 +120,7 @@ class EmployeeController extends Controller
     }
 
     /* Update the specified employee :: */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, Employee $employee): RedirectResponse
     {
         $this->rules['email'] = 'required|email|unique:users,email,' . $employee->user->id;
         $this->rules['personal_email'] = 'nullable|email|unique:employees,personal_email,' . $employee->id;
@@ -140,14 +137,9 @@ class EmployeeController extends Controller
         }
         $user->save();
 
-        $permissions = [];
         $user->syncRoles([]);
         $user->assignRole($request->roles);
-        foreach($request->roles as $role_name){
-            $role = Role::where('name',$role_name)->first();
-            array_push($permissions,$role->permissions()->get());
-        }
-        $user->syncPermissions($permissions);
+        $this->syncUserPermissions($user, $request->roles);
 
         $employee->fill($request->all());
         $employee->save();
@@ -156,9 +148,9 @@ class EmployeeController extends Controller
     }
 
     /* Remove the specified employee :: */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
-        $employee = Employee::with('user')->findByHashid($id);
+        $employee = Employee::findByHashid($id);
 
         if (!$employee) {
             return response()->json([
@@ -195,14 +187,14 @@ class EmployeeController extends Controller
     }
 
     /* Change employee status (activate/deactivate) :: */
-    public function changeStatus(Request $request)
+    public function changeStatus(Request $request): JsonResponse
     {
         $request->validate([
             'route_key' => 'required|string',
             'status' => 'required|in:ACTIVE,INACTIVE'
         ]);
 
-        $employee = Employee::with('user')->findByHashid($request->route_key);
+        $employee = Employee::findByHashid($request->route_key);
 
         if (!$employee || !$employee->user) {
             return response()->json([
@@ -219,7 +211,7 @@ class EmployeeController extends Controller
                 'status' => 'success',
                 'message' => $employee->user->first_name . ' has been marked ' . strtolower($request->status) . ' successfully',
                 'employee' => [
-                    'id' => $employee->hashid,
+                    'id' => $employee->getRouteKey(),
                     'status' => $employee->user->status
                 ]
             ]);
@@ -232,7 +224,11 @@ class EmployeeController extends Controller
         }
     }
 
-    /* Sync user permissions based on assigned roles :: */
+    /**
+     * Sync user permissions based on assigned roles
+     * @param User $user
+     * @param array<string> $roleNames
+     */
     private function syncUserPermissions(User $user, array $roleNames): void
     {
         $permissions = collect();
