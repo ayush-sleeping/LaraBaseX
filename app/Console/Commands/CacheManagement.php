@@ -28,53 +28,44 @@ class CacheManagement extends Command
      */
     protected $description = 'Comprehensive cache management for LaraBaseX';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    /* Execute the console command. */
+
+    public function handle(): int
     {
         $action = $this->argument('action');
-        $force = $this->option('force');
+        $force  = $this->option('force');
 
         $this->info("🚀 LaraBaseX Cache Management System");
         $this->info("=====================================");
 
         switch ($action) {
             case 'status':
-                $this->showCacheStatus();
-                break;
+                return $this->showCacheStatus();
 
             case 'warm':
-                $this->warmCache();
-                break;
+                return $this->warmCache();
 
             case 'clear':
-                $this->clearCache($force);
-                break;
+                return $this->clearCache($force);
 
             case 'optimize':
-                $this->optimizeCache();
-                break;
+                return $this->optimizeCache();
 
             case 'all':
                 $this->clearCache($force);
                 $this->optimizeCache();
                 $this->warmCache();
-                break;
+                return Command::SUCCESS;
 
             default:
                 $this->error("❌ Invalid action: {$action}");
                 $this->info("Available actions: status, warm, clear, optimize, all");
-                return 1;
+                return Command::FAILURE;
         }
-
-        return 0;
     }
 
-    /**
-     * Show current cache status
-     */
-    private function showCacheStatus()
+    /* Show current cache status */
+    private function showCacheStatus(): int
     {
         $this->info("📊 Current Cache Status:");
         $this->newLine();
@@ -87,7 +78,7 @@ class CacheManagement extends Command
         if ($cacheDriver === 'redis') {
             $redisHost = config('database.redis.cache.host', 'N/A');
             $redisPort = config('database.redis.cache.port', 'N/A');
-            $redisDb = config('database.redis.cache.database', 'N/A');
+            $redisDb   = config('database.redis.cache.database', 'N/A');
             $this->info("🔗 Redis Connection: {$redisHost}:{$redisPort} (DB: {$redisDb})");
         }
 
@@ -133,74 +124,45 @@ class CacheManagement extends Command
                 $this->warn("⚠️  Could not get cache statistics: " . $e->getMessage());
             }
         }
+
+        return Command::SUCCESS;
     }
 
-    /**
-     * Clear all caches
-     */
-    private function clearCache($force = false)
+    /* Clear all caches */
+    private function clearCache(bool $force = false): int
     {
-        if (!$force) {
-            if (!$this->confirm('🗑️  Clear all caches? This will impact performance temporarily.')) {
+        if (! $force) {
+            if (! $this->confirm('🗑️  Clear all caches? This will impact performance temporarily.')) {
                 $this->info("Cache clear cancelled.");
-                return;
+                return Command::SUCCESS;
             }
         }
 
         $this->info("🗑️  Clearing all caches...");
 
-        // Clear Application Cache
-        $this->info("   - Clearing application cache...");
         Artisan::call('cache:clear');
-
-        // Clear Query Cache
-        $this->info("   - Clearing query cache...");
-        QueryCacheService::clearAll();
-
-        // Clear Config Cache
-        $this->info("   - Clearing config cache...");
         Artisan::call('config:clear');
-
-        // Clear Route Cache
-        $this->info("   - Clearing route cache...");
         Artisan::call('route:clear');
-
-        // Clear View Cache
-        $this->info("   - Clearing view cache...");
         Artisan::call('view:clear');
-
-        // Clear Event Cache
-        $this->info("   - Clearing event cache...");
         Artisan::call('event:clear');
 
+        QueryCacheService::clearAll();
+
         $this->info("✅ All caches cleared successfully!");
+        return Command::SUCCESS;
     }
 
-    /**
-     * Optimize caches for production
-     */
-    private function optimizeCache()
+    /* Optimize caches for production */
+    private function optimizeCache(): int
     {
         $this->info("⚡ Optimizing caches for production...");
 
-        // Only cache in production environment
         $environment = app()->environment();
 
         if ($environment === 'production') {
-            // Cache Config
-            $this->info("   - Caching configuration...");
             Artisan::call('config:cache');
-
-            // Cache Routes
-            $this->info("   - Caching routes...");
             Artisan::call('route:cache');
-
-            // Cache Views
-            $this->info("   - Caching views...");
             Artisan::call('view:cache');
-
-            // Cache Events
-            $this->info("   - Caching events...");
             Artisan::call('event:cache');
 
             $this->info("✅ Production caches optimized!");
@@ -208,17 +170,17 @@ class CacheManagement extends Command
             $this->warn("⚠️  Cache optimization skipped - not in production environment");
             $this->info("Current environment: {$environment}");
         }
+
+        return Command::SUCCESS;
     }
 
-    /**
-     * Warm up caches
-     */
-    private function warmCache()
+    /* Warm up caches */
+    private function warmCache(): int
     {
         $this->info("🔥 Warming up caches...");
 
         $warmupService = new CacheWarmupService();
-        $results = $warmupService->warmupAll();
+        $results       = $warmupService->warmupAll();
 
         $this->info("📊 Warmup Results:");
         foreach ($results as $cache => $success) {
@@ -226,14 +188,10 @@ class CacheManagement extends Command
             $this->info("   {$status} " . ucfirst($cache) . " cache");
         }
 
-        // Also warm up application-specific caches
         $appResults = $warmupService->warmupApplicationCache();
-        $appStatus = $appResults ? '✅' : '❌';
+        $appStatus  = $appResults ? '✅' : '❌';
         $this->info("   {$appStatus} Application cache");
 
-        $this->info("🎉 Cache warmup completed!");
-
-        // Show warmup status
         $status = $warmupService->getWarmupStatus();
         $this->info("\n📈 Current Cache Status:");
         $this->info("   Config Cached: " . ($status['config_cached'] ? '✅' : '❌'));
@@ -242,5 +200,8 @@ class CacheManagement extends Command
 
         $queryStats = $status['query_cache_stats'];
         $this->info("   Query Cache Keys: " . $queryStats['query_cache_keys']);
+
+        return Command::SUCCESS;
     }
+
 }
