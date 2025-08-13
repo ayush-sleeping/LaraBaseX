@@ -304,7 +304,7 @@ export default function Index() {
     });
 
     // ----------------------------------------------------------------------- ::
-    const handleDelete = (id: number, name: string) => {
+    const handleDelete = (id: number) => {
         const enquiry = enquiries.find((enq) => enq.id === id);
         setDeleteDialog({
             open: true,

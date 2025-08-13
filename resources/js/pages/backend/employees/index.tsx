@@ -285,7 +285,7 @@ export default function Index() {
     }, [flashFromGlobal.success, flashFromGlobal.error]);
 
     // ----------------------------------------------------------------------- ::
-    const handleDelete = (id: number, name: string) => {
+    const handleDelete = (id: number) => {
         const employee = employees.find((emp) => emp.id === id);
         setDeleteDialog({
             open: true,
