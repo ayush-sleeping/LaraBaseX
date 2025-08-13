@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,10 +22,13 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Get application version and store URL",
      *     description="Returns the current application version and app store URL",
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="app_version", type="string", example="1.0.0+0", description="Current app version"),
      *             @OA\Property(property="url", type="string", example="https://play.google.com/store/apps/details?id=com.example.app", description="App store URL")
      *         )
@@ -39,6 +41,7 @@ class AuthController extends Controller
             'app_version' => env('APP_VERSION', '1.0.0+0'),
             'url' => env('PLAY_STORE_URL', 'https://play.google.com/store/apps/details?id=com.example.app'),
         ];
+
         return response()->json($data, 200);
     }
 
@@ -49,27 +52,36 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Register a new user",
      *     description="Register a new user and send OTP for verification",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"first_name","email","mobile","device_id"},
+     *
      *             @OA\Property(property="first_name", type="string", maxLength=191, example="John", description="User's first name"),
      *             @OA\Property(property="email", type="string", format="email", example="john@example.com", description="User's email address"),
      *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number"),
      *             @OA\Property(property="device_id", type="string", maxLength=191, example="abc123device", description="Unique device identifier")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="User registered successfully, OTP sent",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="OTP sent successfully")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="errors", type="object",
      *                 @OA\Property(property="first_name", type="array", @OA\Items(type="string", example="Please enter name")),
      *                 @OA\Property(property="email", type="array", @OA\Items(type="string", example="Please enter valid email")),
@@ -121,34 +133,46 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Login user",
      *     description="Login user with mobile number and send OTP",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"mobile","device_id"},
+     *
      *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number"),
      *             @OA\Property(property="device_id", type="string", maxLength=191, example="abc123device", description="Unique device identifier")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="OTP sent successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="OTP sent successfully")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="errors", type="object",
      *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Please enter valid mobile"))
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Mobile number not found",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="errors", type="object",
      *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Mobile number does not exist"))
      *             )
@@ -195,39 +219,51 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Verify OTP and get access token",
      *     description="Verify the OTP sent to user's mobile and issue access token",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"mobile","otp"},
+     *
      *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number"),
      *             @OA\Property(property="otp", type="string", pattern="^[0-9]{4}$", example="1234", description="4-digit OTP code"),
      *             @OA\Property(property="remember_me", type="boolean", example=true, description="Remember login for extended period")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User authenticated successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="User logged in successfully"),
      *             @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...", description="JWT access token"),
      *             @OA\Property(property="token_type", type="string", example="Bearer", description="Token type"),
      *             @OA\Property(property="expires_at", type="string", format="date-time", example="2024-01-15 10:30:00", description="Token expiration date")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="errors", type="object",
      *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Please enter valid mobile")),
      *                 @OA\Property(property="otp", type="array", @OA\Items(type="string", example="Please enter 4 digits for OTP"))
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Invalid OTP",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="OTP does not match, please enter correct OTP")
      *         )
      *     )
@@ -259,6 +295,7 @@ class AuthController extends Controller
                 $token->expires_at = Carbon::now()->addWeeks(1);
             }
             $token->save();
+
             return response()->json([
                 'message' => api_message('otp_verified'),
                 'access_token' => $tokenResult->accessToken,
@@ -277,33 +314,45 @@ class AuthController extends Controller
      *     tags={"Authentication"},
      *     summary="Resend OTP",
      *     description="Resend OTP to user's mobile number",
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"mobile"},
+     *
      *             @OA\Property(property="mobile", type="string", pattern="^[0-9]{10}$", example="9876543210", description="10-digit mobile number")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="OTP resent successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="OTP sent successfully")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="errors", type="object",
      *                 @OA\Property(property="mobile", type="array", @OA\Items(type="string", example="Please enter valid mobile"))
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Mobile number not found",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Mobile number does not exist")
      *         )
      *     )
@@ -346,17 +395,23 @@ class AuthController extends Controller
      *     summary="Logout user",
      *     description="Logout authenticated user and revoke access token",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User logged out successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="User logged out successfully")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated")
      *         )
      *     )
@@ -371,6 +426,7 @@ class AuthController extends Controller
                 $token->revoke();
             });
         }
+
         return api_success_message('logout_successful');
     }
 
@@ -382,10 +438,13 @@ class AuthController extends Controller
      *     summary="Get authenticated user details",
      *     description="Returns authenticated user's profile information",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User details retrieved successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="id", type="integer", example=1, description="User ID"),
      *             @OA\Property(property="first_name", type="string", example="John", description="User's first name"),
      *             @OA\Property(property="last_name", type="string", example="Doe", description="User's last name"),
@@ -399,10 +458,13 @@ class AuthController extends Controller
      *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-01T10:00:00.000000Z")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated")
      *         )
      *     )
@@ -411,6 +473,7 @@ class AuthController extends Controller
     public function getUser(Request $request): JsonResponse
     {
         $user = $request->user('api');
+
         return response()->json($user, 200);
     }
 
@@ -422,10 +485,13 @@ class AuthController extends Controller
      *     summary="Update authenticated user details",
      *     description="Update authenticated user's profile information",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\JsonContent(
      *             required={"business_name","first_name","last_name","state","city"},
+     *
      *             @OA\Property(property="business_name", type="string", maxLength=50, example="John's Updated Business", description="Business name"),
      *             @OA\Property(property="first_name", type="string", maxLength=50, example="John", description="User's first name"),
      *             @OA\Property(property="last_name", type="string", maxLength=50, example="Doe", description="User's last name"),
@@ -433,27 +499,36 @@ class AuthController extends Controller
      *             @OA\Property(property="city", type="string", example="Los Angeles", description="User's city")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="User updated successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="User updated successfully")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="errors", type="object",
      *                 @OA\Property(property="business_name", type="array", @OA\Items(type="string", example="Please enter business name")),
      *                 @OA\Property(property="first_name", type="array", @OA\Items(type="string", example="Please enter first name"))
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated")
      *         )
      *     )
@@ -482,6 +557,7 @@ class AuthController extends Controller
 
         $user->fill($request->all());
         $user->save();
+
         return api_success_message('updated', $user);
     }
 
@@ -493,34 +569,47 @@ class AuthController extends Controller
      *     summary="Update user profile photo",
      *     description="Upload and update authenticated user's profile photo",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
+     *
      *             @OA\Schema(
      *                 required={"photo"},
+     *
      *                 @OA\Property(property="photo", type="string", format="binary", description="Profile photo file (JPEG, JPG, PNG)")
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Photo updated successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Photo updated successfully")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=400,
      *         description="Validation error or no photo uploaded",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="No photo uploaded")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated")
      *         )
      *     )
@@ -539,8 +628,10 @@ class AuthController extends Controller
             Storage::disk('public')->delete($user->photo);
             $user->photo = Storage::disk('public')->put('user-photos', $request->photo);
             $user->save();
+
             return api_success_message('file.uploaded');
         }
+
         return api_error_message('validation_failed', 400);
     }
 }

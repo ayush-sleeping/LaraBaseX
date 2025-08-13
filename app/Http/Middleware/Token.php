@@ -36,37 +36,36 @@ class Token
      * Enhanced version of old middleware logic:
      * Old: if (!\Auth::guard('api')->check()) { return 401; }
      * New: Comprehensive validation with user status and token checks
-     *
-     * @param Request $request
-     * @param Closure $next
-     * @param string|null $guard
-     * @return Response
      */
     public function handle(Request $request, Closure $next, ?string $guard = 'api'): Response
     {
         // Step 1: Check API authentication (same as old middleware but enhanced)
-        if (!Auth::guard($guard)->check()) {
+        if (! Auth::guard($guard)->check()) {
             $this->logFailedAttempt($request, 'no_valid_token', $guard);
+
             return $this->authenticationFailed($request, 'User not authenticated');
         }
 
         $user = Auth::guard($guard)->user();
 
         // Step 2: Validate user exists (enhancement)
-        if (!$user) {
+        if (! $user) {
             $this->logFailedAttempt($request, 'user_not_found', $guard);
+
             return $this->authenticationFailed($request, 'User not found');
         }
 
         // Step 3: Check user status (enhancement)
         if (isset($user->status) && $user->status !== 'ACTIVE') {
             $this->logFailedAttempt($request, 'user_inactive', $guard, $user->id);
+
             return $this->authenticationFailed($request, 'User account is inactive');
         }
 
         // Step 4: Validate token expiry (enhancement for Passport/Sanctum)
-        if (!$this->isTokenValid($request, $user, $guard)) {
+        if (! $this->isTokenValid($request, $user, $guard)) {
             $this->logFailedAttempt($request, 'token_expired', $guard, $user->id);
+
             return $this->authenticationFailed($request, 'Token has expired');
         }
 
@@ -82,10 +81,7 @@ class Token
     /**
      * Validate token is still valid (enhancement)
      *
-     * @param Request $request
-     * @param mixed $user
-     * @param string $guard
-     * @return bool
+     * @param  mixed  $user
      */
     protected function isTokenValid(Request $request, $user, string $guard): bool
     {
@@ -113,10 +109,6 @@ class Token
      * Return authentication failed response
      *
      * Enhanced version of old: return response()->json(['message' => 'User not logged in'], 401);
-     *
-     * @param Request $request
-     * @param string $message
-     * @return Response
      */
     protected function authenticationFailed(Request $request, string $message): Response
     {
@@ -131,12 +123,6 @@ class Token
 
     /**
      * Log failed authentication attempt (new enhancement)
-     *
-     * @param Request $request
-     * @param string $reason
-     * @param string $guard
-     * @param int|null $userId
-     * @return void
      */
     protected function logFailedAttempt(Request $request, string $reason, string $guard, ?int $userId = null): void
     {
@@ -156,10 +142,7 @@ class Token
     /**
      * Log successful API access (new enhancement)
      *
-     * @param Request $request
-     * @param mixed $user
-     * @param string $guard
-     * @return void
+     * @param  mixed  $user
      */
     protected function logSuccessfulAccess(Request $request, $user, string $guard): void
     {
@@ -177,9 +160,6 @@ class Token
 
     /**
      * Get safe headers for logging (exclude sensitive data)
-     *
-     * @param Request $request
-     * @return array
      */
     protected function getSafeHeaders(Request $request): array
     {

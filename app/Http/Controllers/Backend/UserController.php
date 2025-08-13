@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -37,8 +36,8 @@ class UserController extends Controller
         return Inertia::render('backend/users/index', [
             'users' => $users,
             'filters' => [
-                'status' => $request->status
-            ]
+                'status' => $request->status,
+            ],
         ]);
     }
 
@@ -54,7 +53,7 @@ class UserController extends Controller
     /* Store a newly created user in storage :: */
     public function store(Request $request): RedirectResponse
     {
-        //dd($request->all());
+        // dd($request->all());
         $validated = $request->validate($this->rules, $this->customMessages);
         // Handle avatar upload
         if ($request->hasFile('avatar')) {
@@ -76,7 +75,7 @@ class UserController extends Controller
             'roles:id,name',
             'permissions:id,name',
             'creator:id,first_name,last_name',
-            'updator:id,first_name,last_name'
+            'updator:id,first_name,last_name',
         ]);
 
         return Inertia::render('backend/users/show', compact('user'));
@@ -96,8 +95,8 @@ class UserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         // Modify unique rules to exclude current user
-        $this->rules['email'] = 'required|email|max:255|unique:users,email,' . $user->id;
-        $this->rules['mobile'] = 'required|string|max:15|regex:/^[0-9+\-\s]+$/|unique:users,mobile,' . $user->id;
+        $this->rules['email'] = 'required|email|max:255|unique:users,email,'.$user->id;
+        $this->rules['mobile'] = 'required|string|max:15|regex:/^[0-9+\-\s]+$/|unique:users,mobile,'.$user->id;
         $this->rules['password'] = 'nullable|string|min:8|confirmed';
         $validated = $request->validate($this->rules, $this->customMessages);
         // Handle avatar upload
@@ -110,7 +109,7 @@ class UserController extends Controller
             $validated['avatar'] = $avatarPath;
         }
         // Hash password if provided
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
@@ -125,8 +124,8 @@ class UserController extends Controller
     /* Private Function for : Assign roles and sync permissions for a user :: */
     /**
      * Assign roles and sync permissions for a user
-     * @param User $user
-     * @param array<int> $roleIds
+     *
+     * @param  array<int>  $roleIds
      */
     private function assignRolesAndPermissions(User $user, array $roleIds): void
     {
@@ -170,7 +169,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'status' => 'required|in:ACTIVE,INACTIVE'
+            'status' => 'required|in:ACTIVE,INACTIVE',
         ]);
         $user = User::findOrFail($validated['user_id']);
         // Prevent deactivating RootUser or current user
@@ -180,7 +179,7 @@ class UserController extends Controller
         $user->status = $validated['status'];
         $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', $user->first_name . ' has been marked ' . strtolower($validated['status']) . ' successfully');
+        return redirect()->route('admin.users.index')->with('success', $user->first_name.' has been marked '.strtolower($validated['status']).' successfully');
     }
 
     /* Get user statistics :: */
@@ -207,7 +206,7 @@ class UserController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'stats' => $stats
+            'stats' => $stats,
         ], 200);
     }
 
@@ -215,18 +214,18 @@ class UserController extends Controller
     public function resetPassword(Request $request, User $user): JsonResponse
     {
         $validated = $request->validate([
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|confirmed',
         ], [
             'password.required' => 'Password is required',
             'password.min' => 'Password should be at least 8 characters',
-            'password.confirmed' => 'Password confirmation does not match'
+            'password.confirmed' => 'Password confirmation does not match',
         ]);
         $user->password = Hash::make($validated['password']);
         $user->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Password reset successfully'
+            'message' => 'Password reset successfully',
         ], 200);
     }
 
@@ -242,8 +241,8 @@ class UserController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
         if ($request->filled('status')) {
@@ -252,7 +251,7 @@ class UserController extends Controller
         $users = $query->get();
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="users_' . now()->format('Y-m-d') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="users_'.now()->format('Y-m-d').'.csv"',
         ];
 
         return response()->stream(function () use ($users) {
@@ -260,7 +259,7 @@ class UserController extends Controller
             // Add CSV headers
             fputcsv($handle, [
                 'ID', 'First Name', 'Last Name', 'Email', 'Mobile',
-                'Status', 'Roles', 'Created At', 'Updated At'
+                'Status', 'Roles', 'Created At', 'Updated At',
             ]);
             // Add data rows
             foreach ($users as $user) {
@@ -283,6 +282,7 @@ class UserController extends Controller
 
     /**
      * Validation rules for user operations
+     *
      * @var array<string, mixed>
      */
     private array $rules = [
@@ -299,6 +299,7 @@ class UserController extends Controller
 
     /**
      * Custom validation messages
+     *
      * @var array<string, string>
      */
     private array $customMessages = [

@@ -21,6 +21,7 @@ trait Cacheable
     {
         $modelName = strtolower(class_basename(static::class));
         $customTags = property_exists($this, 'cacheTags') ? $this->cacheTags : [];
+
         return array_merge([$modelName], $customTags);
     }
 
@@ -29,7 +30,7 @@ trait Cacheable
      */
     public static function cacheRemember(string $key, \Closure $callback, ?int $ttl = null): mixed
     {
-        $instance = new static();
+        $instance = new static;
         $ttl = $ttl ?? $instance->getCacheTTL();
 
         return QueryCacheService::remember(
@@ -45,7 +46,7 @@ trait Cacheable
      */
     public static function cacheRememberForever(string $key, \Closure $callback): mixed
     {
-        $instance = new static();
+        $instance = new static;
 
         return QueryCacheService::rememberForever(
             $instance->buildCacheKey($key),
@@ -59,7 +60,8 @@ trait Cacheable
      */
     public static function cacheForget(string $key): bool
     {
-        $instance = new static();
+        $instance = new static;
+
         return QueryCacheService::forget($instance->buildCacheKey($key));
     }
 
@@ -68,7 +70,8 @@ trait Cacheable
      */
     public static function flushCache(): bool
     {
-        $instance = new static();
+        $instance = new static;
+
         return QueryCacheService::flushTags($instance->getCacheTags());
     }
 
@@ -78,6 +81,7 @@ trait Cacheable
     protected function buildCacheKey(string $key): string
     {
         $modelName = strtolower(class_basename(static::class));
+
         return "{$modelName}.{$key}";
     }
 
@@ -86,7 +90,7 @@ trait Cacheable
      */
     public static function cachedCount(string $key = 'count', ?int $ttl = null): int
     {
-        return static::cacheRemember($key, fn() => static::count(), $ttl);
+        return static::cacheRemember($key, fn () => static::count(), $ttl);
     }
 
     /**
@@ -94,7 +98,7 @@ trait Cacheable
      */
     public static function cachedExists(string $key = 'exists', ?int $ttl = null): bool
     {
-        return static::cacheRemember($key, fn() => static::exists(), $ttl);
+        return static::cacheRemember($key, fn () => static::exists(), $ttl);
     }
 
     /**
@@ -102,57 +106,62 @@ trait Cacheable
      */
     public static function cachedFirst(string $key = 'first', ?int $ttl = null)
     {
-        return static::cacheRemember($key, fn() => static::first(), $ttl);
+        return static::cacheRemember($key, fn () => static::first(), $ttl);
     }
 
     /**
      * Cache latest records
      */
-    public static function cachedLatest(int $limit = 10, string $key = null, ?int $ttl = null)
+    public static function cachedLatest(int $limit = 10, ?string $key = null, ?int $ttl = null)
     {
         $key = $key ?? "latest.{$limit}";
-        return static::cacheRemember($key, fn() => static::latest()->take($limit)->get(), $ttl);
+
+        return static::cacheRemember($key, fn () => static::latest()->take($limit)->get(), $ttl);
     }
 
     /**
      * Cache oldest records
      */
-    public static function cachedOldest(int $limit = 10, string $key = null, ?int $ttl = null)
+    public static function cachedOldest(int $limit = 10, ?string $key = null, ?int $ttl = null)
     {
         $key = $key ?? "oldest.{$limit}";
-        return static::cacheRemember($key, fn() => static::oldest()->take($limit)->get(), $ttl);
+
+        return static::cacheRemember($key, fn () => static::oldest()->take($limit)->get(), $ttl);
     }
 
     /**
      * Cache find by ID
      */
-    public static function cachedFind($id, string $key = null, ?int $ttl = null)
+    public static function cachedFind($id, ?string $key = null, ?int $ttl = null)
     {
         $key = $key ?? "find.{$id}";
-        return static::cacheRemember($key, fn() => static::find($id), $ttl);
+
+        return static::cacheRemember($key, fn () => static::find($id), $ttl);
     }
 
     /**
      * Cache where query
      */
-    public static function cachedWhere(string $column, $operator = null, $value = null, string $key = null, ?int $ttl = null)
+    public static function cachedWhere(string $column, $operator = null, $value = null, ?string $key = null, ?int $ttl = null)
     {
         if (func_num_args() === 2) {
             $value = $operator;
             $operator = '=';
         }
 
-        $key = $key ?? "where.{$column}." . md5(serialize([$operator, $value]));
-        return static::cacheRemember($key, fn() => static::where($column, $operator, $value)->get(), $ttl);
+        $key = $key ?? "where.{$column}.".md5(serialize([$operator, $value]));
+
+        return static::cacheRemember($key, fn () => static::where($column, $operator, $value)->get(), $ttl);
     }
 
     /**
      * Cache pluck query
      */
-    public static function cachedPluck(string $column, string $key = null, ?int $ttl = null)
+    public static function cachedPluck(string $column, ?string $key = null, ?int $ttl = null)
     {
         $key = $key ?? "pluck.{$column}";
-        return static::cacheRemember($key, fn() => static::pluck($column), $ttl);
+
+        return static::cacheRemember($key, fn () => static::pluck($column), $ttl);
     }
 
     /**
@@ -182,7 +191,7 @@ trait Cacheable
      */
     public static function getCacheStats(): array
     {
-        $instance = new static();
+        $instance = new static;
         $stats = QueryCacheService::getStats();
         $stats['model'] = class_basename(static::class);
         $stats['cache_tags'] = $instance->getCacheTags();

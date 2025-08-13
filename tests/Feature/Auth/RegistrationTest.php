@@ -62,7 +62,7 @@ test('users can access dashboard after admin activation', function () {
 
     // Create an inactive user
     $user = \App\Models\User::factory()->create([
-        'status' => 'INACTIVE'
+        'status' => 'INACTIVE',
     ]);
     $user->assignRole('User');
 

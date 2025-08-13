@@ -32,7 +32,6 @@ return [
 
     'connections' => [
 
-
         // 'sqlite' => [
         //     'driver' => 'sqlite',
         //     'url' => env('DATABASE_URL'),
@@ -72,7 +71,6 @@ return [
             ],
         ],
 
-
         // 'mariadb' => [
         //     'driver' => 'mariadb',
         //     'url' => env('DATABASE_URL'),
@@ -93,7 +91,6 @@ return [
         //     ]) : [],
         // ],
 
-
         // 'pgsql' => [
         //     'driver' => 'pgsql',
         //     'url' => env('DATABASE_URL'),
@@ -108,7 +105,6 @@ return [
         //     'search_path' => 'public',
         //     'sslmode' => 'prefer',
         // ],
-
 
         // 'sqlsrv' => [
         //     'driver' => 'sqlsrv',

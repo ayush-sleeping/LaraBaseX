@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? $request->user()->load([
                     'roles:id,name,guard_name',
-                    'permissions:id,name,guard_name'
+                    'permissions:id,name,guard_name',
                 ]) : null,
             ],
             'flash' => [

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Employee;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -39,8 +37,8 @@ class EmployeeController extends Controller
         return Inertia::render('backend/employees/index', [
             'employees' => $employees,
             'filters' => [
-                'status' => $request->status
-            ]
+                'status' => $request->status,
+            ],
         ]);
     }
 
@@ -63,7 +61,7 @@ class EmployeeController extends Controller
             'employee' => null,
             'roles' => $roles,
             'emp_id' => $empId,
-            'mode' => 'create'
+            'mode' => 'create',
         ]);
     }
 
@@ -72,7 +70,7 @@ class EmployeeController extends Controller
     {
         $request->validate($this->rules, $this->customMessages);
 
-        $user = New User;
+        $user = new User;
         $user->fill($request->all());
         $user->password = bcrypt($request->password);
         $user->save();
@@ -93,6 +91,7 @@ class EmployeeController extends Controller
     {
         // Load the user relationship if not already loaded
         $employee->load('user.roles');
+
         return Inertia::render('backend/employees/show', compact('employee'));
     }
 
@@ -115,16 +114,16 @@ class EmployeeController extends Controller
         return Inertia::render('backend/employees/edit', [
             'employee' => $employee,
             'roles' => $roles,
-            'mode' => 'edit'
+            'mode' => 'edit',
         ]);
     }
 
     /* Update the specified employee :: */
     public function update(Request $request, Employee $employee): RedirectResponse
     {
-        $this->rules['email'] = 'required|email|unique:users,email,' . $employee->user->id;
-        $this->rules['personal_email'] = 'nullable|email|unique:employees,personal_email,' . $employee->id;
-        $this->rules['mobile'] = 'required|digits:10|unique:users,mobile,' . $employee->user->id;
+        $this->rules['email'] = 'required|email|unique:users,email,'.$employee->user->id;
+        $this->rules['personal_email'] = 'nullable|email|unique:employees,personal_email,'.$employee->id;
+        $this->rules['mobile'] = 'required|digits:10|unique:users,mobile,'.$employee->user->id;
         $this->rules['password'] = 'nullable|min:6';
         $this->rules['password_confirmation'] = 'nullable|same:password';
 
@@ -152,17 +151,17 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findByHashid($id);
 
-        if (!$employee) {
+        if (! $employee) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Employee not found'
+                'message' => 'Employee not found',
             ], 404);
         }
 
         try {
             DB::beginTransaction();
 
-            $userName = $employee->user ? $employee->user->first_name . ' ' . $employee->user->last_name : $employee->emp_id;
+            $userName = $employee->user ? $employee->user->first_name.' '.$employee->user->last_name : $employee->emp_id;
 
             // Delete user (this will cascade delete employee due to foreign key)
             if ($employee->user) {
@@ -174,14 +173,15 @@ class EmployeeController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => "Employee {$userName} deleted successfully"
+                'message' => "Employee {$userName} deleted successfully",
             ]);
 
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete employee: ' . $e->getMessage()
+                'message' => 'Failed to delete employee: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -191,15 +191,15 @@ class EmployeeController extends Controller
     {
         $request->validate([
             'route_key' => 'required|string',
-            'status' => 'required|in:ACTIVE,INACTIVE'
+            'status' => 'required|in:ACTIVE,INACTIVE',
         ]);
 
         $employee = Employee::findByHashid($request->route_key);
 
-        if (!$employee || !$employee->user) {
+        if (! $employee || ! $employee->user) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Employee not found'
+                'message' => 'Employee not found',
             ], 404);
         }
 
@@ -209,25 +209,25 @@ class EmployeeController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => $employee->user->first_name . ' has been marked ' . strtolower($request->status) . ' successfully',
+                'message' => $employee->user->first_name.' has been marked '.strtolower($request->status).' successfully',
                 'employee' => [
                     'id' => $employee->getRouteKey(),
-                    'status' => $employee->user->status
-                ]
+                    'status' => $employee->user->status,
+                ],
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to update status: ' . $e->getMessage()
+                'message' => 'Failed to update status: '.$e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Sync user permissions based on assigned roles
-     * @param User $user
-     * @param array<string> $roleNames
+     *
+     * @param  array<string>  $roleNames
      */
     private function syncUserPermissions(User $user, array $roleNames): void
     {

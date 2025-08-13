@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\PermissionRegistrar;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -56,13 +57,13 @@ return new class extends Migration {
                     $teamForeignKey,
                     $rolePivotKey,
                     $modelMorphKey,
-                    'model_type'
+                    'model_type',
                 ], 'model_has_roles_role_model_type_primary');
             } else {
                 $table->primary([
                     $rolePivotKey,
                     $modelMorphKey,
-                    'model_type'
+                    'model_type',
                 ], 'model_has_roles_role_model_type_primary');
             }
 
@@ -71,7 +72,6 @@ return new class extends Migration {
             $table->index($modelMorphKey);
         });
     }
-
 
     /**
      * Reverse the migrations.

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Hashidable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
@@ -11,12 +12,11 @@ use Spatie\Permission\Guard;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
-use App\Traits\Hashidable;
 
 class Permission extends CoreModel implements PermissionContract
 {
-    use HasRoles;
     use Hashidable;
+    use HasRoles;
     use RefreshesPermissionCache;
 
     protected $guarded = [];
@@ -45,7 +45,7 @@ class Permission extends CoreModel implements PermissionContract
     }
 
     /**
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public static function create(array $attributes = []): static
     {
@@ -54,6 +54,7 @@ class Permission extends CoreModel implements PermissionContract
         if ($permission) {
             throw PermissionAlreadyExists::create($attributes['name'], $attributes['guard_name']);
         }
+
         return static::query()->create($attributes);
     }
 
@@ -97,6 +98,7 @@ class Permission extends CoreModel implements PermissionContract
         if (! $permission) {
             throw PermissionDoesNotExist::create($name, $guardName);
         }
+
         return $permission;
     }
 
@@ -107,6 +109,7 @@ class Permission extends CoreModel implements PermissionContract
         if (! $permission) {
             throw PermissionDoesNotExist::withId($id, $guardName);
         }
+
         return $permission;
     }
 
@@ -117,13 +120,15 @@ class Permission extends CoreModel implements PermissionContract
         if (! $permission) {
             /** @var PermissionContract */
             $created = static::query()->create(['name' => $name, 'guard_name' => $guardName]);
+
             return $created;
         }
+
         return $permission;
     }
 
     /**
-     * @param array<string, mixed> $params
+     * @param  array<string, mixed>  $params
      * @return Collection<int, Permission>
      */
     protected static function getPermissions(array $params = [], bool $onlyOne = false): Collection
@@ -134,7 +139,7 @@ class Permission extends CoreModel implements PermissionContract
     }
 
     /**
-     * @param array<string, mixed> $params
+     * @param  array<string, mixed>  $params
      */
     protected static function getPermission(array $params = []): ?PermissionContract
     {

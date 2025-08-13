@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('permissiongroups')) {
+        if (! Schema::hasTable('permissiongroups')) {
             Schema::create('permissiongroups', function (Blueprint $table) {
                 $table->id()->comment('Primary key: Permission Group ID');
                 $table->string('name', 125)->unique()->comment('Group name for display');

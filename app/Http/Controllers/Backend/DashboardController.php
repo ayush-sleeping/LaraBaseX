@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Employee;
+use App\Models\Enquiry;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Enquiry;
-use App\Models\Employee;
-use App\Models\Permission;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
 
 /**
  * DashboardController
@@ -23,16 +23,14 @@ class DashboardController extends Controller
 {
     /**
      * Display the main dashboard with system statistics.
-     * @param Request $request
-     * @return Response
      */
     public function index(Request $request): Response
     {
         // Get system roles (excluding RootUser for regular counts)
         $systemRoles = get_system_roles();
         // Count users with system roles (excluding RootUser)
-        $usersCount = User::whereHas("roles", function ($query) use ($systemRoles) {
-            $query->whereIn("name", $systemRoles)
+        $usersCount = User::whereHas('roles', function ($query) use ($systemRoles) {
+            $query->whereIn('name', $systemRoles)
                 ->where('name', '!=', 'RootUser');
         })->count();
 
@@ -55,12 +53,12 @@ class DashboardController extends Controller
             ->map(function ($enquiry) {
                 return [
                     'id' => $enquiry->hashid,
-                    'name' => $enquiry->first_name . ' ' . $enquiry->last_name,
+                    'name' => $enquiry->first_name.' '.$enquiry->last_name,
                     'email' => $enquiry->email,
                     'mobile' => $enquiry->mobile,
                     'message' => Str::limit($enquiry->message, 100),
                     'created_at' => $enquiry->created_at->format('M d, Y'),
-                    'created_by' => $enquiry->createdBy ? $enquiry->createdBy->first_name . ' ' . $enquiry->createdBy->last_name : null,
+                    'created_by' => $enquiry->createdBy ? $enquiry->createdBy->first_name.' '.$enquiry->createdBy->last_name : null,
                 ];
             });
 
@@ -73,11 +71,11 @@ class DashboardController extends Controller
                 return [
                     'id' => $employee->hashid,
                     'emp_id' => $employee->emp_id,
-                    'name' => $employee->user ? $employee->user->first_name . ' ' . $employee->user->last_name : 'N/A',
+                    'name' => $employee->user ? $employee->user->first_name.' '.$employee->user->last_name : 'N/A',
                     'email' => $employee->user?->email ?? $employee->personal_email,
                     'designation' => $employee->designation,
                     'created_at' => $employee->created_at->format('M d, Y'),
-                    'created_by' => $employee->createdBy ? $employee->createdBy->first_name . ' ' . $employee->createdBy->last_name : null,
+                    'created_by' => $employee->createdBy ? $employee->createdBy->first_name.' '.$employee->createdBy->last_name : null,
                 ];
             });
 
@@ -88,36 +86,36 @@ class DashboardController extends Controller
                 'recent' => $recentUsers,
                 'label' => 'System Users',
                 'icon' => 'users',
-                'color' => 'blue'
+                'color' => 'blue',
             ],
             'employees' => [
                 'total' => $employeesCount,
                 'recent' => $recentEmployees,
                 'label' => 'Employees',
                 'icon' => 'briefcase',
-                'color' => 'green'
+                'color' => 'green',
             ],
             'enquiries' => [
                 'total' => $enquiriesCount,
                 'recent' => $recentEnquiries,
                 'label' => 'Enquiries',
                 'icon' => 'mail',
-                'color' => 'yellow'
+                'color' => 'yellow',
             ],
             'roles' => [
                 'total' => $rolesCount,
                 'recent' => 0, // Roles don't change frequently
                 'label' => 'Roles',
                 'icon' => 'shield',
-                'color' => 'purple'
+                'color' => 'purple',
             ],
             'permissions' => [
                 'total' => $permissionsCount,
                 'recent' => 0, // Permissions don't change frequently
                 'label' => 'Permissions',
                 'icon' => 'key',
-                'color' => 'red'
-            ]
+                'color' => 'red',
+            ],
         ];
 
         return Inertia::render('dashboard', [
@@ -129,36 +127,32 @@ class DashboardController extends Controller
                 'laravel_version' => app()->version(),
                 'server_time' => now()->format('M d, Y H:i:s'),
                 'timezone' => config('app.timezone'),
-            ]
+            ],
         ]);
     }
 
     /**
      * Get dashboard statistics for AJAX requests.
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function getStats(Request $request): JsonResponse
     {
         $systemRoles = get_system_roles();
 
         return response()->json([
-            'users_count' => User::whereHas("roles", function ($query) use ($systemRoles) {
-                $query->whereIn("name", $systemRoles)->where('name', '!=', 'RootUser');
+            'users_count' => User::whereHas('roles', function ($query) use ($systemRoles) {
+                $query->whereIn('name', $systemRoles)->where('name', '!=', 'RootUser');
             })->count(),
             'employees_count' => Employee::count(),
             'enquiries_count' => Enquiry::count(),
             'roles_count' => Role::count(),
             'permissions_count' => Permission::count(),
             'recent_enquiries' => Enquiry::where('created_at', '>=', now()->subDays(7))->count(),
-            'updated_at' => now()->toISOString()
+            'updated_at' => now()->toISOString(),
         ]);
     }
 
     /**
      * Get system information for admin panel.
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function getSystemInfo(Request $request): JsonResponse
     {
@@ -173,9 +167,8 @@ class DashboardController extends Controller
             'app_debug' => config('app.debug'),
             'server_time' => now()->format('Y-m-d H:i:s'),
             'timezone' => config('app.timezone'),
-            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2) . ' MB',
-            'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . ' MB',
+            'memory_usage' => round(memory_get_usage(true) / 1024 / 1024, 2).' MB',
+            'memory_peak' => round(memory_get_peak_usage(true) / 1024 / 1024, 2).' MB',
         ]);
     }
-
 }

@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class BackupMonitoringService
 {
@@ -36,7 +35,7 @@ class BackupMonitoringService
         // Check backup age
         $ageCheck = $this->checkBackupAge();
         $results['checks']['backup_age'] = $ageCheck;
-        if (!$ageCheck['healthy']) {
+        if (! $ageCheck['healthy']) {
             $results['errors'][] = $ageCheck['message'];
             $results['status'] = 'unhealthy';
         }
@@ -44,7 +43,7 @@ class BackupMonitoringService
         // Check backup size
         $sizeCheck = $this->checkBackupSize();
         $results['checks']['backup_size'] = $sizeCheck;
-        if (!$sizeCheck['healthy']) {
+        if (! $sizeCheck['healthy']) {
             $results['warnings'][] = $sizeCheck['message'];
             if ($results['status'] === 'healthy') {
                 $results['status'] = 'warning';
@@ -54,7 +53,7 @@ class BackupMonitoringService
         // Check storage space
         $storageCheck = $this->checkStorageSpace();
         $results['checks']['storage_space'] = $storageCheck;
-        if (!$storageCheck['healthy']) {
+        if (! $storageCheck['healthy']) {
             $results['warnings'][] = $storageCheck['message'];
             if ($results['status'] === 'healthy') {
                 $results['status'] = 'warning';
@@ -64,7 +63,7 @@ class BackupMonitoringService
         // Check backup integrity
         $integrityCheck = $this->checkBackupIntegrity();
         $results['checks']['backup_integrity'] = $integrityCheck;
-        if (!$integrityCheck['healthy']) {
+        if (! $integrityCheck['healthy']) {
             $results['errors'][] = $integrityCheck['message'];
             $results['status'] = 'unhealthy';
         }
@@ -72,7 +71,7 @@ class BackupMonitoringService
         // Check database connectivity
         $dbCheck = $this->checkDatabaseConnectivity();
         $results['checks']['database_connectivity'] = $dbCheck;
-        if (!$dbCheck['healthy']) {
+        if (! $dbCheck['healthy']) {
             $results['errors'][] = $dbCheck['message'];
             $results['status'] = 'unhealthy';
         }
@@ -96,9 +95,9 @@ class BackupMonitoringService
      */
     private function checkBackupAge(): array
     {
-        $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
+        $backupPath = storage_path('app/private/'.config('app.name', 'laravel-backup'));
 
-        if (!File::exists($backupPath)) {
+        if (! File::exists($backupPath)) {
             return [
                 'healthy' => false,
                 'message' => 'No backup directory found',
@@ -150,9 +149,9 @@ class BackupMonitoringService
      */
     private function checkBackupSize(): array
     {
-        $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
+        $backupPath = storage_path('app/private/'.config('app.name', 'laravel-backup'));
 
-        if (!File::exists($backupPath)) {
+        if (! File::exists($backupPath)) {
             return [
                 'healthy' => false,
                 'message' => 'No backup directory found',
@@ -180,8 +179,8 @@ class BackupMonitoringService
         return [
             'healthy' => $isHealthy,
             'message' => $isHealthy
-                ? "Backup sizes are normal (latest: " . $this->formatBytes($latestSize) . ")"
-                : "Latest backup is suspiciously small: " . $this->formatBytes($latestSize),
+                ? 'Backup sizes are normal (latest: '.$this->formatBytes($latestSize).')'
+                : 'Latest backup is suspiciously small: '.$this->formatBytes($latestSize),
             'total_size' => $totalSize,
             'latest_size' => $latestSize,
             'backup_count' => count($backups),
@@ -214,8 +213,8 @@ class BackupMonitoringService
         return [
             'healthy' => $isHealthy,
             'message' => $isHealthy
-                ? "Storage usage is {$usagePercentage}% (" . $this->formatBytes($freeSpace) . " free)"
-                : "Storage usage is high: {$usagePercentage}% (" . $this->formatBytes($freeSpace) . " free)",
+                ? "Storage usage is {$usagePercentage}% (".$this->formatBytes($freeSpace).' free)'
+                : "Storage usage is high: {$usagePercentage}% (".$this->formatBytes($freeSpace).' free)',
             'free_space' => $freeSpace,
             'total_space' => $totalSpace,
             'usage_percentage' => $usagePercentage,
@@ -235,9 +234,9 @@ class BackupMonitoringService
      */
     private function checkBackupIntegrity(): array
     {
-        $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
+        $backupPath = storage_path('app/private/'.config('app.name', 'laravel-backup'));
 
-        if (!File::exists($backupPath)) {
+        if (! File::exists($backupPath)) {
             return [
                 'healthy' => false,
                 'message' => 'No backup directory found',
@@ -254,10 +253,10 @@ class BackupMonitoringService
 
             try {
                 // Basic integrity check - verify it's a valid zip
-                $zip = new \ZipArchive();
+                $zip = new \ZipArchive;
                 $result = $zip->open($backup->getPathname());
 
-                if ($result !== TRUE) {
+                if ($result !== true) {
                     $corruptCount++;
                 } else {
                     $zip->close();
@@ -298,7 +297,7 @@ class BackupMonitoringService
             // Test a simple query
             $result = DB::select('SELECT 1 as test');
 
-            $isHealthy = !empty($result);
+            $isHealthy = ! empty($result);
 
             return [
                 'healthy' => $isHealthy,
@@ -309,7 +308,7 @@ class BackupMonitoringService
         } catch (\Exception $e) {
             return [
                 'healthy' => false,
-                'message' => 'Database connection failed: ' . $e->getMessage(),
+                'message' => 'Database connection failed: '.$e->getMessage(),
                 'connection' => config('database.default', 'unknown'),
                 'error' => $e->getMessage(),
             ];
@@ -330,7 +329,7 @@ class BackupMonitoringService
      */
     private function collectMetrics(): array
     {
-        $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
+        $backupPath = storage_path('app/private/'.config('app.name', 'laravel-backup'));
         $metrics = [
             'backup_count' => 0,
             'total_backup_size' => 0,
@@ -339,7 +338,7 @@ class BackupMonitoringService
             'newest_backup' => null,
         ];
 
-        if (!File::exists($backupPath)) {
+        if (! File::exists($backupPath)) {
             return $metrics;
         }
 
@@ -382,8 +381,9 @@ class BackupMonitoringService
         try {
             $emailTo = config('backup.notifications.mail.to');
 
-            if (!$emailTo) {
+            if (! $emailTo) {
                 Log::warning('No backup notification email configured');
+
                 return false;
             }
 
@@ -400,7 +400,7 @@ class BackupMonitoringService
 
         } catch (\Exception $e) {
             Log::error('Failed to send backup health report', [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return false;
@@ -460,10 +460,6 @@ class BackupMonitoringService
     /**
      * Format bytes to human readable format
      */
-    /**
-     * @param int $bytes
-     * @param int $precision
-     */
     private function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -472,6 +468,6 @@ class BackupMonitoringService
             $bytes /= 1024;
         }
 
-        return round($bytes, $precision) . ' ' . $units[$i];
+        return round($bytes, $precision).' '.$units[$i];
     }
 }

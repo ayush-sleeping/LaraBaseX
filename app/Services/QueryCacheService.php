@@ -20,27 +20,22 @@ class QueryCacheService
     /**
      * Cache a database query result
      *
-     * @param string $key
-     * @param \Closure $callback
-     * @param int|null $ttl
-     * @param array $tags
      * @return mixed
      */
     /**
      * @template TCacheValue
-     * @param string $key
-     * @param \Closure():TCacheValue $callback
-     * @param int|null $ttl
-     * @param array<int, string> $tags
+     *
+     * @param  \Closure():TCacheValue  $callback
+     * @param  array<int, string>  $tags
      * @return TCacheValue
      */
     public static function remember(string $key, \Closure $callback, ?int $ttl = null, array $tags = [])
     {
         $ttl = $ttl ?? self::DEFAULT_TTL;
-        $cacheKey = self::CACHE_PREFIX . $key;
+        $cacheKey = self::CACHE_PREFIX.$key;
 
         try {
-            if (!empty($tags) && self::supportsTags()) {
+            if (! empty($tags) && self::supportsTags()) {
                 return Cache::tags($tags)->remember($cacheKey, $ttl, $callback);
             }
 
@@ -48,7 +43,7 @@ class QueryCacheService
         } catch (\Exception $e) {
             Log::warning('Query cache failed, executing query directly', [
                 'key' => $key,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $callback();
@@ -58,24 +53,21 @@ class QueryCacheService
     /**
      * Cache forever (until manually cleared)
      *
-     * @param string $key
-     * @param \Closure $callback
-     * @param array $tags
      * @return mixed
      */
     /**
      * @template TCacheValue
-     * @param string $key
-     * @param \Closure():TCacheValue $callback
-     * @param array<int, string> $tags
+     *
+     * @param  \Closure():TCacheValue  $callback
+     * @param  array<int, string>  $tags
      * @return TCacheValue
      */
     public static function rememberForever(string $key, \Closure $callback, array $tags = [])
     {
-        $cacheKey = self::CACHE_PREFIX . $key;
+        $cacheKey = self::CACHE_PREFIX.$key;
 
         try {
-            if (!empty($tags) && self::supportsTags()) {
+            if (! empty($tags) && self::supportsTags()) {
                 return Cache::tags($tags)->rememberForever($cacheKey, $callback);
             }
 
@@ -83,7 +75,7 @@ class QueryCacheService
         } catch (\Exception $e) {
             Log::warning('Query cache (forever) failed, executing query directly', [
                 'key' => $key,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return $callback();
@@ -92,20 +84,17 @@ class QueryCacheService
 
     /**
      * Forget a cached query
-     *
-     * @param string $key
-     * @return bool
      */
     public static function forget(string $key): bool
     {
-        $cacheKey = self::CACHE_PREFIX . $key;
+        $cacheKey = self::CACHE_PREFIX.$key;
 
         try {
             return Cache::forget($cacheKey);
         } catch (\Exception $e) {
             Log::warning('Failed to forget cache key', [
                 'key' => $key,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return false;
@@ -114,27 +103,26 @@ class QueryCacheService
 
     /**
      * Flush cache by tags
-     *
-     * @param array $tags
-     * @return bool
      */
     /**
-     * @param array<int, string> $tags
+     * @param  array<int, string>  $tags
      */
     public static function flushTags(array $tags): bool
     {
-        if (!self::supportsTags()) {
+        if (! self::supportsTags()) {
             Log::warning('Cache tags not supported by current driver');
+
             return false;
         }
 
         try {
             Cache::tags($tags)->flush();
+
             return true;
         } catch (\Exception $e) {
             Log::warning('Failed to flush cache tags', [
                 'tags' => $tags,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return false;
@@ -143,19 +131,16 @@ class QueryCacheService
 
     /**
      * Check if current cache driver supports tags
-     *
-     * @return bool
      */
     public static function supportsTags(): bool
     {
         $driver = config('cache.default');
+
         return in_array($driver, ['redis', 'memcached']);
     }
 
     /**
      * Get cache statistics
-     *
-     * @return array
      */
     /**
      * @return array{
@@ -179,7 +164,7 @@ class QueryCacheService
             try {
                 $redis = app('redis.connection')->connection('cache');
                 $allKeys = $redis->keys('*');
-                $queryCacheKeys = $redis->keys(self::CACHE_PREFIX . '*');
+                $queryCacheKeys = $redis->keys(self::CACHE_PREFIX.'*');
 
                 $stats['total_keys'] = count($allKeys);
                 $stats['query_cache_keys'] = count($queryCacheKeys);
@@ -193,8 +178,6 @@ class QueryCacheService
 
     /**
      * Clear all query cache
-     *
-     * @return bool
      */
     public static function clearAll(): bool
     {
@@ -203,9 +186,9 @@ class QueryCacheService
 
             if ($driver === 'redis') {
                 $redis = app('redis.connection')->connection('cache');
-                $keys = $redis->keys(self::CACHE_PREFIX . '*');
+                $keys = $redis->keys(self::CACHE_PREFIX.'*');
 
-                if (!empty($keys)) {
+                if (! empty($keys)) {
                     $redis->del($keys);
                 }
 
@@ -214,47 +197,39 @@ class QueryCacheService
 
             // For other drivers, we'd need to clear the entire cache
             Cache::flush();
+
             return true;
 
         } catch (\Exception $e) {
             Log::warning('Failed to clear query cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
 
     /**
      * Generate cache key from query and parameters
-     *
-     * @param string $query
-     * @param array $bindings
-     * @return string
      */
     /**
-     * @param array<int, mixed> $bindings
+     * @param  array<int, mixed>  $bindings
      */
     public static function generateKey(string $query, array $bindings = []): string
     {
-        return md5($query . serialize($bindings));
+        return md5($query.serialize($bindings));
     }
 
     /**
      * Cache a model query
-     *
-     * @param string $model
-     * @param string $method
-     * @param array $parameters
-     * @param int|null $ttl
-     * @return string
      */
     /**
-     * @param array<int, mixed> $parameters
+     * @param  array<int, mixed>  $parameters
      */
     public static function modelKey(string $model, string $method, array $parameters = [], ?int $ttl = null): string
     {
-        $baseKey = class_basename($model) . ':' . $method;
+        $baseKey = class_basename($model).':'.$method;
 
-        if (!empty($parameters)) {
-            $baseKey .= ':' . md5(serialize($parameters));
+        if (! empty($parameters)) {
+            $baseKey .= ':'.md5(serialize($parameters));
         }
 
         return $baseKey;

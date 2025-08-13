@@ -2,10 +2,10 @@
 
 namespace App\Scopes;
 
-use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
 
 /**
  * Global scope to restrict queries to the current user and their descendants.
@@ -23,16 +23,13 @@ class HierarchyScope implements Scope
 
     /**
      * Auth manager instance.
-     *
-     * @var \Illuminate\Contracts\Auth\Factory
      */
     protected AuthFactory $auth;
 
     /**
      * Create a new HierarchyScope instance.
      *
-     * @param AuthFactory $auth
-     * @param array<int, class-string> $excludedModels
+     * @param  array<int, class-string>  $excludedModels
      */
     public function __construct(AuthFactory $auth, array $excludedModels = [])
     {
@@ -46,10 +43,6 @@ class HierarchyScope implements Scope
 
     /**
      * Apply the scope to a given Eloquent query builder.
-     *
-     * @param Builder $builder
-     * @param Model $model
-     * @return void
      */
     public function apply(Builder $builder, Model $model): void
     {
@@ -58,9 +51,9 @@ class HierarchyScope implements Scope
         }
         /** @var \App\Models\User|null $user */
         $user = $this->auth->guard()->user();
-        if (!$user || !method_exists($user, 'getDescendantIds')) {
+        if (! $user || ! method_exists($user, 'getDescendantIds')) {
             return;
         }
-        $builder->whereIn($model->getTable() . '.created_by', $user->getDescendantIds());
+        $builder->whereIn($model->getTable().'.created_by', $user->getDescendantIds());
     }
 }

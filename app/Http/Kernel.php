@@ -20,7 +20,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
     ];
 
-
     /**
      * Route middleware groups.
      */
@@ -46,7 +45,6 @@ class Kernel extends HttpKernel
         //     \App\Http\Middleware\Admin::class
         // ],
     ];
-
 
     /**
      * Route middleware (assignable to groups or used individually).

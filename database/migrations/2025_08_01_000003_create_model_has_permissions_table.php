@@ -26,9 +26,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $tableNames  = config('permission.table_names');
+        $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
-        $teams       = config('permission.teams');
+        $teams = config('permission.teams');
 
         // Use direct column names instead of PermissionRegistrar static properties
         $permissionPivotKey = $columnNames['permission_pivot_key'] ?? 'permission_id';
@@ -72,7 +72,6 @@ return new class extends Migration
             $table->index($modelMorphKey);
         });
     }
-
 
     /**
      * Reverse the migrations.

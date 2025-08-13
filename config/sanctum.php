@@ -1,8 +1,8 @@
 <?php
 
-use Laravel\Sanctum\Sanctum;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\VerifyCsrfToken;
+use Laravel\Sanctum\Sanctum;
 
 // --------------------------------------------------------------------------
 // Sanctum Configuration - Best Practices

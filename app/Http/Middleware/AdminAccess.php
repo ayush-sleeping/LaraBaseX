@@ -2,13 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Permission;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Permission;
 
 /**
  * AdminAccess Middleware
@@ -48,15 +48,12 @@ class AdminAccess
      * 2. User status validation (must be ACTIVE)
      * 3. Permission-based access control (controller@method matching)
      *
-     * @param Request $request
-     * @param Closure $next
-     * @param string|null $guard Optional guard name
-     * @return Response
+     * @param  string|null  $guard  Optional guard name
      */
     public function handle(Request $request, Closure $next, ?string $guard = null): Response
     {
         // STEP 1: Authentication Check (same as old middleware)
-        if (!Auth::guard($guard)->check()) {
+        if (! Auth::guard($guard)->check()) {
             Log::warning('AdminAccess: Unauthenticated access attempt', [
                 'ip' => $request->ip(),
                 'route' => Route::currentRouteName(),
@@ -64,6 +61,7 @@ class AdminAccess
             ]);
 
             Auth::logout();
+
             return $this->redirectToLogin($request, 'Authentication required');
         }
 
@@ -80,6 +78,7 @@ class AdminAccess
             ]);
 
             Auth::logout();
+
             return $this->redirectToLogin($request, 'You are not allowed to view this page. Please contact admin.');
         }
 
@@ -87,41 +86,44 @@ class AdminAccess
         // Give full access to SuperAdmin/RootUser roles (enhancement)
         if ($this->isSuperAdmin($user)) {
             $this->logAccess($request, $user, 'super_admin_access');
+
             return $next($request);
         }
 
         // STEP 4: Permission-Based Access Control (enhanced version of old logic)
         $routeInfo = $this->extractRouteInformation($request);
 
-        if (!$routeInfo) {
+        if (! $routeInfo) {
             Log::error('AdminAccess: Could not extract route information', [
                 'user_id' => $user->id,
                 'route' => Route::currentRouteName(),
                 'action' => Route::currentRouteAction(),
             ]);
+
             return $this->accessDenied($request, 'Route information unavailable');
         }
 
         // STEP 5: Check Permission Access (same logic as old middleware but enhanced)
         if ($this->hasPermissionAccess($user, $routeInfo)) {
             $this->logAccess($request, $user, 'permission_granted', $routeInfo);
+
             return $next($request);
         }
 
         // STEP 6: Access Denied (enhanced error handling)
         $this->logAccessDenied($request, $user, $routeInfo);
+
         return $this->accessDenied($request, 'Insufficient permissions');
     }
 
     /**
      * Check if user has super admin privileges
      *
-     * @param mixed $user
-     * @return bool
+     * @param  mixed  $user
      */
     protected function isSuperAdmin($user): bool
     {
-        if (!method_exists($user, 'hasAnyRole')) {
+        if (! method_exists($user, 'hasAnyRole')) {
             return false;
         }
 
@@ -135,9 +137,6 @@ class AdminAccess
      * $currentAction = \Route::currentRouteAction();
      * list($controller, $method) = explode('@', $currentAction);
      * $controller = str_replace('App\Http\Controllers\\','',$controller);
-     *
-     * @param Request $request
-     * @return array|null
      */
     /**
      * @return array<string, string>|null
@@ -146,7 +145,7 @@ class AdminAccess
     {
         $currentAction = Route::currentRouteAction();
 
-        if (!$currentAction || !str_contains($currentAction, '@')) {
+        if (! $currentAction || ! str_contains($currentAction, '@')) {
             return null;
         }
 
@@ -181,17 +180,15 @@ class AdminAccess
      *     }
      * }
      *
-     * @param mixed $user
-     * @param array $routeInfo
-     * @return bool
+     * @param  mixed  $user
      */
     /**
-     * @param mixed $user
-     * @param array<string, string> $routeInfo
+     * @param  mixed  $user
+     * @param  array<string, string>  $routeInfo
      */
     protected function hasPermissionAccess($user, array $routeInfo): bool
     {
-        if (!method_exists($user, 'getAllPermissions')) {
+        if (! method_exists($user, 'getAllPermissions')) {
             return false;
         }
 
@@ -221,22 +218,19 @@ class AdminAccess
      *
      * Old middleware logic:
      * return \Redirect::back()->withErrors(['message']);
-     *
-     * @param Request $request
-     * @param string $message
-     * @return Response
      */
     protected function redirectToLogin(Request $request, string $message): Response
     {
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $message
+                'message' => $message,
             ], 401);
         }
 
         // Enhanced redirect logic with proper route checking
         $loginRoute = route('login');
+
         return redirect($loginRoute)->withErrors([$message]);
     }
 
@@ -245,17 +239,13 @@ class AdminAccess
      *
      * Old middleware logic:
      * return abort(403);
-     *
-     * @param Request $request
-     * @param string $message
-     * @return Response
      */
     protected function accessDenied(Request $request, string $message): Response
     {
         if ($request->expectsJson()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $message
+                'message' => $message,
             ], 403);
         }
 
@@ -265,17 +255,11 @@ class AdminAccess
     /**
      * Log successful access (new enhancement)
      *
-     * @param Request $request
-     * @param mixed $user
-     * @param string $accessType
-     * @param array|null $routeInfo
-     * @return void
+     * @param  mixed  $user
      */
     /**
-     * @param Request $request
-     * @param mixed $user
-     * @param string $accessType
-     * @param array<string, string>|null $routeInfo
+     * @param  mixed  $user
+     * @param  array<string, string>|null  $routeInfo
      */
     protected function logAccess(Request $request, $user, string $accessType, ?array $routeInfo = null): void
     {
@@ -293,15 +277,11 @@ class AdminAccess
     /**
      * Log access denied (new enhancement)
      *
-     * @param Request $request
-     * @param mixed $user
-     * @param array $routeInfo
-     * @return void
+     * @param  mixed  $user
      */
     /**
-     * @param Request $request
-     * @param mixed $user
-     * @param array<string, string> $routeInfo
+     * @param  mixed  $user
+     * @param  array<string, string>  $routeInfo
      */
     protected function logAccessDenied(Request $request, $user, array $routeInfo): void
     {

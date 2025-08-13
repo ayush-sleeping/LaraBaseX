@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Services\QueryCacheService;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
 
 class CacheWarmupService
 {
@@ -45,9 +44,11 @@ class CacheWarmupService
         try {
             Artisan::call('config:cache');
             Log::info('Configuration cache warmed up successfully');
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up config cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -60,9 +61,11 @@ class CacheWarmupService
         try {
             Artisan::call('route:cache');
             Log::info('Route cache warmed up successfully');
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up route cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -75,9 +78,11 @@ class CacheWarmupService
         try {
             Artisan::call('view:cache');
             Log::info('View cache warmed up successfully');
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up view cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -93,7 +98,7 @@ class CacheWarmupService
             // Warm up user count
             $userCount = QueryCacheService::remember(
                 'users.count',
-                fn() => User::count(),
+                fn () => User::count(),
                 3600,
                 ['users']
             );
@@ -102,7 +107,7 @@ class CacheWarmupService
             // Warm up recent users
             $recentUsers = QueryCacheService::remember(
                 'users.recent.10',
-                fn() => User::latest()->take(10)->get(['id', 'name', 'email', 'created_at']),
+                fn () => User::latest()->take(10)->get(['id', 'name', 'email', 'created_at']),
                 1800,
                 ['users']
             );
@@ -111,7 +116,7 @@ class CacheWarmupService
             // Warm up active users (if you have a way to determine this)
             $activeUsers = QueryCacheService::remember(
                 'users.active.count',
-                fn() => User::whereNotNull('email_verified_at')->count(),
+                fn () => User::whereNotNull('email_verified_at')->count(),
                 3600,
                 ['users']
             );
@@ -124,12 +129,13 @@ class CacheWarmupService
                 'queries_warmed' => $warmedQueries,
                 'user_count' => $userCount,
                 'recent_users_count' => $recentUsers->count(),
-                'active_users_count' => $activeUsers
+                'active_users_count' => $activeUsers,
             ]);
 
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up query cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -145,7 +151,7 @@ class CacheWarmupService
             // Cache application settings if you have them
             $settings = QueryCacheService::remember(
                 'app.settings',
-                function() {
+                function () {
                     // Replace with your actual settings logic
                     return [
                         'app_name' => config('app.name'),
@@ -162,13 +168,13 @@ class CacheWarmupService
             // Cache navigation/menu data if you have it
             $navigation = QueryCacheService::remember(
                 'app.navigation',
-                function() {
+                function () {
                     // Replace with your actual navigation logic
                     return [
                         'main_menu' => [
                             ['label' => 'Dashboard', 'route' => 'dashboard'],
                             ['label' => 'Profile', 'route' => 'profile.edit'],
-                        ]
+                        ],
                     ];
                 },
                 3600,
@@ -177,12 +183,13 @@ class CacheWarmupService
             $warmedItems++;
 
             Log::info('Application cache warmed up successfully', [
-                'items_warmed' => $warmedItems
+                'items_warmed' => $warmedItems,
             ]);
 
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up application cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -230,7 +237,8 @@ class CacheWarmupService
     private function isViewsCached(): bool
     {
         $viewCachePath = storage_path('framework/views');
-        return is_dir($viewCachePath) && count(glob($viewCachePath . '/*.php')) > 0;
+
+        return is_dir($viewCachePath) && count(glob($viewCachePath.'/*.php')) > 0;
     }
 
     /**
@@ -264,6 +272,7 @@ class CacheWarmupService
         } catch (\Exception $e) {
             $results['clear'] = false;
             Log::error('Failed to clear caches', ['error' => $e->getMessage()]);
+
             return $results;
         }
 

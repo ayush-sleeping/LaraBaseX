@@ -42,7 +42,7 @@ class TrustHosts extends Middleware
 
         // Option 2: Environment-based trusted hosts
         $envHosts = $this->getEnvironmentHosts();
-        if (!empty($envHosts)) {
+        if (! empty($envHosts)) {
             $trustedHosts = array_merge($trustedHosts, $envHosts);
         }
 
@@ -53,7 +53,7 @@ class TrustHosts extends Middleware
 
         // Option 4: Load balancer/proxy hosts
         $proxyHosts = $this->getProxyHosts();
-        if (!empty($proxyHosts)) {
+        if (! empty($proxyHosts)) {
             $trustedHosts = array_merge($trustedHosts, $proxyHosts);
         }
 

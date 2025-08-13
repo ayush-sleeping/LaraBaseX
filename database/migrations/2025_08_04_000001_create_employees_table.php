@@ -27,7 +27,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('employees')) {
+        if (! Schema::hasTable('employees')) {
             Schema::create('employees', function (Blueprint $table) {
                 $table->id()->comment('Primary key: Employee ID');
                 $table->unsignedBigInteger('user_id')->nullable()->comment('Foreign key to users table');

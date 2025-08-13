@@ -30,32 +30,31 @@ class BasicAuth
      * Enhanced version of old middleware logic:
      * Old: if ($request->authtoken) { if ($request->authtoken != '1234') { ... } }
      * New: Multiple token sources, environment config, better validation
-     *
-     * @param Request $request
-     * @param Closure $next
-     * @return Response
      */
     public function handle(Request $request, Closure $next): Response
     {
         // Get the expected auth token from environment (security enhancement)
         $expectedToken = $this->getExpectedToken();
 
-        if (!$expectedToken) {
+        if (! $expectedToken) {
             Log::error('BasicAuth: No auth token configured in environment');
+
             return $this->authenticationFailed($request, 'Authentication not configured');
         }
 
         // Get token from request (multiple sources - enhancement)
         $providedToken = $this->extractTokenFromRequest($request);
 
-        if (!$providedToken) {
+        if (! $providedToken) {
             $this->logFailedAttempt($request, 'no_token_provided');
+
             return $this->authenticationFailed($request, 'Authentication token required');
         }
 
         // Validate token (same logic as old middleware but enhanced)
-        if (!$this->validateToken($providedToken, $expectedToken)) {
+        if (! $this->validateToken($providedToken, $expectedToken)) {
             $this->logFailedAttempt($request, 'invalid_token');
+
             return $this->authenticationFailed($request, 'Invalid authentication token');
         }
 
@@ -69,8 +68,6 @@ class BasicAuth
      * Get expected token from environment configuration
      *
      * Enhancement: Move from hardcoded '1234' to environment variable
-     *
-     * @return string|null
      */
     protected function getExpectedToken(): ?string
     {
@@ -82,9 +79,6 @@ class BasicAuth
      *
      * Old middleware only checked: $request->authtoken
      * Enhanced: Check multiple possible sources
-     *
-     * @param Request $request
-     * @return string|null
      */
     protected function extractTokenFromRequest(Request $request): ?string
     {
@@ -122,10 +116,6 @@ class BasicAuth
      *
      * Same logic as old middleware: if ($request->authtoken != $authtoken)
      * But with additional security checks
-     *
-     * @param string $providedToken
-     * @param string $expectedToken
-     * @return bool
      */
     protected function validateToken(string $providedToken, string $expectedToken): bool
     {
@@ -137,6 +127,7 @@ class BasicAuth
         // Additional security: Check token length (enhancement)
         if (strlen($providedToken) < 8) {
             Log::warning('BasicAuth: Token too short, possible brute force attempt');
+
             return false;
         }
 
@@ -147,10 +138,6 @@ class BasicAuth
      * Return authentication failed response
      *
      * Enhanced version of old: return response()->json(['message' => 'Authentication failed'], 401);
-     *
-     * @param Request $request
-     * @param string $message
-     * @return Response
      */
     protected function authenticationFailed(Request $request, string $message): Response
     {
@@ -165,10 +152,6 @@ class BasicAuth
 
     /**
      * Log failed authentication attempt (new enhancement)
-     *
-     * @param Request $request
-     * @param string $reason
-     * @return void
      */
     protected function logFailedAttempt(Request $request, string $reason): void
     {
@@ -184,9 +167,6 @@ class BasicAuth
 
     /**
      * Log successful authentication (new enhancement)
-     *
-     * @param Request $request
-     * @return void
      */
     protected function logSuccessfulAuth(Request $request): void
     {

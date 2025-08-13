@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -14,31 +15,31 @@ use Throwable;
  */
 class Handler extends ExceptionHandler
 {
-
     /**
      * Custom log levels for exception types.
      * Example:
      *   \App\Exceptions\CustomException::class => \Psr\Log\LogLevel::WARNING,
+     *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
         // \App\Exceptions\CustomException::class => \Psr\Log\LogLevel::WARNING,
     ];
 
-
     /**
      * Exception types that are not reported.
      * Example:
      *   \App\Exceptions\CustomException::class,
+     *
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
         // \App\Exceptions\CustomException::class,
     ];
 
-
     /**
      * Inputs never flashed to session on validation errors.
+     *
      * @var array<int, string>
      */
     protected $dontFlash = [
@@ -46,7 +47,6 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-
 
     /* Register exception handling callbacks. */
     public function register(): void

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 
 class HealthController extends Controller
 {
@@ -23,7 +22,7 @@ class HealthController extends Controller
             'status' => 'OK',
             'timestamp' => now()->toISOString(),
             'service' => config('app.name'),
-            'version' => config('app.version', '1.0.0')
+            'version' => config('app.version', '1.0.0'),
         ], 200);
     }
 
@@ -39,42 +38,42 @@ class HealthController extends Controller
 
         // 1. Database Connection Check
         $checks['database'] = $this->checkDatabase();
-        if (!$checks['database']['healthy']) {
+        if (! $checks['database']['healthy']) {
             $overallStatus = 'unhealthy';
             $issues[] = 'Database connection failed';
         }
 
         // 2. Cache Service Check
         $checks['cache'] = $this->checkCache();
-        if (!$checks['cache']['healthy']) {
+        if (! $checks['cache']['healthy']) {
             $overallStatus = 'degraded';
             $issues[] = 'Cache service issues';
         }
 
         // 3. Storage Check
         $checks['storage'] = $this->checkStorage();
-        if (!$checks['storage']['healthy']) {
+        if (! $checks['storage']['healthy']) {
             $overallStatus = 'degraded';
             $issues[] = 'Storage issues detected';
         }
 
         // 4. Queue Service Check
         $checks['queue'] = $this->checkQueue();
-        if (!$checks['queue']['healthy']) {
+        if (! $checks['queue']['healthy']) {
             $overallStatus = 'degraded';
             $issues[] = 'Queue service issues';
         }
 
         // 5. Application Health
         $checks['application'] = $this->checkApplication();
-        if (!$checks['application']['healthy']) {
+        if (! $checks['application']['healthy']) {
             $overallStatus = 'unhealthy';
             $issues[] = 'Application configuration issues';
         }
 
         // 6. Backup System Health
         $checks['backup'] = $this->checkBackupSystem();
-        if (!$checks['backup']['healthy']) {
+        if (! $checks['backup']['healthy']) {
             $overallStatus = 'degraded';
             $issues[] = 'Backup system issues';
         }
@@ -93,7 +92,7 @@ class HealthController extends Controller
             'uptime' => $this->getUptime(),
         ];
 
-        if (!empty($issues)) {
+        if (! empty($issues)) {
             $response['issues'] = $issues;
         }
 
@@ -102,7 +101,7 @@ class HealthController extends Controller
             Log::warning('Health check detected issues', [
                 'status' => $overallStatus,
                 'issues' => $issues,
-                'response_time' => $responseTime
+                'response_time' => $responseTime,
             ]);
         }
 
@@ -147,7 +146,7 @@ class HealthController extends Controller
                 'query_time_ms' => $queryTime,
                 'response_time_ms' => $responseTime,
                 'tables_accessible' => true,
-                'user_count' => $writeTest
+                'user_count' => $writeTest,
             ];
 
         } catch (\Exception $e) {
@@ -157,7 +156,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'connection_failed',
                 'error' => $e->getMessage(),
-                'response_time_ms' => $responseTime
+                'response_time_ms' => $responseTime,
             ];
         }
     }
@@ -173,8 +172,8 @@ class HealthController extends Controller
         $startTime = microtime(true);
 
         try {
-            $testKey = 'health_check_' . time();
-            $testValue = 'test_' . uniqid();
+            $testKey = 'health_check_'.time();
+            $testValue = 'test_'.uniqid();
 
             // Test write
             $writeStart = microtime(true);
@@ -199,7 +198,7 @@ class HealthController extends Controller
                 'driver' => config('cache.default'),
                 'write_time_ms' => $writeTime,
                 'read_time_ms' => $readTime,
-                'response_time_ms' => $responseTime
+                'response_time_ms' => $responseTime,
             ];
 
         } catch (\Exception $e) {
@@ -209,7 +208,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'cache_failed',
                 'error' => $e->getMessage(),
-                'response_time_ms' => $responseTime
+                'response_time_ms' => $responseTime,
             ];
         }
     }
@@ -231,21 +230,21 @@ class HealthController extends Controller
             // Check local storage
             $localStorage = $this->checkStorageDisk('local');
             $results['local'] = $localStorage;
-            if (!$localStorage['healthy']) {
+            if (! $localStorage['healthy']) {
                 $overallHealthy = false;
             }
 
             // Check public storage
             $publicStorage = $this->checkStorageDisk('public');
             $results['public'] = $publicStorage;
-            if (!$publicStorage['healthy']) {
+            if (! $publicStorage['healthy']) {
                 $overallHealthy = false;
             }
 
             // Check disk space
             $diskSpace = $this->checkDiskSpace();
             $results['disk_space'] = $diskSpace;
-            if (!$diskSpace['healthy']) {
+            if (! $diskSpace['healthy']) {
                 $overallHealthy = false;
             }
 
@@ -255,7 +254,7 @@ class HealthController extends Controller
                 'healthy' => $overallHealthy,
                 'status' => $overallHealthy ? 'operational' : 'storage_issues',
                 'details' => $results,
-                'response_time_ms' => $responseTime
+                'response_time_ms' => $responseTime,
             ];
 
         } catch (\Exception $e) {
@@ -265,7 +264,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'storage_check_failed',
                 'error' => $e->getMessage(),
-                'response_time_ms' => $responseTime
+                'response_time_ms' => $responseTime,
             ];
         }
     }
@@ -280,8 +279,8 @@ class HealthController extends Controller
     {
         try {
             $storage = Storage::disk($disk);
-            $testFile = 'health_check_' . time() . '.txt';
-            $testContent = 'health_check_' . uniqid();
+            $testFile = 'health_check_'.time().'.txt';
+            $testContent = 'health_check_'.uniqid();
 
             // Test write
             $storage->put($testFile, $testContent);
@@ -297,7 +296,7 @@ class HealthController extends Controller
             return [
                 'healthy' => $isHealthy,
                 'status' => $isHealthy ? 'operational' : 'read_write_failed',
-                'disk' => $disk
+                'disk' => $disk,
             ];
 
         } catch (\Exception $e) {
@@ -305,7 +304,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'disk_failed',
                 'disk' => $disk,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ];
         }
     }
@@ -326,7 +325,7 @@ class HealthController extends Controller
             if ($freeBytes === false || $totalBytes === false) {
                 return [
                     'healthy' => false,
-                    'status' => 'disk_space_check_failed'
+                    'status' => 'disk_space_check_failed',
                 ];
             }
 
@@ -342,14 +341,14 @@ class HealthController extends Controller
                 'status' => $status,
                 'usage_percent' => $usagePercent,
                 'free_gb' => round($freeBytes / 1024 / 1024 / 1024, 2),
-                'total_gb' => round($totalBytes / 1024 / 1024 / 1024, 2)
+                'total_gb' => round($totalBytes / 1024 / 1024 / 1024, 2),
             ];
 
         } catch (\Exception $e) {
             return [
                 'healthy' => false,
                 'status' => 'disk_space_check_failed',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ];
         }
     }
@@ -377,7 +376,7 @@ class HealthController extends Controller
                     'status' => 'sync_mode',
                     'driver' => $queueDriver,
                     'note' => 'Running in synchronous mode',
-                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
                 ];
             }
 
@@ -389,7 +388,7 @@ class HealthController extends Controller
                 'healthy' => true,
                 'status' => 'operational',
                 'driver' => $queueDriver,
-                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
             ];
 
         } catch (\Exception $e) {
@@ -397,7 +396,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'queue_failed',
                 'error' => $e->getMessage(),
-                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
             ];
         }
     }
@@ -416,7 +415,7 @@ class HealthController extends Controller
 
         try {
             // Check critical configuration
-            if (!config('app.key')) {
+            if (! config('app.key')) {
                 $issues[] = 'APP_KEY not set';
                 $isHealthy = false;
             }
@@ -447,7 +446,7 @@ class HealthController extends Controller
             ];
 
             foreach ($criticalPaths as $path) {
-                if (!is_writable($path)) {
+                if (! is_writable($path)) {
                     $issues[] = "Directory not writable: {$path}";
                     $isHealthy = false;
                 }
@@ -465,7 +464,7 @@ class HealthController extends Controller
                 'timezone' => config('app.timezone'),
                 'maintenance_mode' => app()->isDownForMaintenance(),
                 'issues' => $issues,
-                'response_time_ms' => $responseTime
+                'response_time_ms' => $responseTime,
             ];
 
         } catch (\Exception $e) {
@@ -473,7 +472,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'application_check_failed',
                 'error' => $e->getMessage(),
-                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
             ];
         }
     }
@@ -490,34 +489,34 @@ class HealthController extends Controller
 
         try {
             // Check if backup directory exists and is writable
-            $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
+            $backupPath = storage_path('app/private/'.config('app.name', 'laravel-backup'));
 
-            if (!file_exists($backupPath)) {
+            if (! file_exists($backupPath)) {
                 return [
                     'healthy' => false,
                     'status' => 'backup_directory_missing',
                     'path' => $backupPath,
-                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
                 ];
             }
 
-            if (!is_writable($backupPath)) {
+            if (! is_writable($backupPath)) {
                 return [
                     'healthy' => false,
                     'status' => 'backup_directory_not_writable',
                     'path' => $backupPath,
-                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
                 ];
             }
 
             // Check recent backups
-            $files = glob($backupPath . '/*.zip');
+            $files = glob($backupPath.'/*.zip');
             if (empty($files)) {
                 return [
                     'healthy' => false,
                     'status' => 'no_backups_found',
                     'path' => $backupPath,
-                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                    'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
                 ];
             }
 
@@ -546,7 +545,7 @@ class HealthController extends Controller
                 'backup_age_hours' => $backupAgeHours,
                 'backup_count' => count($files),
                 'backup_path' => $backupPath,
-                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
             ];
 
         } catch (\Exception $e) {
@@ -554,7 +553,7 @@ class HealthController extends Controller
                 'healthy' => false,
                 'status' => 'backup_check_failed',
                 'error' => $e->getMessage(),
-                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2)
+                'response_time_ms' => round((microtime(true) - $startTime) * 1000, 2),
             ];
         }
     }
@@ -572,7 +571,7 @@ class HealthController extends Controller
             // In production, you might want to track this more accurately
             $uptimeFile = storage_path('app/uptime.txt');
 
-            if (!file_exists($uptimeFile)) {
+            if (! file_exists($uptimeFile)) {
                 // Create uptime file with current timestamp
                 file_put_contents($uptimeFile, time());
                 $startTime = time();
@@ -585,13 +584,13 @@ class HealthController extends Controller
             return [
                 'seconds' => $uptime,
                 'human' => $this->formatUptime($uptime),
-                'started_at' => Carbon::createFromTimestamp($startTime)->toISOString()
+                'started_at' => Carbon::createFromTimestamp($startTime)->toISOString(),
             ];
 
         } catch (\Exception $e) {
             return [
                 'error' => 'Could not determine uptime',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
     }
@@ -607,17 +606,20 @@ class HealthController extends Controller
 
         if ($seconds < 3600) {
             $minutes = floor($seconds / 60);
+
             return "{$minutes} minutes";
         }
 
         if ($seconds < 86400) {
             $hours = floor($seconds / 3600);
             $minutes = floor(($seconds % 3600) / 60);
+
             return "{$hours}h {$minutes}m";
         }
 
         $days = floor($seconds / 86400);
         $hours = floor(($seconds % 86400) / 3600);
+
         return "{$days}d {$hours}h";
     }
 }

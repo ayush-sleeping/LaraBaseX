@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,11 +12,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Optionally define DS for cross-platform directory separator usage
-        if (!defined('DS')) {
+        if (! defined('DS')) {
             define('DS', DIRECTORY_SEPARATOR);
         }
     }
-
 
     /* Bootstrap any application services. */
     public function boot(): void

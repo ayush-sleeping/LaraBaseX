@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 // -------------------------------------------------------------------------------------------------------- ::
-Artisan::command('inspire', function () { $this->comment(Inspiring::quote()); })->purpose('Display an inspiring quote');
+Artisan::command('inspire', function () {
+    $this->comment(Inspiring::quote());
+})->purpose('Display an inspiring quote');
 
 // Schedule backup to run daily at 2:00 AM
 Schedule::command('backup:database --only-db')->dailyAt('02:00')->name('daily-db-backup');

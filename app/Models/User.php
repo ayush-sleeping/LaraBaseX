@@ -3,19 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\Hashidable;
 use App\Traits\Cacheable;
-use Laravel\Passport\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+use App\Traits\Hashidable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, Hashidable, HasApiTokens, LogsActivity, Cacheable;
+    use Cacheable, HasApiTokens, HasFactory, Hashidable, HasRoles, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -48,6 +48,7 @@ class User extends Authenticatable
      * Cache configuration
      */
     protected $cacheTTL = 1800; // 30 minutes
+
     protected $cacheTags = ['users', 'auth'];
 
     /**
@@ -90,8 +91,6 @@ class User extends Authenticatable
 
     /**
      * Get the user's name (alias for full_name for frontend compatibility).
-     *
-     * @return string
      */
     public function getNameAttribute(): string
     {
@@ -100,8 +99,6 @@ class User extends Authenticatable
 
     /**
      * Get the user's full name.
-     *
-     * @return string
      */
     public function getFullNameAttribute(): string
     {
@@ -109,15 +106,13 @@ class User extends Authenticatable
         $lastName = trim($this->last_name ?? '');
 
         // Ensure we always return a string, never null
-        $fullName = trim($firstName . ' ' . $lastName);
+        $fullName = trim($firstName.' '.$lastName);
 
         return $fullName ?: 'Unknown User';
     }
 
     /**
      * Get the user's initials.
-     *
-     * @return string
      */
     public function getInitialsAttribute(): string
     {
@@ -127,22 +122,20 @@ class User extends Authenticatable
         $firstInitial = $firstName ? strtoupper(substr($firstName, 0, 1)) : '';
         $lastInitial = $lastName ? strtoupper(substr($lastName, 0, 1)) : '';
 
-        return $firstInitial . $lastInitial;
+        return $firstInitial.$lastInitial;
     }
 
     /**
      * Get the user's avatar URL.
-     *
-     * @return string
      */
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+            return asset('storage/'.$this->avatar);
         }
 
         // Return a default avatar or generate one based on initials
-        return "https://ui-avatars.com/api/?name=" . urlencode($this->full_name) . "&background=random";
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->full_name).'&background=random';
     }
 
     /**
@@ -160,6 +153,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
     /**
      * @return array<int, string>
      */
@@ -167,6 +161,7 @@ class User extends Authenticatable
     {
         return $this->cacheTags;
     }
+
     /**
      * @return array<string, mixed>
      */
@@ -175,36 +170,43 @@ class User extends Authenticatable
         // ...existing code...
         return [];
     }
+
     public static function cachedFirst(): ?static
     {
         // ...existing code...
         return null;
     }
+
     public static function cachedLatest(): ?static
     {
         // ...existing code...
         return null;
     }
+
     public static function cachedOldest(): ?static
     {
         // ...existing code...
         return null;
     }
+
     public static function cachedFind(int|string $id): ?static
     {
         // ...existing code...
         return null;
     }
+
     public static function cachedWhere(string $column, string $operator, mixed $value): ?static
     {
         // ...existing code...
         return null;
     }
+
     public static function cachedPluck(string $column): array
     {
         // ...existing code...
         return [];
     }
+
     protected static function bootCacheable(): void
     {
         // ...existing code...
@@ -222,7 +224,7 @@ class User extends Authenticatable
                 'email',
                 'mobile',
                 'status',
-                'avatar'
+                'avatar',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

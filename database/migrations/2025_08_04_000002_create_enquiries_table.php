@@ -28,7 +28,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('enquiries')) {
+        if (! Schema::hasTable('enquiries')) {
             Schema::create('enquiries', function (Blueprint $table) {
                 $table->id()->comment('Primary key: Enquiry ID');
                 $table->string('first_name', 125)->comment('Contact\'s first name');

@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Traits\Hashidable;
-use PHPUnit\Event\Code\Throwable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * CoreModel: A modern base model for auditing and shared logic.
@@ -18,7 +17,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - PHP 8+ null-safe operators
  * - Easily extendable for more shared logic
  */
-
 
 /**
  * @property int|null $created_by
@@ -35,7 +33,6 @@ class CoreModel extends Model
      * Set to false in child models to disable auditing.
      */
     public static bool $auditing = true;
-
 
     /**
      * Boot the model and automatically set created_by and updated_by fields on create/update.
@@ -76,7 +73,6 @@ class CoreModel extends Model
         }
     }
 
-
     /**
      * Relationship: The user who created this model.
      */
@@ -84,7 +80,6 @@ class CoreModel extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
 
     /**
      * Relationship: The user who last updated this model.
@@ -94,7 +89,6 @@ class CoreModel extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-
     /**
      * Get the full name of the creator (first + last name, trimmed).
      */
@@ -102,9 +96,9 @@ class CoreModel extends Model
     {
         $first = $this->createdBy ? $this->createdBy->first_name : '';
         $last = $this->createdBy ? $this->createdBy->last_name : '';
+
         return trim("$first $last");
     }
-
 
     /**
      * Get the full name of the last updater (first + last name, trimmed).
@@ -113,6 +107,7 @@ class CoreModel extends Model
     {
         $first = $this->updatedBy ? $this->updatedBy->first_name : '';
         $last = $this->updatedBy ? $this->updatedBy->last_name : '';
+
         return trim("$first $last");
     }
 
@@ -131,5 +126,4 @@ class CoreModel extends Model
             'updated_at' => $this->updated_at,
         ];
     }
-
 }

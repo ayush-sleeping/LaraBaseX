@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Backup\Tasks\Backup\BackupJobFactory;
 
 class BackupDatabase extends Command
 {
@@ -37,7 +36,8 @@ class BackupDatabase extends Command
 
             $this->info('Backup completed successfully!');
         } catch (\Exception $e) {
-            $this->error('Backup failed: ' . $e->getMessage());
+            $this->error('Backup failed: '.$e->getMessage());
+
             return 1;
         }
 

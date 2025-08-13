@@ -1,4 +1,5 @@
 <?php
+
 /**
  * LaraBaseX Project Helpers
  *
@@ -36,13 +37,13 @@
  * Add or update helpers as needed for your project.
  */
 
-use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 // 🔠 String Helpers
-if (!function_exists('str_ends_with')) {
+if (! function_exists('str_ends_with')) {
     /**
      * Check if a string ends with a given substring.
      */
@@ -52,8 +53,7 @@ if (!function_exists('str_ends_with')) {
     }
 }
 
-
-if (!function_exists('str_singular')) {
+if (! function_exists('str_singular')) {
     /**
      * Get the singular form of a string.
      */
@@ -63,8 +63,7 @@ if (!function_exists('str_singular')) {
     }
 }
 
-
-if (!function_exists('str_snake')) {
+if (! function_exists('str_snake')) {
     /**
      * Convert a string to snake_case.
      */
@@ -74,8 +73,7 @@ if (!function_exists('str_snake')) {
     }
 }
 
-
-if (!function_exists('str_plural')) {
+if (! function_exists('str_plural')) {
     /**
      * Get the plural form of a string.
      */
@@ -85,9 +83,8 @@ if (!function_exists('str_plural')) {
     }
 }
 
-
 // 📅 Date/Time Helpers
-if (!function_exists('to_indian_datetime')) {
+if (! function_exists('to_indian_datetime')) {
     /**
      * Format a datetime string to Indian date/time format.
      */
@@ -97,9 +94,8 @@ if (!function_exists('to_indian_datetime')) {
     }
 }
 
-
 // ⚙️ App/Utility Helpers
-if (!function_exists('get_system_roles')) {
+if (! function_exists('get_system_roles')) {
     /**
      * Get system roles from PermissionSeeder.
      *
@@ -109,13 +105,13 @@ if (!function_exists('get_system_roles')) {
     {
         $permissionSeeder = new \Database\Seeders\PermissionSeeder;
         $roles = $permissionSeeder->roles ?? [];
+
         return array_keys($roles);
     }
 }
 
-
 // ⚙️ App/Utility Helpers (continued)
-if (!function_exists('get_counting_number')) {
+if (! function_exists('get_counting_number')) {
     /**
      * Generate a unique counting number for a model.
      */
@@ -132,88 +128,95 @@ if (!function_exists('get_counting_number')) {
         $currentMonth = date('n');
         $fyStart = ($currentMonth >= 4) ? substr($currentYear, -2) : substr(($currentYear - 1), -2);
         $fyEnd = ($currentMonth >= 4) ? substr(($currentYear + 1), -2) : substr($currentYear, -2);
-        $number = $prefix . '-' . $fyStart . '-' . $fyEnd . '-' . str_pad($lastNumberPart, 4, '0', STR_PAD_LEFT);
-        if (!$year) {
-            $number = $prefix . '-' . str_pad($lastNumberPart, 4, '0', STR_PAD_LEFT);
+        $number = $prefix.'-'.$fyStart.'-'.$fyEnd.'-'.str_pad($lastNumberPart, 4, '0', STR_PAD_LEFT);
+        if (! $year) {
+            $number = $prefix.'-'.str_pad($lastNumberPart, 4, '0', STR_PAD_LEFT);
         }
+
         return $number;
     }
 }
 
 // 📱 Device Helpers (requires Mobile_Detect package)
-if (!function_exists('is_desktop')) {
+if (! function_exists('is_desktop')) {
     /**
      * Detect if the device is desktop.
      */
     function is_desktop(): bool
     {
-        if (!class_exists('Mobile_Detect')) return true;
+        if (! class_exists('Mobile_Detect')) {
+            return true;
+        }
         $detect = new \Mobile_Detect;
-        return !$detect->isMobile();
+
+        return ! $detect->isMobile();
     }
 }
 
-
-if (!function_exists('is_mobile')) {
+if (! function_exists('is_mobile')) {
     /**
      * Detect if the device is mobile.
      */
     function is_mobile(): bool
     {
-        if (!class_exists('Mobile_Detect')) return false;
+        if (! class_exists('Mobile_Detect')) {
+            return false;
+        }
         $detect = new \Mobile_Detect;
+
         return $detect->isMobile();
     }
 }
 
-
 // 🌐 API Helpers (SMS, API responses, etc.)
-if (!function_exists('send_sms')) {
+if (! function_exists('send_sms')) {
     /**
      * Send an SMS using Fast2SMS API.
      */
     function send_sms($numbers, string $message): bool
     {
         $apiKey = env('FAST2SMS_API_KEY');
-        if (!$apiKey) return false;
+        if (! $apiKey) {
+            return false;
+        }
         $fields = [
-            "variables_values" => $message,
-            "route" => "otp",
-            "numbers" => $numbers,
+            'variables_values' => $message,
+            'route' => 'otp',
+            'numbers' => $numbers,
         ];
         try {
             $curl = curl_init();
             curl_setopt_array($curl, [
-                CURLOPT_URL => "https://www.fast2sms.com/dev/bulkV2",
+                CURLOPT_URL => 'https://www.fast2sms.com/dev/bulkV2',
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
+                CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => json_encode($fields),
                 CURLOPT_HTTPHEADER => [
                     "authorization: {$apiKey}",
-                    "accept: */*",
-                    "cache-control: no-cache",
-                    "content-type: application/json"
+                    'accept: */*',
+                    'cache-control: no-cache',
+                    'content-type: application/json',
                 ],
             ]);
             $response = curl_exec($curl);
             $err = curl_error($curl);
             curl_close($curl);
-            return !$err;
+
+            return ! $err;
         } catch (\Exception $e) {
             return false;
         }
     }
 }
 
-
 // 💸 Finance Helpers
-if (!function_exists('get_discounted_percentage')) {
+if (! function_exists('get_discounted_percentage')) {
     /**
      * Calculate the discount percentage.
      */
@@ -223,13 +226,13 @@ if (!function_exists('get_discounted_percentage')) {
             return '0%';
         }
         $percentage = (($originalPrice - $discountedPrice) / $originalPrice) * 100;
-        return round($percentage, 0) . '%';
+
+        return round($percentage, 0).'%';
     }
 }
 
-
 // 💸 Finance Helpers (continued)
-if (!function_exists('in_rupee')) {
+if (! function_exists('in_rupee')) {
     /**
      * Format a number as Indian Rupees.
      */
@@ -242,35 +245,34 @@ if (!function_exists('in_rupee')) {
             $minus = true;
             $num = substr($num, 1);
         }
-        $explrestunits = "";
+        $explrestunits = '';
         if (strlen($num) > 3) {
             $lastthree = substr($num, -3);
             $restunits = substr($num, 0, -3);
-            $restunits = (strlen($restunits) % 2 == 1) ? "0" . $restunits : $restunits;
+            $restunits = (strlen($restunits) % 2 == 1) ? '0'.$restunits : $restunits;
             $expunit = str_split($restunits, 2);
             foreach ($expunit as $i => $unit) {
-                $explrestunits .= ($i == 0 ? (int)$unit : $unit) . ",";
+                $explrestunits .= ($i == 0 ? (int) $unit : $unit).',';
             }
-            $thecash = $explrestunits . $lastthree;
+            $thecash = $explrestunits.$lastthree;
         } else {
             $thecash = $num;
         }
         if ($minus) {
-            $thecash = "-" . $thecash;
+            $thecash = '-'.$thecash;
         }
         if (isset($nums[1]) && $nums[1] > 0) {
-            $thecash .= "." . $nums[1];
+            $thecash .= '.'.$nums[1];
         }
         if ($symbol) {
-            return '₹ ' . $thecash . '/-';
+            return '₹ '.$thecash.'/-';
         } elseif ($pdf) {
-            return $thecash . '/-';
+            return $thecash.'/-';
         } else {
-            return html_entity_decode('₹ ' . $thecash . '/-');
+            return html_entity_decode('₹ '.$thecash.'/-');
         }
     }
 }
-
 
 // ⚙️ App/Utility Helpers (continued)
 // if (!function_exists('get_domain_url')) {
@@ -285,179 +287,200 @@ if (!function_exists('in_rupee')) {
 
 // 🌐 API Helpers (continued) & Miscellaneous
 
-if (!function_exists('json_response')) {
+if (! function_exists('json_response')) {
     /**
      * Return a JSON response for APIs.
      */
-    function json_response($data = [], int $status = 200) {
+    function json_response($data = [], int $status = 200)
+    {
         return response()->json($data, $status);
     }
 }
 
-if (!function_exists('get_env')) {
+if (! function_exists('get_env')) {
     /**
      * Safe access to .env values.
      */
-    function get_env($key, $default = null) {
+    function get_env($key, $default = null)
+    {
         return env($key, $default);
     }
 }
 
-if (!function_exists('uuid')) {
+if (! function_exists('uuid')) {
     /**
      * Generate a UUID string.
      */
-    function uuid(): string {
+    function uuid(): string
+    {
         return \Illuminate\Support\Str::uuid()->toString();
     }
 }
 
-if (!function_exists('is_api_request')) {
+if (! function_exists('is_api_request')) {
     /**
      * Detect if the current request is for an API route.
      */
-    function is_api_request(): bool {
+    function is_api_request(): bool
+    {
         return request()->is('api/*');
     }
 }
 
-if (!function_exists('carbon')) {
+if (! function_exists('carbon')) {
     /**
      * Easy Carbon date object wrapper.
      */
-    function carbon($date = null): \Carbon\Carbon {
+    function carbon($date = null): \Carbon\Carbon
+    {
         return \Carbon\Carbon::parse($date);
     }
 }
 
-if (!function_exists('asset_timestamped')) {
+if (! function_exists('asset_timestamped')) {
     /**
      * Append filemtime to asset for cache busting.
      */
-    function asset_timestamped($path): string {
+    function asset_timestamped($path): string
+    {
         $fullPath = public_path($path);
-        return asset($path) . '?v=' . (file_exists($fullPath) ? filemtime($fullPath) : time());
+
+        return asset($path).'?v='.(file_exists($fullPath) ? filemtime($fullPath) : time());
     }
 }
 
-if (!function_exists('dd_log')) {
+if (! function_exists('dd_log')) {
     /**
      * Dump data to log for debugging.
      */
-    function dd_log($data): void {
+    function dd_log($data): void
+    {
         Log::debug(print_r($data, true));
     }
 }
 
-if (!function_exists('format_mobile')) {
+if (! function_exists('format_mobile')) {
     /**
      * Standardize mobile numbers (digits only).
      */
-    function format_mobile($mobile): string {
+    function format_mobile($mobile): string
+    {
         return preg_replace('/[^0-9]/', '', $mobile);
     }
 }
 
-if (!function_exists('random_otp')) {
+if (! function_exists('random_otp')) {
     /**
      * Generate a random OTP of given digits.
      */
-    function random_otp(int $digits = 6): int {
-        return rand(pow(10, $digits-1), pow(10, $digits)-1);
+    function random_otp(int $digits = 6): int
+    {
+        return rand(pow(10, $digits - 1), pow(10, $digits) - 1);
     }
 }
 
-if (!function_exists('api_success')) {
+if (! function_exists('api_success')) {
     /**
      * Standard API success response.
      */
-    function api_success($data = [], string $message = 'Success') {
+    function api_success($data = [], string $message = 'Success')
+    {
         return response()->json([
             'status' => true,
             'message' => $message,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }
 
-if (!function_exists('api_error')) {
+if (! function_exists('api_error')) {
     /**
      * Standard API error response.
      */
-    function api_error(string $message = 'Something went wrong', int $status = 400) {
+    function api_error(string $message = 'Something went wrong', int $status = 400)
+    {
         return response()->json([
             'status' => false,
-            'message' => $message
+            'message' => $message,
         ], $status);
     }
 }
 
-if (!function_exists('client_ip')) {
+if (! function_exists('client_ip')) {
     /**
      * Get the real client IP address.
      */
-    function client_ip(): ?string {
+    function client_ip(): ?string
+    {
         return request()->getClientIp();
     }
 }
 
-if (!function_exists('is_local_env')) {
+if (! function_exists('is_local_env')) {
     /**
      * Detect if running in local environment.
      */
-    function is_local_env(): bool {
+    function is_local_env(): bool
+    {
         return app()->environment('local');
     }
 }
 
-if (!function_exists('current_user')) {
+if (! function_exists('current_user')) {
     /**
      * Get the authenticated user (API guard).
      */
-    function current_user() {
+    function current_user()
+    {
         return auth()->user();
     }
 }
 
-if (!function_exists('file_size_readable')) {
+if (! function_exists('file_size_readable')) {
     /**
      * Convert bytes to human-readable file size.
      */
-    function file_size_readable($bytes, int $decimals = 2): string {
+    function file_size_readable($bytes, int $decimals = 2): string
+    {
         $size = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $factor = floor((strlen((string)$bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $size[$factor];
+        $factor = floor((strlen((string) $bytes) - 1) / 3);
+
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).' '.$size[$factor];
     }
 }
 
-if (!function_exists('sanitize_string')) {
+if (! function_exists('sanitize_string')) {
     /**
      * Remove HTML tags and unwanted chars from a string.
      */
-    function sanitize_string($string): string {
+    function sanitize_string($string): string
+    {
         return htmlspecialchars(strip_tags(trim($string)));
     }
 }
 
 // 🔐 Permission System Helpers
-if (!function_exists('getModelForGuard')) {
+if (! function_exists('getModelForGuard')) {
     /**
      * Get the model class for the given guard.
      */
-    function getModelForGuard(string $guard = null): string {
+    function getModelForGuard(?string $guard = null): string
+    {
         $guard = $guard ?: config('auth.defaults.guard');
+
         return config("auth.guards.{$guard}.provider")
-            ? config("auth.providers." . config("auth.guards.{$guard}.provider") . ".model")
+            ? config('auth.providers.'.config("auth.guards.{$guard}.provider").'.model')
             : config('auth.providers.users.model', App\Models\User::class);
     }
 }
 
-if (!function_exists('getPermissionsTeamId')) {
+if (! function_exists('getPermissionsTeamId')) {
     /**
      * Get the team ID for permissions (if teams are enabled).
      */
-    function getPermissionsTeamId(): ?int {
-        if (!config('permission.teams')) {
+    function getPermissionsTeamId(): ?int
+    {
+        if (! config('permission.teams')) {
             return null;
         }
 
@@ -468,55 +491,59 @@ if (!function_exists('getPermissionsTeamId')) {
 }
 
 // 🔗 Helper Functions
-if (!function_exists('generate_slug')) {
+if (! function_exists('generate_slug')) {
     /**
      * Auto generate slug from title.
      */
-    function generate_slug(string $title, string $separator = '-'): string {
+    function generate_slug(string $title, string $separator = '-'): string
+    {
         return Str::slug($title, $separator);
     }
 }
 
-if (!function_exists('upload_file')) {
+if (! function_exists('upload_file')) {
     /**
      * Universal file uploader.
      */
-    function upload_file($file, string $directory = 'uploads', ?string $filename = null): ?string {
-        if (!$file || !$file->isValid()) {
+    function upload_file($file, string $directory = 'uploads', ?string $filename = null): ?string
+    {
+        if (! $file || ! $file->isValid()) {
             return null;
         }
 
         try {
-            $directory = 'storage/' . trim($directory, '/');
+            $directory = 'storage/'.trim($directory, '/');
 
             // Create directory if it doesn't exist
             $fullPath = public_path($directory);
-            if (!file_exists($fullPath)) {
+            if (! file_exists($fullPath)) {
                 mkdir($fullPath, 0755, true);
             }
 
             // Generate filename if not provided
-            if (!$filename) {
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            if (! $filename) {
+                $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
             }
 
             // Move the file
             $file->move($fullPath, $filename);
 
-            return $directory . '/' . $filename;
+            return $directory.'/'.$filename;
         } catch (\Exception $e) {
-            Log::error('File upload failed: ' . $e->getMessage());
+            Log::error('File upload failed: '.$e->getMessage());
+
             return null;
         }
     }
 }
 
-if (!function_exists('remove_file')) {
+if (! function_exists('remove_file')) {
     /**
      * Delete uploaded file.
      */
-    function remove_file(?string $filePath): bool {
-        if (!$filePath) {
+    function remove_file(?string $filePath): bool
+    {
+        if (! $filePath) {
             return false;
         }
 
@@ -525,20 +552,23 @@ if (!function_exists('remove_file')) {
             if (file_exists($fullPath)) {
                 return unlink($fullPath);
             }
+
             return true; // File doesn't exist, consider it removed
         } catch (\Exception $e) {
-            Log::error('File deletion failed: ' . $e->getMessage());
+            Log::error('File deletion failed: '.$e->getMessage());
+
             return false;
         }
     }
 }
 
-if (!function_exists('get_file_url')) {
+if (! function_exists('get_file_url')) {
     /**
      * Retrieve full file URL from path.
      */
-    function get_file_url(?string $filePath): ?string {
-        if (!$filePath) {
+    function get_file_url(?string $filePath): ?string
+    {
+        if (! $filePath) {
             return null;
         }
 
@@ -553,15 +583,16 @@ if (!function_exists('get_file_url')) {
         }
 
         // For other paths, prepend with asset helper
-        return asset('storage/' . ltrim($filePath, '/'));
+        return asset('storage/'.ltrim($filePath, '/'));
     }
 }
 
-if (!function_exists('human_readable_time')) {
+if (! function_exists('human_readable_time')) {
     /**
      * Time ago format (human readable).
      */
-    function human_readable_time($datetime): string {
+    function human_readable_time($datetime): string
+    {
         try {
             return Carbon::parse($datetime)->diffForHumans();
         } catch (\Exception $e) {
@@ -570,11 +601,12 @@ if (!function_exists('human_readable_time')) {
     }
 }
 
-if (!function_exists('log_activity')) {
+if (! function_exists('log_activity')) {
     /**
      * Wrapper to log user actions.
      */
-    function log_activity(string $description, ?array $properties = null, ?string $logName = 'default'): void {
+    function log_activity(string $description, ?array $properties = null, ?string $logName = 'default'): void
+    {
         try {
             $user = Auth::user();
 
@@ -591,7 +623,7 @@ if (!function_exists('log_activity')) {
             ];
 
             // Log to Laravel log system
-            Log::channel($logName)->info('User Activity: ' . $description, $logData);
+            Log::channel($logName)->info('User Activity: '.$description, $logData);
 
             // If Spatie Activity Log is installed, use it
             if (class_exists('\Spatie\Activitylog\Models\Activity')) {
@@ -601,16 +633,17 @@ if (!function_exists('log_activity')) {
                     ->log($description);
             }
         } catch (\Exception $e) {
-            Log::error('Activity logging failed: ' . $e->getMessage());
+            Log::error('Activity logging failed: '.$e->getMessage());
         }
     }
 }
 
-if (!function_exists('get_random_code')) {
+if (! function_exists('get_random_code')) {
     /**
      * Generate random code for OTP, referral codes, etc.
      */
-    function get_random_code(int $length = 6, string $type = 'numeric'): string {
+    function get_random_code(int $length = 6, string $type = 'numeric'): string
+    {
         switch ($type) {
             case 'numeric':
                 return str_pad(random_int(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);
@@ -627,90 +660,99 @@ if (!function_exists('get_random_code')) {
 }
 
 // 💬 Message Helper Functions
-if (!function_exists('message')) {
+if (! function_exists('message')) {
     /**
      * Get a message from the messages language file.
      */
-    function message(string $key, array $replace = []): string {
+    function message(string $key, array $replace = []): string
+    {
         return __("messages.{$key}", $replace);
     }
 }
 
-if (!function_exists('auth_message')) {
+if (! function_exists('auth_message')) {
     /**
      * Get an authentication message.
      */
-    function auth_message(string $key, array $replace = []): string {
+    function auth_message(string $key, array $replace = []): string
+    {
         return message("auth.{$key}", $replace);
     }
 }
 
-if (!function_exists('api_message')) {
+if (! function_exists('api_message')) {
     /**
      * Get an API message.
      */
-    function api_message(string $key, array $replace = []): string {
+    function api_message(string $key, array $replace = []): string
+    {
         return message("api.{$key}", $replace);
     }
 }
 
-if (!function_exists('user_message')) {
+if (! function_exists('user_message')) {
     /**
      * Get a user management message.
      */
-    function user_message(string $key, array $replace = []): string {
+    function user_message(string $key, array $replace = []): string
+    {
         return message("user.{$key}", $replace);
     }
 }
 
-if (!function_exists('validation_message')) {
+if (! function_exists('validation_message')) {
     /**
      * Get a validation message.
      */
-    function validation_message(string $key, array $replace = []): string {
+    function validation_message(string $key, array $replace = []): string
+    {
         return message("validation.{$key}", $replace);
     }
 }
 
-if (!function_exists('api_success_message')) {
+if (! function_exists('api_success_message')) {
     /**
      * Standard API success response with centralized message.
      */
-    function api_success_message(string $messageKey = 'success', $data = [], array $replace = []) {
+    function api_success_message(string $messageKey = 'success', $data = [], array $replace = [])
+    {
         return response()->json([
             'status' => true,
             'message' => api_message($messageKey, $replace),
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }
 
-if (!function_exists('api_error_message')) {
+if (! function_exists('api_error_message')) {
     /**
      * Standard API error response with centralized message.
      */
-    function api_error_message(string $messageKey = 'server_error', int $status = 400, array $replace = []) {
+    function api_error_message(string $messageKey = 'server_error', int $status = 400, array $replace = [])
+    {
         return response()->json([
             'status' => false,
-            'message' => api_message($messageKey, $replace)
+            'message' => api_message($messageKey, $replace),
         ], $status);
     }
 }
 
-if (!function_exists('success_message')) {
+if (! function_exists('success_message')) {
     /**
      * Get a success message for web responses.
      */
-    function success_message(string $category, string $action = 'success'): string {
+    function success_message(string $category, string $action = 'success'): string
+    {
         return message("{$category}.{$action}");
     }
 }
 
-if (!function_exists('error_message')) {
+if (! function_exists('error_message')) {
     /**
      * Get an error message for web responses.
      */
-    function error_message(string $category, string $error = 'error'): string {
+    function error_message(string $category, string $error = 'error'): string
+    {
         return message("{$category}.{$error}");
     }
 }

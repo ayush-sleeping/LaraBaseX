@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\PermissionRegistrar;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -50,7 +51,7 @@ return new class extends Migration {
             // Primary key
             $table->primary([
                 $permissionPivotKey,
-                $rolePivotKey
+                $rolePivotKey,
             ], 'role_has_permissions_permission_id_role_id_primary');
 
             // Indexes for performance
@@ -58,7 +59,6 @@ return new class extends Migration {
             $table->index($rolePivotKey);
         });
     }
-
 
     /**
      * Reverse the migrations.

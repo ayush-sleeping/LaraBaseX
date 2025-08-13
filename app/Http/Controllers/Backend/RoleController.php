@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Permission;
+use App\Models\Permissiongroup;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Permission;
-use Illuminate\Http\Request;
-use App\Models\Permissiongroup;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * RoleController
@@ -24,6 +24,7 @@ class RoleController extends Controller
     public function index(): Response
     {
         $roles = Role::all();
+
         return Inertia::render('backend/roles/index', compact('roles'));
     }
 
@@ -31,8 +32,9 @@ class RoleController extends Controller
     public function create(): Response
     {
         $guards = config('auth.guards', []);
+
         return Inertia::render('backend/roles/create', [
-            'guards' => array_keys($guards)
+            'guards' => array_keys($guards),
         ]);
     }
 
@@ -53,11 +55,11 @@ class RoleController extends Controller
         $role->load([
             'createdBy:id,first_name,last_name',
             'updatedBy:id,first_name,last_name',
-            'permissions:id,name,guard_name'
+            'permissions:id,name,guard_name',
         ]);
         $role->loadCount(['permissions', 'users']);
 
-        return Inertia::render('backend/roles/show', [ 'role' => $role ]);
+        return Inertia::render('backend/roles/show', ['role' => $role]);
     }
 
     /* Show the form for editing the specified role. */
@@ -70,7 +72,7 @@ class RoleController extends Controller
     public function update(Request $request, Role $role): RedirectResponse
     {
         // Modify unique rule to exclude current role
-        $this->rules['name'] = 'required|string|max:125|regex:/^[\pL\s\-]+$/u|unique:roles,name,' . $role->id;
+        $this->rules['name'] = 'required|string|max:125|regex:/^[\pL\s\-]+$/u|unique:roles,name,'.$role->id;
         $validated = $request->validate($this->rules, $this->customMessages);
         $role->update($validated);
 
@@ -118,7 +120,7 @@ class RoleController extends Controller
             'role' => $role,
             'permissionGroups' => $permissionGroups,
             'permissions' => $permissions,
-            'rolePermissionIds' => $rolePermissionIds
+            'rolePermissionIds' => $rolePermissionIds,
         ]);
     }
 
@@ -127,7 +129,7 @@ class RoleController extends Controller
     {
         $validated = $request->validate([
             'permissions' => 'nullable|array',
-            'permissions.*' => 'exists:permissions,id'
+            'permissions.*' => 'exists:permissions,id',
         ]);
 
         $permissionIds = $validated['permissions'] ?? [];
@@ -161,12 +163,12 @@ class RoleController extends Controller
                 ->select('guard_name')
                 ->distinct()
                 ->pluck('guard_name')
-                ->toArray()
+                ->toArray(),
         ];
 
         return response()->json([
             'status' => 'success',
-            'stats' => $stats
+            'stats' => $stats,
         ], 200);
     }
 
@@ -190,7 +192,7 @@ class RoleController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Role cloned successfully',
-            'role' => $newRole->load(['createdBy:id,first_name,last_name', 'updatedBy:id,first_name,last_name'])
+            'role' => $newRole->load(['createdBy:id,first_name,last_name', 'updatedBy:id,first_name,last_name']),
         ], 201);
     }
 
@@ -203,12 +205,13 @@ class RoleController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'users' => $users
+            'users' => $users,
         ], 200);
     }
 
     /**
      * Validation rules for role operations.
+     *
      * @var array<string, string>
      */
     private array $rules = [
@@ -218,6 +221,7 @@ class RoleController extends Controller
 
     /**
      * Custom validation messages.
+     *
      * @var array<string, string>
      */
     private array $customMessages = [

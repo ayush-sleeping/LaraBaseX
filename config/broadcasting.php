@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default'     => env('BROADCAST_DRIVER', 'null'),
+    'default' => env('BROADCAST_DRIVER', 'null'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,38 +31,38 @@ return [
     'connections' => [
 
         'pusher' => [
-            'driver'         => 'pusher',
-            'key'            => env('PUSHER_APP_KEY'),
-            'secret'         => env('PUSHER_APP_SECRET'),
-            'app_id'         => env('PUSHER_APP_ID'),
-            'options'        => [
-                'host'      => env('PUSHER_HOST') ?: 'api-' . env('PUSHER_APP_CLUSTER', 'mt1') . '.pusher.com',
-                'port'      => env('PUSHER_PORT', 443),
-                'scheme'    => env('PUSHER_SCHEME', 'https'),
+            'driver' => 'pusher',
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'app_id' => env('PUSHER_APP_ID'),
+            'options' => [
+                'host' => env('PUSHER_HOST') ?: 'api-'.env('PUSHER_APP_CLUSTER', 'mt1').'.pusher.com',
+                'port' => env('PUSHER_PORT', 443),
+                'scheme' => env('PUSHER_SCHEME', 'https'),
                 'encrypted' => true,
-                'useTLS'    => env('PUSHER_SCHEME', 'https') === 'https',
-                'cluster'   => env('PUSHER_APP_CLUSTER'), // Best practice: always set cluster
+                'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
+                'cluster' => env('PUSHER_APP_CLUSTER'), // Best practice: always set cluster
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
             ],
         ],
 
-        'ably'   => [
+        'ably' => [
             'driver' => 'ably',
-            'key'    => env('ABLY_KEY'),
+            'key' => env('ABLY_KEY'),
         ],
 
-        'redis'  => [
-            'driver'     => 'redis',
+        'redis' => [
+            'driver' => 'redis',
             'connection' => env('BROADCAST_REDIS_CONNECTION', 'default'), // Best practice: allow override
         ],
 
-        'log'    => [
+        'log' => [
             'driver' => 'log',
         ],
 
-        'null'   => [
+        'null' => [
             'driver' => 'null',
         ],
 
@@ -79,7 +79,7 @@ return [
     |
     */
 
-    'queue'       => env('BROADCAST_QUEUE_CONNECTION'),
+    'queue' => env('BROADCAST_QUEUE_CONNECTION'),
 
     /*
     |--------------------------------------------------------------------------
@@ -91,6 +91,6 @@ return [
     |
     */
 
-    'fallback'    => env('BROADCAST_FALLBACK_DRIVER', 'log'),
+    'fallback' => env('BROADCAST_FALLBACK_DRIVER', 'log'),
 
 ];

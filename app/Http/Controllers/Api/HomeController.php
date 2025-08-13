@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-// Add other models as needed
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+// Add other models as needed
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HomeController extends Controller
@@ -21,12 +17,16 @@ class HomeController extends Controller
      *     summary="Get home page sliders",
      *     description="Retrieve all active sliders for the home page",
      *     security={{"bearerAuth":{}}},
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Sliders retrieved successfully",
+     *
      *         @OA\JsonContent(
      *             type="array",
+     *
      *             @OA\Items(
+     *
      *                 @OA\Property(property="id", type="integer", example=1, description="Slider ID"),
      *                 @OA\Property(property="title", type="string", example="Welcome to LaraBaseX", description="Slider title"),
      *                 @OA\Property(property="description", type="string", example="Best platform for your needs", description="Slider description"),
@@ -39,10 +39,13 @@ class HomeController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated")
      *         )
      *     )
@@ -64,8 +67,8 @@ class HomeController extends Controller
                 'is_active' => true,
                 'order' => 1,
                 'created_at' => now(),
-                'updated_at' => now()
-            ]
+                'updated_at' => now(),
+            ],
         ];
 
         return response()->json($sliders, 200);

@@ -28,10 +28,6 @@ class PreventBackHistory
      * - Set cache control headers to prevent browser caching
      * - Prevent back button access to sensitive pages
      * - Add expiration headers for old browser compatibility
-     *
-     * @param Request $request
-     * @param Closure $next
-     * @return Response
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -70,18 +66,15 @@ class PreventBackHistory
 
     /**
      * Add browser-specific cache prevention headers (new enhancement)
-     *
-     * @param Response $response
-     * @return void
      */
     protected function addBrowserSpecificHeaders(Response $response): void
     {
         // IE-specific cache prevention
         $response->headers->set('Cache-Control',
-            $response->headers->get('Cache-Control') . ', private, no-transform');
+            $response->headers->get('Cache-Control').', private, no-transform');
 
         // Additional headers for better compatibility
-        $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
+        $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s').' GMT');
         $response->headers->set('Vary', 'User-Agent');
 
         // Prevent proxy caching

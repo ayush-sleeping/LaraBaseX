@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
+use App\Models\Enquiry;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Enquiry;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * EnquiryController
@@ -50,7 +50,7 @@ class EnquiryController extends Controller
                 'remark_status' => $request->remark_status,
                 'date_from' => $request->date_from,
                 'date_to' => $request->date_to,
-            ]
+            ],
         ]);
     }
 
@@ -58,6 +58,7 @@ class EnquiryController extends Controller
     public function show(Enquiry $enquiry): Response
     {
         $enquiry->load(['createdBy:id,first_name,last_name', 'updatedBy:id,first_name,last_name']);
+
         return Inertia::render('backend/enquiries/show', compact('enquiry'));
     }
 
@@ -65,10 +66,10 @@ class EnquiryController extends Controller
     public function updateRemark(Request $request, Enquiry $enquiry): RedirectResponse
     {
         $request->validate([
-            'remark' => 'required|string|max:1000'
+            'remark' => 'required|string|max:1000',
         ], [
             'remark.required' => 'Remark is required',
-            'remark.max' => 'Remark cannot exceed 1000 characters'
+            'remark.max' => 'Remark cannot exceed 1000 characters',
         ]);
 
         try {
@@ -78,7 +79,7 @@ class EnquiryController extends Controller
             return redirect()->back()->with('success', 'Remark updated successfully');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update remark: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update remark: '.$e->getMessage());
         }
     }
 
@@ -86,6 +87,7 @@ class EnquiryController extends Controller
     public function destroy(Enquiry $enquiry): RedirectResponse
     {
         $enquiry->delete();
+
         return redirect()->route('admin.enquiries.index')->with('success', 'Enquiry deleted successfully.');
     }
 
@@ -101,7 +103,7 @@ class EnquiryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'stats' => $stats
+            'stats' => $stats,
         ], 200);
     }
 }

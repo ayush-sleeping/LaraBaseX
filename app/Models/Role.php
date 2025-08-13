@@ -10,7 +10,6 @@ use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Guard;
-use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
 
@@ -31,9 +30,9 @@ use Spatie\Permission\Traits\RefreshesPermissionCache;
  */
 class Role extends CoreModel implements RoleContract
 {
+    use Hashidable;
     use HasPermissions;
     use RefreshesPermissionCache;
-    use Hashidable;
 
     /** @var array<string> */
     protected $guarded = [];
@@ -43,7 +42,7 @@ class Role extends CoreModel implements RoleContract
         'name',
         'guard_name',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
 
     /** @var array<string, string> */
@@ -55,7 +54,7 @@ class Role extends CoreModel implements RoleContract
     /**
      * Create a new role instance.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -66,8 +65,6 @@ class Role extends CoreModel implements RoleContract
 
     /**
      * Get the table associated with the model.
-     *
-     * @return string
      */
     public function getTable(): string
     {
@@ -77,8 +74,8 @@ class Role extends CoreModel implements RoleContract
     /**
      * Create a new role with validation.
      *
-     * @param array<string, mixed> $attributes
-     * @return static
+     * @param  array<string, mixed>  $attributes
+     *
      * @throws RoleAlreadyExists
      */
     public static function create(array $attributes = []): static
@@ -104,8 +101,6 @@ class Role extends CoreModel implements RoleContract
 
     /**
      * A role may be given various permissions.
-     *
-     * @return BelongsToMany
      */
     /**
      * @return BelongsToMany<\App\Models\Permission, Role>
@@ -122,8 +117,6 @@ class Role extends CoreModel implements RoleContract
 
     /**
      * A role belongs to some users of the model associated with its guard.
-     *
-     * @return MorphToMany
      */
     /**
      * @return MorphToMany<\App\Models\User, Role>
@@ -142,9 +135,8 @@ class Role extends CoreModel implements RoleContract
     /**
      * Find a role by its name and guard name.
      *
-     * @param string $name
-     * @param string|null $guardName
-     * @return RoleContract
+     * @param  string|null  $guardName
+     *
      * @throws RoleDoesNotExist
      */
     public static function findByName(string $name, $guardName = null): RoleContract
@@ -152,7 +144,7 @@ class Role extends CoreModel implements RoleContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $role = static::findByParam(['name' => $name, 'guard_name' => $guardName]);
 
-        if (!$role) {
+        if (! $role) {
             throw RoleDoesNotExist::named($name, $guardName);
         }
 
@@ -162,9 +154,8 @@ class Role extends CoreModel implements RoleContract
     /**
      * Find a role by its ID and guard name.
      *
-     * @param int|string $id
-     * @param string|null $guardName
-     * @return RoleContract
+     * @param  string|null  $guardName
+     *
      * @throws RoleDoesNotExist
      */
     public static function findById(int|string $id, $guardName = null): RoleContract
@@ -172,7 +163,7 @@ class Role extends CoreModel implements RoleContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $role = static::findByParam(['id' => $id, 'guard_name' => $guardName]);
 
-        if (!$role) {
+        if (! $role) {
             throw RoleDoesNotExist::withId($id, $guardName);
         }
 
@@ -182,16 +173,14 @@ class Role extends CoreModel implements RoleContract
     /**
      * Find or create role by its name (and optionally guardName).
      *
-     * @param string $name
-     * @param string|null $guardName
-     * @return RoleContract
+     * @param  string|null  $guardName
      */
     public static function findOrCreate(string $name, $guardName = null): RoleContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $role = static::findByParam(['name' => $name, 'guard_name' => $guardName]);
 
-        if (!$role) {
+        if (! $role) {
             $attributes = ['name' => $name, 'guard_name' => $guardName];
             if (config('permission.teams', false)) {
                 $teamsKey = config('permission.column_names.team_foreign_key', 'team_id');
@@ -199,6 +188,7 @@ class Role extends CoreModel implements RoleContract
             }
             /** @var RoleContract $newRole */
             $newRole = static::query()->create($attributes);
+
             return $newRole;
         }
 
@@ -208,8 +198,7 @@ class Role extends CoreModel implements RoleContract
     /**
      * Find role by parameters with team support.
      *
-     * @param array<string, mixed> $params
-     * @return static|null
+     * @param  array<string, mixed>  $params
      */
     protected static function findByParam(array $params = []): ?static
     {
@@ -236,12 +225,11 @@ class Role extends CoreModel implements RoleContract
     /**
      * Determine if the role has the given permission.
      *
-     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
-     * @param string|null $guardName
-     * @return bool
+     * @param  string|int|\Spatie\Permission\Contracts\Permission  $permission
+     *
      * @throws GuardDoesNotMatch
      */
-    public function hasPermissionTo($permission, string $guardName = null): bool
+    public function hasPermissionTo($permission, ?string $guardName = null): bool
     {
         if (config('permission.enable_wildcard_permission', false)) {
             return $this->hasWildcardPermission($permission, $guardName ?: $this->getDefaultGuardName());
@@ -257,7 +245,7 @@ class Role extends CoreModel implements RoleContract
             $permission = $permissionClass->findById($permission, $guardName ?: $this->getDefaultGuardName());
         }
 
-        if (!$this->getGuardNames()->contains($permission->guard_name)) {
+        if (! $this->getGuardNames()->contains($permission->guard_name)) {
             throw GuardDoesNotMatch::create($permission->guard_name, $this->getGuardNames());
         }
 
@@ -266,23 +254,19 @@ class Role extends CoreModel implements RoleContract
 
     /**
      * Get the role display name with creator info.
-     *
-     * @return string
      */
     public function getDisplayNameAttribute(): string
     {
-        return $this->name . ($this->creatorName() ? ' (by ' . $this->creatorName() . ')' : '');
+        return $this->name.($this->creatorName() ? ' (by '.$this->creatorName().')' : '');
     }
 
     /**
      * Scope to get roles for a specific guard.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $guardName
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      */
     /**
-     * @param \Illuminate\Database\Eloquent\Builder<Role> $query
+     * @param  \Illuminate\Database\Eloquent\Builder<Role>  $query
      * @return \Illuminate\Database\Eloquent\Builder<Role>
      */
     public function scopeForGuard($query, string $guardName): \Illuminate\Database\Eloquent\Builder
@@ -293,11 +277,10 @@ class Role extends CoreModel implements RoleContract
     /**
      * Scope to get roles with permissions count.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      */
     /**
-     * @param \Illuminate\Database\Eloquent\Builder<Role> $query
+     * @param  \Illuminate\Database\Eloquent\Builder<Role>  $query
      * @return \Illuminate\Database\Eloquent\Builder<Role>
      */
     public function scopeWithPermissionsCount($query): \Illuminate\Database\Eloquent\Builder

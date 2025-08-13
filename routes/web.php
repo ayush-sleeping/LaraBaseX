@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Models\User;
 use App\Services\QueryCacheService;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,9 @@ use App\Services\QueryCacheService;
 
 // Home page route
 // -------------------------------------------------------------------------------------------------------- ::
-Route::get('/', function () { return Inertia::render('welcome'); })->name('home');
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
 
 // Cache test route
 // -------------------------------------------------------------------------------------------------------- ::
@@ -34,7 +36,7 @@ Route::get('/test-cache', function () {
     // Test query cache service directly
     $appSettings = QueryCacheService::remember(
         'app.test.settings',
-        fn() => [
+        fn () => [
             'name' => config('app.name'),
             'env' => app()->environment(),
             'version' => config('app.version', '1.0.0'),
@@ -63,5 +65,5 @@ Route::get('/test-cache', function () {
 // -------------------------------------------------------------------------------------------------------- ::
 require __DIR__.'/settings.php';    // User settings routes
 require __DIR__.'/auth.php';        // Authentication routes
-require __DIR__ . '/backend.php';   // Admin panel routes
-require __DIR__ . '/frontend.php';  // Frontend routes
+require __DIR__.'/backend.php';   // Admin panel routes
+require __DIR__.'/frontend.php';  // Frontend routes
