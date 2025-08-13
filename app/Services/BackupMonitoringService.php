@@ -14,6 +14,15 @@ class BackupMonitoringService
     /**
      * Monitor backup health and send alerts if needed
      */
+    /**
+     * @return array{
+     *   status: string,
+     *   checks: array<string, array<string, mixed>>,
+     *   warnings: array<int, string>,
+     *   errors: array<int, string>,
+     *   metrics: array<string, mixed>
+     * }
+     */
     public function performHealthCheck(): array
     {
         $results = [
@@ -77,6 +86,14 @@ class BackupMonitoringService
     /**
      * Check if backups are recent enough
      */
+    /**
+     * @return array{
+     *   healthy: bool,
+     *   message: string,
+     *   last_backup: string|null,
+     *   hours_old?: int
+     * }
+     */
     private function checkBackupAge(): array
     {
         $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
@@ -122,6 +139,15 @@ class BackupMonitoringService
     /**
      * Check backup file sizes
      */
+    /**
+     * @return array{
+     *   healthy: bool,
+     *   message: string,
+     *   total_size: int,
+     *   latest_size?: int,
+     *   backup_count?: int
+     * }
+     */
     private function checkBackupSize(): array
     {
         $backupPath = storage_path('app/private/' . config('app.name', 'laravel-backup'));
@@ -165,6 +191,15 @@ class BackupMonitoringService
     /**
      * Check available storage space
      */
+    /**
+     * @return array{
+     *   healthy: bool,
+     *   message: string,
+     *   free_space: int,
+     *   total_space: int,
+     *   usage_percentage: float
+     * }
+     */
     private function checkStorageSpace(): array
     {
         $path = storage_path();
@@ -189,6 +224,14 @@ class BackupMonitoringService
 
     /**
      * Check backup file integrity
+     */
+    /**
+     * @return array{
+     *   healthy: bool,
+     *   message: string,
+     *   checked_files: int,
+     *   corrupt_files?: int
+     * }
      */
     private function checkBackupIntegrity(): array
     {
@@ -239,6 +282,14 @@ class BackupMonitoringService
     /**
      * Check database connectivity
      */
+    /**
+     * @return array{
+     *   healthy: bool,
+     *   message: string,
+     *   connection: string,
+     *   error?: string
+     * }
+     */
     private function checkDatabaseConnectivity(): array
     {
         try {
@@ -252,14 +303,14 @@ class BackupMonitoringService
             return [
                 'healthy' => $isHealthy,
                 'message' => $isHealthy ? 'Database connection is healthy' : 'Database query failed',
-                'connection' => env('DB_CONNECTION', 'unknown'),
+                'connection' => config('database.default', 'unknown'),
             ];
 
         } catch (\Exception $e) {
             return [
                 'healthy' => false,
                 'message' => 'Database connection failed: ' . $e->getMessage(),
-                'connection' => env('DB_CONNECTION', 'unknown'),
+                'connection' => config('database.default', 'unknown'),
                 'error' => $e->getMessage(),
             ];
         }
@@ -267,6 +318,15 @@ class BackupMonitoringService
 
     /**
      * Collect backup metrics
+     */
+    /**
+     * @return array{
+     *   backup_count: int,
+     *   total_backup_size: int,
+     *   average_backup_size: int,
+     *   oldest_backup: string|null,
+     *   newest_backup: string|null
+     * }
      */
     private function collectMetrics(): array
     {
@@ -308,6 +368,15 @@ class BackupMonitoringService
     /**
      * Send health check report via email
      */
+    /**
+     * @param array{
+     *   status: string,
+     *   checks: array<string, array<string, mixed>>,
+     *   warnings: array<int, string>,
+     *   errors: array<int, string>,
+     *   metrics: array<string, mixed>
+     * } $healthCheck
+     */
     public function sendHealthReport(array $healthCheck): bool
     {
         try {
@@ -341,6 +410,16 @@ class BackupMonitoringService
     /**
      * Get backup statistics for dashboard
      */
+    /**
+     * @return array{
+     *   status: string,
+     *   last_backup: string|null,
+     *   backup_count: int,
+     *   total_size: string,
+     *   storage_usage: float|int,
+     *   health_score: int
+     * }
+     */
     public function getBackupStatistics(): array
     {
         $healthCheck = $this->performHealthCheck();
@@ -357,6 +436,11 @@ class BackupMonitoringService
 
     /**
      * Calculate overall health score (0-100)
+     */
+    /**
+     * @param array{
+     *   checks: array<string, array<string, mixed>>
+     * } $healthCheck
      */
     private function calculateHealthScore(array $healthCheck): int
     {
@@ -376,7 +460,11 @@ class BackupMonitoringService
     /**
      * Format bytes to human readable format
      */
-    private function formatBytes($bytes, $precision = 2): string
+    /**
+     * @param int $bytes
+     * @param int $precision
+     */
+    private function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 

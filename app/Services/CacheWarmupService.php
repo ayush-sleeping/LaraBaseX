@@ -13,6 +13,14 @@ class CacheWarmupService
     /**
      * Warm up all caches
      */
+    /**
+     * @return array{
+     *   config: bool,
+     *   routes: bool,
+     *   views: bool,
+     *   queries: bool
+     * }
+     */
     public function warmupAll(): array
     {
         $results = [];
@@ -182,6 +190,14 @@ class CacheWarmupService
     /**
      * Get cache warmup status
      */
+    /**
+     * @return array{
+     *   config_cached: bool,
+     *   routes_cached: bool,
+     *   views_cached: bool,
+     *   query_cache_stats: array<string, mixed>
+     * }
+     */
     public function getWarmupStatus(): array
     {
         return [
@@ -219,6 +235,15 @@ class CacheWarmupService
 
     /**
      * Clear all caches before warming up
+     */
+    /**
+     * @return array{
+     *   clear: bool,
+     *   config: bool,
+     *   routes: bool,
+     *   views: bool,
+     *   queries: bool
+     * }
      */
     public function clearAndWarmup(): array
     {

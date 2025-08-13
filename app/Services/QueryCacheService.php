@@ -26,6 +26,14 @@ class QueryCacheService
      * @param array $tags
      * @return mixed
      */
+    /**
+     * @template TCacheValue
+     * @param string $key
+     * @param \Closure():TCacheValue $callback
+     * @param int|null $ttl
+     * @param array<int, string> $tags
+     * @return TCacheValue
+     */
     public static function remember(string $key, \Closure $callback, ?int $ttl = null, array $tags = [])
     {
         $ttl = $ttl ?? self::DEFAULT_TTL;
@@ -54,6 +62,13 @@ class QueryCacheService
      * @param \Closure $callback
      * @param array $tags
      * @return mixed
+     */
+    /**
+     * @template TCacheValue
+     * @param string $key
+     * @param \Closure():TCacheValue $callback
+     * @param array<int, string> $tags
+     * @return TCacheValue
      */
     public static function rememberForever(string $key, \Closure $callback, array $tags = [])
     {
@@ -103,6 +118,9 @@ class QueryCacheService
      * @param array $tags
      * @return bool
      */
+    /**
+     * @param array<int, string> $tags
+     */
     public static function flushTags(array $tags): bool
     {
         if (!self::supportsTags()) {
@@ -138,6 +156,14 @@ class QueryCacheService
      * Get cache statistics
      *
      * @return array
+     */
+    /**
+     * @return array{
+     *   driver: string,
+     *   supports_tags: bool,
+     *   total_keys: int,
+     *   query_cache_keys: int
+     * }
      */
     public static function getStats(): array
     {
@@ -203,6 +229,9 @@ class QueryCacheService
      * @param array $bindings
      * @return string
      */
+    /**
+     * @param array<int, mixed> $bindings
+     */
     public static function generateKey(string $query, array $bindings = []): string
     {
         return md5($query . serialize($bindings));
@@ -216,6 +245,9 @@ class QueryCacheService
      * @param array $parameters
      * @param int|null $ttl
      * @return string
+     */
+    /**
+     * @param array<int, mixed> $parameters
      */
     public static function modelKey(string $model, string $method, array $parameters = [], ?int $ttl = null): string
     {
