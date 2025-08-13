@@ -114,11 +114,11 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->messages()], 400);
         }
 
-    $otp = (string)rand(1000, 9999);
-    $user = new User;
-    $user->fill($request->all());
-    $user->password = Hash::make($otp);
-    $user->save();
+        $otp = (string) rand(1000, 9999);
+        $user = new User;
+        $user->fill($request->all());
+        $user->password = Hash::make($otp);
+        $user->save();
 
         // TODO: Integrate actual OTP sending logic here
         // Log::info('OTP sent to user', ['mobile' => $user->mobile, 'otp' => $otp]);
@@ -198,7 +198,7 @@ class AuthController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         if ($user) {
-            $otp = (string)rand(1000, 9999);
+            $otp = (string) rand(1000, 9999);
             $user->password = Hash::make($otp);
             $user->device_id = $request->device_id;
             $user->save();
@@ -296,6 +296,7 @@ class AuthController extends Controller
                 $passportToken->expires_at = Carbon::now()->addWeeks(1);
                 $passportToken->save();
             }
+
             return response()->json([
                 'message' => api_message('otp_verified'),
                 'access_token' => $accessToken,
@@ -374,7 +375,7 @@ class AuthController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         if ($user) {
-            $otp = (string)rand(1000, 9999);
+            $otp = (string) rand(1000, 9999);
             $user->password = Hash::make($otp);
             $user->save();
 

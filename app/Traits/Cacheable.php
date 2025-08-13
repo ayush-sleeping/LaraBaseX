@@ -31,14 +31,13 @@ trait Cacheable
      * Remember a query result in cache
      *
      * @template TCacheValue
-     * @param string $key
-     * @param \Closure():TCacheValue $callback
-     * @param int|null $ttl
+     *
+     * @param  \Closure():TCacheValue  $callback
      * @return TCacheValue
      */
     public static function cacheRemember(string $key, \Closure $callback, ?int $ttl = null): mixed
     {
-        $instance = new self();
+        $instance = new self;
         $ttl = $ttl ?? $instance->getCacheTTL();
 
         return QueryCacheService::remember(
@@ -53,13 +52,13 @@ trait Cacheable
      * Remember a query result in cache forever
      *
      * @template TCacheValue
-     * @param string $key
-     * @param \Closure():TCacheValue $callback
+     *
+     * @param  \Closure():TCacheValue  $callback
      * @return TCacheValue
      */
     public static function cacheRememberForever(string $key, \Closure $callback): mixed
     {
-        $instance = new self();
+        $instance = new self;
 
         return QueryCacheService::rememberForever(
             $instance->buildCacheKey($key),
@@ -73,7 +72,7 @@ trait Cacheable
      */
     public static function cacheForget(string $key): bool
     {
-        $instance = new self();
+        $instance = new self;
 
         return QueryCacheService::forget($instance->buildCacheKey($key));
     }
@@ -83,7 +82,7 @@ trait Cacheable
      */
     public static function flushCache(): bool
     {
-        $instance = new self();
+        $instance = new self;
 
         return QueryCacheService::flushTags($instance->getCacheTags());
     }
@@ -204,7 +203,7 @@ trait Cacheable
      */
     public static function getCacheStats(): array
     {
-        $instance = new self();
+        $instance = new self;
         $stats = QueryCacheService::getStats();
         $stats['model'] = class_basename(static::class);
         $stats['cache_tags'] = $instance->getCacheTags();

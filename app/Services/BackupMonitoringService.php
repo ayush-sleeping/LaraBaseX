@@ -120,7 +120,7 @@ class BackupMonitoringService
 
         $latest = $backups->first();
         $lastBackupTime = Carbon::createFromTimestamp($latest->getMTime());
-    $hoursOld = (int) $lastBackupTime->diffInHours(now());
+        $hoursOld = (int) $lastBackupTime->diffInHours(now());
 
         // Consider unhealthy if backup is older than 25 hours (daily backup + 1 hour grace)
         $isHealthy = $hoursOld <= 25;

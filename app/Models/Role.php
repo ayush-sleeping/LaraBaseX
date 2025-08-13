@@ -115,6 +115,7 @@ class Role extends SpatieRoleModel implements RoleContract
             config('permission.column_names.role_pivot_key', 'role_id'),
             config('permission.column_names.permission_pivot_key', 'permission_id')
         );
+
         return $relation;
     }
 
@@ -134,6 +135,7 @@ class Role extends SpatieRoleModel implements RoleContract
             config('permission.column_names.role_pivot_key', 'role_id'),
             config('permission.column_names.model_morph_key')
         );
+
         return $relation;
     }
 

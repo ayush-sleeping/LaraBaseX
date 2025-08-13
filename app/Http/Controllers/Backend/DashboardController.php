@@ -55,7 +55,7 @@ class DashboardController extends Controller
             ->get()
             ->map(
                 /**
-                 * @param Enquiry $enquiry
+                 * @param  Enquiry  $enquiry
                  * @return array<string, mixed>
                  */
                 function ($enquiry) {
@@ -81,7 +81,7 @@ class DashboardController extends Controller
             ->get()
             ->map(
                 /**
-                 * @param Employee $employee
+                 * @param  Employee  $employee
                  * @return array<string, mixed>
                  */
                 function ($employee) {

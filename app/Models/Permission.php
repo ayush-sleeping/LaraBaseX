@@ -9,10 +9,10 @@ use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\Exceptions\PermissionAlreadyExists;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Guard;
+use Spatie\Permission\Models\Permission as SpatiePermissionModel;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
-use Spatie\Permission\Models\Permission as SpatiePermissionModel;
 
 class Permission extends SpatiePermissionModel implements PermissionContract
 {
@@ -70,13 +70,14 @@ class Permission extends SpatiePermissionModel implements PermissionContract
      */
     public function roles(): BelongsToMany
     {
-    /** @var BelongsToMany<Role, Permission> $relation; */
-    $relation = $this->belongsToMany(
+        /** @var BelongsToMany<Role, Permission> $relation; */
+        $relation = $this->belongsToMany(
             config('permission.models.role'),
             config('permission.table_names.role_has_permissions'),
             config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.role_pivot_key', 'role_id')
         );
+
         return $relation;
     }
 
@@ -88,14 +89,15 @@ class Permission extends SpatiePermissionModel implements PermissionContract
      */
     public function users(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-    /** @var \Illuminate\Database\Eloquent\Relations\MorphToMany<User, Permission> $relation; */
-    $relation = $this->morphedByMany(
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphToMany<User, Permission> $relation; */
+        $relation = $this->morphedByMany(
             getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_permissions'),
             config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.model_morph_key')
         );
+
         return $relation;
     }
 

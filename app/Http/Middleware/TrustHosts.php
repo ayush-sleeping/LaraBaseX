@@ -69,7 +69,7 @@ class TrustHosts extends Middleware
      */
     protected function getEnvironmentHosts(): array
     {
-    $envHosts = config('trusted.hosts', '');
+        $envHosts = config('trusted.hosts', '');
 
         if (empty($envHosts)) {
             return [];
@@ -107,7 +107,7 @@ class TrustHosts extends Middleware
     protected function getProxyHosts(): array
     {
         // Add your load balancer or proxy hosts
-    $proxyHosts = config('proxy.hosts', '');
+        $proxyHosts = config('proxy.hosts', '');
         if (empty($proxyHosts)) {
             return [];
         }
