@@ -28,10 +28,8 @@ class PasswordResetLinkController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
-        // Always return a generic message for security, to prevent user enumeration.
-        Password::sendResetLink(
-            $request->only('email')
-        );
+        // Email sending is disabled for now. In future, enable Password::sendResetLink.
+        // Password::sendResetLink($request->only('email'));
 
         return back()->with('status', __('A reset link will be sent if the account exists.'));
     }
