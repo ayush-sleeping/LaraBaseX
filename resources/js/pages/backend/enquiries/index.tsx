@@ -153,8 +153,7 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
         },
         cell: ({ row }) => {
             const enquiry = row.original;
-            const fullName = `${enquiry.first_name} ${enquiry.last_name}`.trim();
-            return <div className="text-center font-medium">{fullName}</div>;
+            return <div className="text-center font-medium">{`${enquiry.first_name} ${enquiry.last_name}`.trim()}</div>;
         },
         sortingFn: (rowA, rowB) => {
             const nameA = `${rowA.original.first_name} ${rowA.original.last_name}`.trim();

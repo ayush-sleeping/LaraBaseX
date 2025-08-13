@@ -177,8 +177,7 @@ const createColumns = (handleDelete: (id: number, name: string) => void, process
         },
         cell: ({ row }) => {
             const employee = row.original;
-            const fullName = `${employee.user.first_name} ${employee.user.last_name}`.trim();
-            return <div className="text-center font-medium">{fullName}</div>;
+            return <div className="text-center font-medium">{`${employee.user.first_name} ${employee.user.last_name}`.trim()}</div>;
         },
         sortingFn: (rowA, rowB) => {
             const nameA = `${rowA.original.user.first_name} ${rowA.original.user.last_name}`.trim();
