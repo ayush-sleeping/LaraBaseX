@@ -354,6 +354,8 @@ class BackupManagement extends Command
                 $monitoringService->sendHealthReport($healthCheck);
             }
 
+            // Run custom health checks (now used)
+            $this->performCustomHealthChecks();
             return Command::SUCCESS;
 
         } catch (\Exception $e) {
@@ -361,7 +363,6 @@ class BackupManagement extends Command
             return Command::FAILURE;
         }
     }
-
 
     /* Show latest backup information */
     private function showLatestBackupInfo(): void
