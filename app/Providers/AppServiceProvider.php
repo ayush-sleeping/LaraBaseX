@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * ProfileUpdateRequest handles the validation of profile update requests.
+ * Get the validation rules that apply to the request
+*/
 class AppServiceProvider extends ServiceProvider
 {
     /* Register any application services. */

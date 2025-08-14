@@ -5,6 +5,10 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * TrustProxies Middleware ( Handles proxy headers and trusted proxies )
+ */
 class TrustProxies extends Middleware
 {
     /**

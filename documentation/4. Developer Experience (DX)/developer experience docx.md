@@ -567,7 +567,7 @@ pm.test("Response has access_token", function () {
     "access_token": "",
     "mobile_number": "9876543210",
     "device_id": "test-device-postman-local",
-    "test_user_email": "john.doe@example.com",
+    "test_user_email": "dev@example.com",
     "test_user_password": "Password123!"
 }
 ```

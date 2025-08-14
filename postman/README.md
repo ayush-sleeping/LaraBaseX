@@ -1,12 +1,46 @@
-# 📮 LaraBaseX Postman Collection
+## 📮 LaraBaseX Postman Collection
 
 A comprehensive, pre-configured Postman collection for the LaraBaseX API with automated testing, environment management, and complete authentication workflows.
+### 🚀 Quick Start Guide
 
----
+<br>
 
-## 🚀 Quick Start Guide
+<br>
 
-### 1. **Import Collection & Environment**
+<div id="top"></div>
+
+#
+
+### Table of content:
+
+| No.     | Topics                                                                                  |
+| ------- | --------------------------------------------------------------------------------------- |
+| 0.      | [1 Import Collection & Environment](#1-import-collection--environment)                  |
+| 1       | [2 Set Active Environment](#2-set-active-environment)                                   |
+| 2       | [3 Test Authentication Flow](#3-test-authentication-flow)                               |
+| 3       | [Collection Structure](#collection-structure)                                           |
+| 4       | [Environment Configuration](#environment-configuration)                                 |
+| 5       | [Authentication Workflow](#authentication-workflow)                                     |
+| 6       | [API Endpoints Reference](#api-endpoints-reference)                                     |
+| 7       | [Testing Features](#testing-features)                                                   |
+| 8       | [Advanced Usage](#advanced-usage)                                                       |
+| 9       | [Sample Request Examples](#sample-request-examples)                                     |
+| 10      | [Performance and Optimization](#performance-and-optimization)                           |
+| 11      | [Troubleshooting](#troubleshooting)                                                     |
+| 12      | [Benefits of This Collection](#benefits-of-this-collection)                             |
+
+
+
+
+
+
+<br>
+
+<br>
+
+#
+
+## 1 Import Collection & Environment
 
 **Option A: Import Files**
 ```bash
@@ -22,7 +56,7 @@ Collection URL: https://your-domain.com/postman/LaraBaseX-API-Collection.json
 Environment URL: https://your-domain.com/postman/LaraBaseX-Local-Environment.json
 ```
 
-### 2. **Set Active Environment**
+## 2 Set Active Environment
 ```bash
 1. Open Postman
 2. Click "Environments" in sidebar
@@ -30,18 +64,26 @@ Environment URL: https://your-domain.com/postman/LaraBaseX-Local-Environment.jso
 4. Ensure environment is active (top-right dropdown)
 ```
 
-### 3. **Test Authentication Flow**
+## 3 Test Authentication Flow
 ```bash
 1. Run: "🔐 Authentication" → "Login with Mobile"
 2. Check server logs for OTP (or use default: 1234)
 3. Run: "🔐 Authentication" → "Verify OTP"
-4. ✅ Access token automatically saved!
+4.  Access token automatically saved!
 5. Run: "👤 User Management" → "Get User Profile"
 ```
 
----
 
-## 🏗️ Collection Structure
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+
+## Collection Structure
 
 ### **📁 Folder Organization**
 
@@ -58,25 +100,33 @@ LaraBaseX API Collection/
 ### **🔧 Built-in Features**
 
 #### **Automated Token Management**
-- ✅ Auto-saves access token after OTP verification
-- ✅ Auto-includes Bearer token in authenticated requests
-- ✅ Auto-clears token on logout
-- ✅ Smart environment variable management
+-  Auto-saves access token after OTP verification
+-  Auto-includes Bearer token in authenticated requests
+-  Auto-clears token on logout
+-  Smart environment variable management
 
 #### **Pre-Request Automation**
-- ✅ Auto-sets default mobile number and device ID
-- ✅ Generates unique device IDs for testing
-- ✅ Validates environment setup before requests
+-  Auto-sets default mobile number and device ID
+-  Generates unique device IDs for testing
+-  Validates environment setup before requests
 
 #### **Response Testing**
-- ✅ Automatic status code validation
-- ✅ Response time monitoring (< 5s)
-- ✅ JSON structure validation
-- ✅ Token extraction and storage
+-  Automatic status code validation
+-  Response time monitoring (< 5s)
+-  JSON structure validation
+-  Token extraction and storage
 
----
 
-## 🌍 Environment Configuration
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+
+## Environment Configuration
 
 ### **Local Development Environment**
 
@@ -86,7 +136,7 @@ LaraBaseX API Collection/
 | `access_token` | *auto-set* | JWT authentication token |
 | `mobile_number` | `9876543210` | Test mobile number |
 | `device_id` | `test-device-postman-local` | Unique device identifier |
-| `test_user_email` | `john.doe@example.com` | Sample user email |
+| `test_user_email` | `dev@example.com` | Sample user email |
 | `test_user_password` | `Password123!` | Sample user password |
 
 ### **Production Environment**
@@ -100,9 +150,17 @@ LaraBaseX API Collection/
 | `test_user_email` | `test@yourdomain.com` | Production test email |
 | `test_user_password` | *set manually* | Secure production password |
 
----
 
-## 🔐 Authentication Workflow
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+## Authentication Workflow
 
 ### **Complete Flow (Auto-Managed)**
 
@@ -145,9 +203,17 @@ Headers: Authorization: Bearer {{access_token}}
 ```
 **Result**: Returns authenticated user profile
 
----
 
-## 📱 API Endpoints Reference
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+## API Endpoints Reference
 
 ### **🔐 Authentication Endpoints**
 
@@ -158,25 +224,33 @@ Headers: Authorization: Bearer {{access_token}}
 | `POST` | `/api/login` | Login with mobile number and send OTP | ❌ No |
 | `POST` | `/api/verify-otp` | Verify OTP and get access token | ❌ No |
 | `POST` | `/api/resend-otp` | Resend OTP to mobile number | ❌ No |
-| `POST` | `/api/logout` | Logout and revoke access token | ✅ Yes |
+| `POST` | `/api/logout` | Logout and revoke access token |  Yes |
 
 ### **👤 User Management Endpoints**
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `POST` | `/api/user` | Get authenticated user details | ✅ Yes |
-| `POST` | `/api/user/update` | Update user profile information | ✅ Yes |
-| `POST` | `/api/user/update-photo` | Upload/update profile photo | ✅ Yes |
+| `POST` | `/api/user` | Get authenticated user details |  Yes |
+| `POST` | `/api/user/update` | Update user profile information |  Yes |
+| `POST` | `/api/user/update-photo` | Upload/update profile photo |  Yes |
 
 ### **🏠 Content Endpoints**
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `POST` | `/api/sliders` | Get home page sliders | ✅ Yes |
+| `POST` | `/api/sliders` | Get home page sliders |  Yes |
 
----
 
-## 🧪 Testing Features
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+## Testing Features
 
 ### **Automated Test Scripts**
 
@@ -185,7 +259,7 @@ Headers: Authorization: Bearer {{access_token}}
 // Auto-save access token
 if (pm.response.json().access_token) {
     pm.environment.set("access_token", pm.response.json().access_token);
-    console.log("✅ Token saved automatically!");
+    console.log(" Token saved automatically!");
 }
 
 // Auto-clear token on logout
@@ -231,9 +305,17 @@ Headers: Authorization: Bearer invalid-token
 ```
 **Response**: Unauthorized access error
 
----
 
-## 🔧 Advanced Usage
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+
+## Advanced Usage
 
 ### **Custom Environment Setup**
 
@@ -297,9 +379,17 @@ jobs:
             --reporter-junit-export api-test-results.xml
 ```
 
----
 
-## 📝 Sample Request Examples
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+## Sample Request Examples
 
 ### **Complete Authentication Flow**
 ```bash
@@ -346,25 +436,41 @@ Headers: Authorization: Bearer {{access_token}}
 }
 ```
 
----
 
-## ⚡ Performance & Optimization
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+## Performance and Optimization
 
 ### **Built-in Performance Monitoring**
-- ✅ Response time validation (< 5 seconds)
-- ✅ Content-Type header validation
-- ✅ JSON structure validation
-- ✅ Token expiry handling
+-  Response time validation (< 5 seconds)
+-  Content-Type header validation
+-  JSON structure validation
+-  Token expiry handling
 
 ### **Request Optimization**
-- ✅ Minimal request payloads
-- ✅ Efficient authentication flow
-- ✅ Smart environment variable reuse
-- ✅ Automated cleanup scripts
+-  Minimal request payloads
+-  Efficient authentication flow
+-  Smart environment variable reuse
+-  Automated cleanup scripts
 
----
 
-## 🛠️ Troubleshooting
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+## Troubleshooting
 
 ### **Common Issues & Solutions**
 
@@ -411,46 +517,48 @@ console.log("Mobile:", pm.environment.get("mobile_number"));
 console.log("Token:", pm.environment.get("access_token") ? "Set" : "Not Set");
 ```
 
----
 
-## 🎯 Benefits of This Collection
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+
+## Benefits of This Collection
 
 ### **For Developers**
-- ✅ **Ready-to-Use**: Import and start testing immediately
-- ✅ **Automated Workflows**: Token management and authentication flow
-- ✅ **Comprehensive Testing**: All endpoints with validation scripts
-- ✅ **Environment Management**: Local, staging, production environments
-- ✅ **Error Handling**: Examples of validation and authorization errors
+-  **Ready-to-Use**: Import and start testing immediately
+-  **Automated Workflows**: Token management and authentication flow
+-  **Comprehensive Testing**: All endpoints with validation scripts
+-  **Environment Management**: Local, staging, production environments
+-  **Error Handling**: Examples of validation and authorization errors
 
 ### **For Mobile App Developers**
-- ✅ **Authentication Reference**: Complete OTP-based login flow
-- ✅ **Request Examples**: Sample payloads for all endpoints
-- ✅ **File Upload Guide**: Profile photo upload with proper headers
-- ✅ **Error Response Examples**: Handle API errors gracefully
+-  **Authentication Reference**: Complete OTP-based login flow
+-  **Request Examples**: Sample payloads for all endpoints
+-  **File Upload Guide**: Profile photo upload with proper headers
+-  **Error Response Examples**: Handle API errors gracefully
 
 ### **For QA Teams**
-- ✅ **Automated Testing**: Run via Newman CLI or CI/CD
-- ✅ **Performance Monitoring**: Response time and validation checks
-- ✅ **Regression Testing**: Consistent test scenarios
-- ✅ **Documentation**: Self-documenting API tests
+-  **Automated Testing**: Run via Newman CLI or CI/CD
+-  **Performance Monitoring**: Response time and validation checks
+-  **Regression Testing**: Consistent test scenarios
+-  **Documentation**: Self-documenting API tests
 
 ### **For DevOps Teams**
-- ✅ **CI/CD Integration**: Newman CLI automation
-- ✅ **Environment Testing**: Multiple environment configurations
-- ✅ **Monitoring**: API health and performance validation
-- ✅ **Deployment Validation**: Automated post-deployment testing
+-  **CI/CD Integration**: Newman CLI automation
+-  **Environment Testing**: Multiple environment configurations
+-  **Monitoring**: API health and performance validation
+-  **Deployment Validation**: Automated post-deployment testing
 
----
 
-## 📚 Related Documentation
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
 
-- [Swagger API Documentation](http://localhost:8001/api/documentation)
-- [Laravel Sanctum Authentication](https://laravel.com/docs/11.x/sanctum)
-- [Postman Newman CLI](https://learning.postman.com/docs/running-collections/using-newman-cli/)
-- [Environment Management](https://learning.postman.com/docs/sending-requests/managing-environments/)
+<br>
 
----
+<br>
 
-**✅ Status**: Postman Collection - COMPLETED!
-**🎯 Ready**: Import, test, and integrate with your development workflow
-**📱 Mobile-Ready**: Complete authentication and API testing suite
+#

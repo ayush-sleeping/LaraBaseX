@@ -9,11 +9,18 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * LoginRequest handles the validation and authentication of login requests.
+ * Determine if the user is authorized to make this request
+ * Get the validation rules that apply to the request
+ * Attempt to authenticate the request's credentials
+ * Ensure the login request is not rate limited
+ * Get the rate limiting throttle key for the request
+*/
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    /* Determine if the user is authorized to make this request */
     public function authorize(): bool
     {
         return true;
@@ -40,7 +47,6 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -62,9 +68,7 @@ class LoginRequest extends FormRequest
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
-
         event(new Lockout($this));
-
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
@@ -75,9 +79,7 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
+    /* Get the rate limiting throttle key for the request */
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());

@@ -28,7 +28,7 @@
 		},
 		{
 			"key": "test_user_email",
-			"value": "john.doe@example.com",
+			"value": "dev@example.com",
 			"type": "default",
 			"enabled": true
 		},

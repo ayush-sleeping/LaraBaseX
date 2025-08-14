@@ -7,27 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
- * Token Middleware
- *
- * Validates user authentication via API guard (usually token-based like Passport/Sanctum).
- *
- * Difference from BasicAuth:
- * - BasicAuth: App-level authentication (before user login)
- * - Token: User-level authentication (after user login)
- *
- *  Comprehensive token validation and user status checking
- *  Detailed audit trail for API access
- *  Detailed error responses with context
- *  Check if user is ACTIVE and token is valid
- *
- * Use Cases:
- * - Mobile app authenticated API calls
- * - User profile API endpoints
- * - User-specific data retrieval
- * - Any API requiring user authentication
- */
+ * CODE STRUCTURE SUMMARY:
+ * Token Middleware ( Validates user authentication via API guard (usually token-based like Passport/Sanctum) )
+ * Handle an incoming request
+ * Validate token is still valid
+ * Return authentication failed response
+ * Log failed authentication attempt
+ * Log successful API access
+ * Get safe headers for logging (exclude sensitive data)
+*/
 class Token
 {
     /**
@@ -45,41 +34,35 @@ class Token
 
             return $this->authenticationFailed($request, 'User not authenticated');
         }
-
         $user = Auth::guard($guard)->user();
-
-        // Step 2: Validate user exists (enhancement)
+        // Step 2: Validate user exists
         if (! $user) {
             $this->logFailedAttempt($request, 'user_not_found', $guard);
 
             return $this->authenticationFailed($request, 'User not found');
         }
-
-        // Step 3: Check user status (enhancement)
+        // Step 3: Check user status
         if (isset($user->status) && $user->status !== 'ACTIVE') {
             $this->logFailedAttempt($request, 'user_inactive', $guard, $user->id);
 
             return $this->authenticationFailed($request, 'User account is inactive');
         }
-
         // Step 4: Validate token expiry (enhancement for Passport/Sanctum)
         if (! $this->isTokenValid($request, $user, $guard)) {
             $this->logFailedAttempt($request, 'token_expired', $guard, $user->id);
 
             return $this->authenticationFailed($request, 'Token has expired');
         }
-
-        // Step 5: Log successful access (enhancement)
+        // Step 5: Log successful access
         $this->logSuccessfulAccess($request, $user, $guard);
-
-        // Add user to request for easy access in controllers (enhancement)
+        // Add user to request for easy access in controllers
         $request->merge(['authenticated_user' => $user]);
 
         return $next($request);
     }
 
     /**
-     * Validate token is still valid (enhancement)
+     * Validate token is still valid
      *
      * @param  mixed  $user
      */
@@ -92,7 +75,6 @@ class Token
                 return $token->expires_at->isFuture();
             }
         }
-
         // For Sanctum tokens
         if (method_exists($user, 'currentAccessToken')) {
             $token = $user->currentAccessToken();
@@ -100,7 +82,6 @@ class Token
                 return $token->expires_at->isFuture();
             }
         }
-
         // If no expiry mechanism, consider valid
         return true;
     }
@@ -121,9 +102,7 @@ class Token
         ], 401);
     }
 
-    /**
-     * Log failed authentication attempt
-     */
+    /* Log failed authentication attempt */
     protected function logFailedAttempt(Request $request, string $reason, string $guard, ?int $userId = null): void
     {
         Log::warning('Token: API authentication failed', [
@@ -158,22 +137,18 @@ class Token
         ]);
     }
 
-    /**
-     * Get safe headers for logging (exclude sensitive data)
-     */
+    /* Get safe headers for logging (exclude sensitive data) */
     /**
      * @return array<string, array<int, string>|string>
      */
     protected function getSafeHeaders(Request $request): array
     {
         $headers = $request->headers->all();
-
         // Remove sensitive headers
         unset($headers['authorization']);
         unset($headers['cookie']);
         unset($headers['x-api-key']);
         unset($headers['x-auth-token']);
-
         return $headers;
     }
 }
