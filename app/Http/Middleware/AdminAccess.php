@@ -76,7 +76,7 @@ class AdminAccess
         }
 
         // STEP 3: Super Admin Emergency Access
-        // Give full access to SuperAdmin/RootUser roles (enhancement)
+        // Give full access to SuperAdmin/RootUser roles
         if ($this->isSuperAdmin($user)) {
             $this->logAccess($request, $user, 'super_admin_access');
 

@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, Notebook, ReceiptText, SquareUser, Users } from 'lucide-react';
+import { ChartNoAxesCombined, LayoutGrid, Notebook, ReceiptText, SquareUser, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 // Navigation items with their required permissions ::
@@ -38,6 +38,12 @@ const allNavItems: (NavItem & { permission?: string })[] = [
         href: '/admin/enquiries',
         icon: ReceiptText,
         permission: 'enquiry-view',
+    },
+    {
+        title: 'Analytics',
+        href: '/admin/analytics',
+        icon: ChartNoAxesCombined,
+        permission: 'analytics-view',
     },
 ];
 

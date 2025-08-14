@@ -47,7 +47,7 @@ class Token
 
             return $this->authenticationFailed($request, 'User account is inactive');
         }
-        // Step 4: Validate token expiry (enhancement for Passport/Sanctum)
+        // Step 4: Validate token expiry ( for Passport/Sanctum)
         if (! $this->isTokenValid($request, $user, $guard)) {
             $this->logFailedAttempt($request, 'token_expired', $guard, $user->id);
 

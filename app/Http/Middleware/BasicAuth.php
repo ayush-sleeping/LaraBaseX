@@ -28,7 +28,7 @@ class BasicAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Get the expected auth token from environment (security enhancement)
+        // Get the expected auth token from environment (security )
         $expectedToken = $this->getExpectedToken();
 
         if (! $expectedToken) {
@@ -36,7 +36,7 @@ class BasicAuth
 
             return $this->authenticationFailed($request, 'Authentication not configured');
         }
-        // Get token from request (multiple sources - enhancement)
+        // Get token from request (multiple sources - )
         $providedToken = $this->extractTokenFromRequest($request);
 
         if (! $providedToken) {
@@ -60,7 +60,7 @@ class BasicAuth
     /**
      * Get expected token from environment configuration
      *
-     * Enhancement: Move from hardcoded '1234' to environment variable
+     * Move from hardcoded '1234' to environment variable
      */
     protected function getExpectedToken(): ?string
     {
@@ -80,7 +80,7 @@ class BasicAuth
             return $request->authtoken;
         }
 
-        // Check Authorization header (enhancement)
+        // Check Authorization header
         if ($request->hasHeader('Authorization')) {
             $header = $request->header('Authorization');
             if (str_starts_with($header, 'Bearer ')) {
@@ -91,12 +91,12 @@ class BasicAuth
             }
         }
 
-        // Check custom header (enhancement)
+        // Check custom header
         if ($request->hasHeader('X-Auth-Token')) {
             return $request->header('X-Auth-Token');
         }
 
-        // Check API key header (enhancement)
+        // Check API key header
         if ($request->hasHeader('X-API-Key')) {
             return $request->header('X-API-Key');
         }
@@ -117,7 +117,7 @@ class BasicAuth
             return false;
         }
 
-        // Additional security: Check token length (enhancement)
+        // Additional security: Check token length
         if (strlen($providedToken) < 8) {
             Log::warning('BasicAuth: Token too short, possible brute force attempt');
 

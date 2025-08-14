@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\EmployeeController;
+use App\Http\Controllers\Backend\AnalyticsController;
 use App\Http\Controllers\Backend\EnquiryController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
@@ -62,6 +63,8 @@ Route::middleware(['auth', 'verified', 'admin', 'preventBackHistory'])->group(fu
         Route::post('enquiries/list', [EnquiryController::class, 'list'])->name('enquiries.list');
         Route::post('enquiries/{enquiry}/remark', [EnquiryController::class, 'updateRemark'])->name('enquiries.update.remark');
 
+        // Analytics
+        Route::resource('analytics', AnalyticsController::class);
         // End of File
     });
 });

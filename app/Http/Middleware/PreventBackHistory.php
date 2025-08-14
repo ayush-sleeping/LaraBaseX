@@ -33,7 +33,7 @@ class PreventBackHistory
             'Expires' => 'Fri, 01 Jan 1990 00:00:00 GMT', // Fixed: was separate elements
         ];
 
-        // Additional security headers (enhancement)
+        // Additional security headers
         $securityHeaders = [
             'X-Frame-Options' => 'DENY',                    // Prevent clickjacking
             'X-Content-Type-Options' => 'nosniff',          // Prevent MIME sniffing
@@ -49,7 +49,7 @@ class PreventBackHistory
             $response->headers->set($key, $value);
         }
 
-        // Additional browser-specific cache prevention (enhancement)
+        // Additional browser-specific cache prevention
         $this->addBrowserSpecificHeaders($response);
 
         return $response;

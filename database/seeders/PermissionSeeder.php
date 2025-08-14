@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\Permission;
@@ -9,34 +8,48 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * PermissionSeeder
+ * This seeder is responsible for creating the initial permissions and roles in the database.
+ * - Predefined permission groups and their permissions
+ * - Predefined system roles with assigned permissions
+ * - Predefined system users and their roles
+ * - Main entry point for seeding permissions, roles, and users
+ * - Deletes permissions and permission groups that are NOT in the predefined list
+ * - Creates or updates permission groups and their permissions
+ * - Creates or updates roles and assigns them their respective permissions
+ * - Creates or updates predefined users and assigns them roles & permissions
+ */
 class PermissionSeeder extends Seeder
 {
     /**
      * @var array<string, array<string, mixed>>
      */
+    // Predefined permission groups and their permissions
     private array $permissions = [
         'Dashboard' => [
-            'controller' => 'Backend\DashboardController',
+            'controller'  => 'Backend\DashboardController',
             'permissions' => [
                 'dashboard-view' => [
                     'index',
                 ],
             ],
         ],
-        'Role' => [
-            'controller' => 'Backend\RoleController',
+        'Role'      => [
+            'controller'  => 'Backend\RoleController',
             'permissions' => [
-                'role-view' => [
+                'role-view'       => [
                     'index',
                     'data',
                     'list',
                     'show',
                 ],
-                'role-store' => [
+                'role-store'      => [
                     'create',
                     'store',
                 ],
-                'role-update' => [
+                'role-update'     => [
                     'edit',
                     'update',
                     'changeStatus',
@@ -47,16 +60,16 @@ class PermissionSeeder extends Seeder
                 ],
             ],
         ],
-        'User' => [
-            'controller' => 'Backend\UserController',
+        'User'      => [
+            'controller'  => 'Backend\UserController',
             'permissions' => [
-                'user-view' => [
+                'user-view'   => [
                     'index',
                     'data',
                     'list',
                     'show',
                 ],
-                'user-store' => [
+                'user-store'  => [
                     'create',
                     'store',
                 ],
@@ -67,16 +80,16 @@ class PermissionSeeder extends Seeder
                 ],
             ],
         ],
-        'Employee' => [
-            'controller' => 'Backend\EmployeeController',
+        'Employee'  => [
+            'controller'  => 'Backend\EmployeeController',
             'permissions' => [
-                'employee-view' => [
+                'employee-view'   => [
                     'index',
                     'data',
                     'list',
                     'show',
                 ],
-                'employee-store' => [
+                'employee-store'  => [
                     'create',
                     'store',
                 ],
@@ -87,19 +100,36 @@ class PermissionSeeder extends Seeder
                 ],
             ],
         ],
-        'Enquiry' => [
-            'controller' => 'Backend\EnquiryController',
+        'Enquiry'   => [
+            'controller'  => 'Backend\EnquiryController',
             'permissions' => [
-                'enquiry-view' => [
+                'enquiry-view'   => [
                     'index',
                     'data',
                     'list',
                     'show',
                 ],
-                'enquiry-store' => [
+                'enquiry-store'  => [
 
                 ],
                 'enquiry-update' => [
+
+                ],
+            ],
+        ],
+        'Analytics'   => [
+            'controller'  => 'Backend\AnalyticsController',
+            'permissions' => [
+                'analytics-view'   => [
+                    'index',
+                    'data',
+                    'list',
+                    'show',
+                ],
+                'analytics-store'  => [
+
+                ],
+                'analytics-update' => [
 
                 ],
             ],
@@ -110,6 +140,8 @@ class PermissionSeeder extends Seeder
     /**
      * @var array<string, array<int, string>>
      */
+
+    // Predefined system roles with assigned permissions
     public array $roles = [
         'RootUser' => [
 
@@ -137,9 +169,14 @@ class PermissionSeeder extends Seeder
             'enquiry-store',
             'enquiry-update',
 
+            // Analytics
+            'analytics-view',
+            'analytics-store',
+            'analytics-update',
+
             // End of Role Permission
         ],
-        'Admin' => [
+        'Admin'    => [
 
             // Dashboard
             'dashboard-view',
@@ -168,7 +205,7 @@ class PermissionSeeder extends Seeder
             // End of Role Permission
 
         ],
-        'User' => [
+        'User'     => [
             // Dashboard - basic users can view dashboard
             'dashboard-view',
 
@@ -180,19 +217,22 @@ class PermissionSeeder extends Seeder
     /**
      * @var array<int, array<string, mixed>>
      */
+
+    // Predefined system users and their roles
     private array $users = [
         [
             'first_name' => 'Root',
-            'last_name' => 'User',
-            'roles' => [
+            'last_name'  => 'User',
+            'roles'      => [
                 'RootUser',
             ],
-            'mobile' => '1234567890',
-            'email' => 'rootuser@example.com',
-            'password' => 'root@123@user',
+            'mobile'     => '1234567890',
+            'email'      => 'rootuser@example.com',
+            'password'   => 'root@123@user',
         ],
     ];
 
+    // Main entry point for seeding permissions, roles, and users
     public function run(): void
     {
         // Groups & Permission
@@ -204,6 +244,7 @@ class PermissionSeeder extends Seeder
         $this->createUsers();
     }
 
+    // Deletes permissions and permission groups that are NOT in the predefined list
     private function deletePermissions(): void
     {
         $permissions = Permission::all();
@@ -235,13 +276,14 @@ class PermissionSeeder extends Seeder
         }
     }
 
+    // Creates or updates permission groups and their permissions
     private function createPermissions(): void
     {
         foreach ($this->permissions as $group => $data) {
             $permissiongroup = Permissiongroup::where('name', $group)->first();
             if (! $permissiongroup) {
-                $permissiongroup = new Permissiongroup;
-                $permissiongroup->name = $group;
+                $permissiongroup             = new Permissiongroup;
+                $permissiongroup->name       = $group;
                 $permissiongroup->controller = $data['controller'];
                 $permissiongroup->save();
             } else {
@@ -252,11 +294,11 @@ class PermissionSeeder extends Seeder
             foreach ($data['permissions'] as $permissions_name => $methods) {
                 $permission = Permission::where('permissiongroup_id', $permissiongroup->id)->where('name', $permissions_name)->first();
                 if (! $permission) {
-                    $permission = new Permission;
+                    $permission                     = new Permission;
                     $permission->permissiongroup_id = $permissiongroup->id;
-                    $permission->name = $permissions_name;
-                    $permission->methods = $methods;
-                    $permission->guard_name = config('auth.defaults.guard');
+                    $permission->name               = $permissions_name;
+                    $permission->methods            = $methods;
+                    $permission->guard_name         = config('auth.defaults.guard');
                     $permission->save();
                 } else {
                     $permission->methods = $methods;
@@ -266,13 +308,14 @@ class PermissionSeeder extends Seeder
         }
     }
 
+    // Creates or updates roles and assigns them their respective permissions
     private function createRoles(): void
     {
         foreach ($this->roles as $role_name => $permissions) {
             $role = Role::where('name', $role_name)->first();
             if (! $role) {
-                $role = new Role;
-                $role->name = $role_name;
+                $role             = new Role;
+                $role->name       = $role_name;
                 $role->guard_name = config('auth.defaults.guard');
                 $role->save();
             }
@@ -282,22 +325,23 @@ class PermissionSeeder extends Seeder
         }
     }
 
+    // Creates or updates predefined users and assigns them roles & permissions
     private function createUsers(): void
     {
         foreach ($this->users as $data) {
             $user = User::where('email', $data['email'])->first();
             if (! $user) {
-                $user = new User;
-                $user->email = $data['email'];
-                $user->mobile = $data['mobile'];
+                $user             = new User;
+                $user->email      = $data['email'];
+                $user->mobile     = $data['mobile'];
                 $user->first_name = $data['first_name'];
-                $user->last_name = $data['last_name'];
-                $user->password = Hash::make($data['password']);
+                $user->last_name  = $data['last_name'];
+                $user->password   = Hash::make($data['password']);
                 $user->save();
             } else {
                 $user->first_name = $data['first_name'];
-                $user->last_name = $data['last_name'];
-                $user->password = Hash::make($data['password']);
+                $user->last_name  = $data['last_name'];
+                $user->password   = Hash::make($data['password']);
                 $user->save();
             }
 
@@ -307,7 +351,7 @@ class PermissionSeeder extends Seeder
             // Sync All Roles Permissions to User
             $all_permissions = collect();
             foreach ($data['roles'] as $role_name) {
-                $role = Role::where('name', $role_name)->first();
+                $role        = Role::where('name', $role_name)->first();
                 $permissions = $role->permissions()->get();
                 foreach ($permissions as $permission) {
                     $all_permissions->push($permission);
