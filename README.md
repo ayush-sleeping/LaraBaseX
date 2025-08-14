@@ -12,7 +12,8 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 | ------- | --------------------------------------------------------------------------------------- |
 | 0.      | [Tech Stack](#tech-stack)                                                               |
 | 1       | [Why LaraBaseX](#why-larabasex)                                                         |
-| 2       | [Documentations](#documentations)                 |
+| 2       | [Getting Started](#getting-started)                                                     |
+| 3       | [Documentations](#documentations)                                                       |
 
 <br>
 
@@ -72,6 +73,99 @@ LaraBaseX is designed for developers and teams who want to build and ship secure
 
 #
 
+## Getting Started
+1. **Clone the repo:**
+   ```sh
+   git clone https://github.com/ayush-sleeping/LaraBaseX.git
+   cd LaraBaseX
+   ```
+
+2. **Install backend dependencies:**
+   ```sh
+   composer install
+   ```
+
+3. **Install frontend dependencies:**
+   ```sh
+   npm install
+   ```
+
+4. **Copy and configure environment files:**
+   ```sh
+   cp .env.example .env
+   ```
+   - Update `.env` with your database credentials (MySQL recommended, SQLite supported).
+   - Set up mail, cache, and other environment variables as needed.
+
+5. **Generate application key:**
+   ```sh
+   php artisan key:generate
+   ```
+
+6. **Run database migrations and seeders:**
+   ```sh
+   php artisan migrate --seed
+   ```
+
+7. **Build frontend assets:**
+   ```sh
+   npm run build
+   ```
+
+8. **Start the Laravel backend server:**
+   ```sh
+   php artisan serve
+   ```
+   - Or use Docker for local development:
+     ```sh
+     docker-compose up
+     ```
+
+9. **Start the React frontend (Vite):**
+   ```sh
+   npm run dev
+   ```
+
+10. **Access the app:**
+    - Backend API: [http://localhost:8000](http://localhost:8000)
+    - Frontend: [http://localhost:5173](http://localhost:5173)
+
+11. **Run tests and code quality checks:**
+    - PHPStan (static analysis):
+      ```sh
+      ./vendor/bin/phpstan analyse
+      ```
+    - Pest (unit/feature tests):
+      ```sh
+      ./vendor/bin/pest
+      ```
+    - Pint (code style):
+      ```sh
+      ./vendor/bin/pint
+      ```
+    - ESLint (frontend lint):
+      ```sh
+      npm run lint
+      ```
+    - Postman/Newman (API tests):
+      ```sh
+      bash postman/test.sh
+      ```
+    - Health check:
+      ```sh
+      php test_health.php
+      ```
+
+<p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
+
+<br>
+
+<br>
+
+#
+
+
+
 ## Documentations
 > Comprehensive guides and references for the codebase.
 
@@ -91,6 +185,7 @@ LaraBaseX is designed for developers and teams who want to build and ship secure
 | 12 | [Setting Profile Information Update](documentation/12.%20Setting%20Profile%20Information%20Update/) | Profile Information Update |
 | 13 | [Setting Password Update](documentation/13.%20Setting%20Password%20Update/) | Password Update |
 | 14 | [Permission Based UI Implementation](documentation/14.%20Permission%20Based%20UI%20Implementation/) | Permission Based UI Implementation |
+| 15 | [Testing](documentation/15.%20Testing/) | Testing Documentation |
 
 <p align="right"><a href="#top"><img src="https://img.shields.io/badge/-Back%20to%20Top-blueviolet?style=for-the-badge" /></a></p>
 
