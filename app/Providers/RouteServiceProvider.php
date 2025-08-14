@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * RouteServiceProvider
+ * - Registers route services
+ * - Bootstraps route services
+ * Define your route model bindings, pattern filters, etc.
+ * Configure the rate limiters for the application.
+*/
 class RouteServiceProvider extends ServiceProvider
 {
     /*

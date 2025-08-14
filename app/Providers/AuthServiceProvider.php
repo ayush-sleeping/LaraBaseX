@@ -5,6 +5,12 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * AuthServiceProvider
+ * - Registers authentication / authorization services
+ * - Bootstraps authentication / authorization services
+*/
 class AuthServiceProvider extends ServiceProvider
 {
     /*

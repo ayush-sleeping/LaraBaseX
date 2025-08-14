@@ -8,8 +8,9 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * CODE STRUCTURE SUMMARY:
- * ProfileUpdateRequest handles the validation of profile update requests.
- * Get the validation rules that apply to the request
+ * AppServiceProvider
+ * - Registers application services
+ * - Bootstraps application services
 */
 class AppServiceProvider extends ServiceProvider
 {

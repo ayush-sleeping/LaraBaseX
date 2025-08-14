@@ -8,11 +8,24 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * BackupMonitoringService
+ * Monitors the health of backup processes
+ * Check if backups are recent enough
+ * Check backup file sizes
+ * Check available storage space
+ * Check backup file integrity
+ * Check database connectivity
+ * Collect backup metrics
+ * Send health check report via email
+ * Get backup statistics for dashboard
+ * Calculate overall health score
+ * Format bytes to human readable format
+*/
 class BackupMonitoringService
 {
-    /**
-     * Monitor backup health and send alerts if needed
-     */
+    /* Monitor backup health and send alerts if needed */
     /**
      * @return array{
      *   status: string,
@@ -82,9 +95,7 @@ class BackupMonitoringService
         return $results;
     }
 
-    /**
-     * Check if backups are recent enough
-     */
+    /* Check if backups are recent enough */
     /**
      * @return array{
      *   healthy: bool,
@@ -135,9 +146,7 @@ class BackupMonitoringService
         ];
     }
 
-    /**
-     * Check backup file sizes
-     */
+    /* Check backup file sizes */
     /**
      * @return array{
      *   healthy: bool,
@@ -187,9 +196,7 @@ class BackupMonitoringService
         ];
     }
 
-    /**
-     * Check available storage space
-     */
+    /* Check available storage space */
     /**
      * @return array{
      *   healthy: bool,
@@ -223,9 +230,7 @@ class BackupMonitoringService
         ];
     }
 
-    /**
-     * Check backup file integrity
-     */
+    /* Check backup file integrity */
     /**
      * @return array{
      *   healthy: bool,
@@ -280,9 +285,7 @@ class BackupMonitoringService
         ];
     }
 
-    /**
-     * Check database connectivity
-     */
+    /* Check database connectivity */
     /**
      * @return array{
      *   healthy: bool,
@@ -317,9 +320,7 @@ class BackupMonitoringService
         }
     }
 
-    /**
-     * Collect backup metrics
-     */
+    /* Collect backup metrics */
     /**
      * @return array{
      *   backup_count: int,
@@ -366,9 +367,7 @@ class BackupMonitoringService
         return $metrics;
     }
 
-    /**
-     * Send health check report via email
-     */
+    /* Send health check report via email */
     /**
      * @param array{
      *   status: string,
@@ -409,9 +408,7 @@ class BackupMonitoringService
         }
     }
 
-    /**
-     * Get backup statistics for dashboard
-     */
+    /* Get backup statistics for dashboard */
     /**
      * @return array{
      *   status: string,
@@ -436,9 +433,7 @@ class BackupMonitoringService
         ];
     }
 
-    /**
-     * Calculate overall health score (0-100)
-     */
+    /* Calculate overall health score (0-100) */
     /**
      * @param array{
      *   checks: array<string, array<string, mixed>>
@@ -459,13 +454,10 @@ class BackupMonitoringService
         return $totalChecks > 0 ? round(($healthyChecks / $totalChecks) * 100) : 0;
     }
 
-    /**
-     * Format bytes to human readable format
-     */
+    /* Format bytes to human readable format */
     private function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }

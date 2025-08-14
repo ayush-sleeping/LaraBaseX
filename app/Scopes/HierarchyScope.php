@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
- * Global scope to restrict queries to the current user and their descendants.
- *
- * Excluded models can be configured via constructor or config.
- */
+ * CODE STRUCTURE SUMMARY:
+ * HierarchyScope
+ * - Global scope to restrict queries to the current user and their descendants
+ * - Excluded models can be configured via constructor or config.
+ * Create a new HierarchyScope instance
+ * Apply the scope to a given Eloquent query builder
+*/
 class HierarchyScope implements Scope
 {
     /**
@@ -41,9 +44,7 @@ class HierarchyScope implements Scope
         ];
     }
 
-    /**
-     * Apply the scope to a given Eloquent query builder.
-     */
+    /* Apply the scope to a given Eloquent query builder. */
     public function apply(Builder $builder, Model $model): void
     {
         if (in_array(get_class($model), $this->excludedModels, true)) {
