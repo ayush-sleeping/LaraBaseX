@@ -122,7 +122,7 @@ class Token
     }
 
     /**
-     * Log failed authentication attempt (new enhancement)
+     * Log failed authentication attempt
      */
     protected function logFailedAttempt(Request $request, string $reason, string $guard, ?int $userId = null): void
     {
@@ -140,7 +140,7 @@ class Token
     }
 
     /**
-     * Log successful API access (new enhancement)
+     * Log successful API access
      *
      * @param  mixed  $user
      */

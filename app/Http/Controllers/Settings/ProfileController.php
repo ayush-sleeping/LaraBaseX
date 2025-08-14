@@ -10,11 +10,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * ProfileController ( Handles user profile management, including profile update and validation. )
+ * Show the user's profile settings page.
+ * Update the user's profile settings.
+ * Delete the user's account.
+ */
 class ProfileController extends Controller
 {
     /* Show the user's profile settings page. */
-    // ----------------------------------------------------------------- ::
     public function edit(Request $request): Response
     {
         return Inertia::render('settings/profile', [
@@ -24,7 +29,6 @@ class ProfileController extends Controller
     }
 
     /* Update the user's profile settings. */
-    // ----------------------------------------------------------------- ::
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
@@ -37,7 +41,6 @@ class ProfileController extends Controller
     }
 
     /* Delete the user's account. */
-    // ----------------------------------------------------------------- ::
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([

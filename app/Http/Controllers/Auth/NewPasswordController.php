@@ -14,7 +14,11 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Show the password reset page
+ * Handle an incoming new password request
+*/
 class NewPasswordController extends Controller
 {
     /* Show the password reset page. */
@@ -29,7 +33,7 @@ class NewPasswordController extends Controller
     /*
      * Handle an incoming new password request.
      * @throws \Illuminate\Validation\ValidationException
-     */
+    */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -59,7 +63,6 @@ class NewPasswordController extends Controller
         if ($status == Password::PasswordReset) {
             return to_route('login')->with('status', __($status));
         }
-
         throw ValidationException::withMessages([
             'email' => [__($status)],
         ]);

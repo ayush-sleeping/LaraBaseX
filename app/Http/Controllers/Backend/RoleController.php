@@ -12,11 +12,23 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-
 /**
- * RoleController
- * Handles role management for the backend administration.
- * Provides CRUD operations, permission management, and data tables for roles.
+ * CODE STRUCTURE SUMMARY:
+ * RoleController ( Handles role management for the backend administration, Provides CRUD operations, permission management, and data tables for roles. )
+ * Display a listing of roles
+ * Show the form for creating a new role
+ * Store a newly created role
+ * Display the specified role
+ * Show the form for editing the specified role
+ * Update the specified role
+ * Remove the specified role
+ * Show role permissions management page
+ * Update role permissions
+ * Get role statistics
+ * Clone a role with its permissions
+ * Get users assigned to a role
+ * Validation rules for role operations
+ * Custom validation messages
  */
 class RoleController extends Controller
 {
@@ -24,7 +36,6 @@ class RoleController extends Controller
     public function index(): Response
     {
         $roles = Role::all();
-
         return Inertia::render('backend/roles/index', compact('roles'));
     }
 
@@ -32,7 +43,6 @@ class RoleController extends Controller
     public function create(): Response
     {
         $guards = config('auth.guards', []);
-
         return Inertia::render('backend/roles/create', [
             'guards' => array_keys($guards),
         ]);
@@ -45,7 +55,6 @@ class RoleController extends Controller
         // Set default guard if not provided
         $validated['guard_name'] = $validated['guard_name'] ?? config('auth.defaults.guard');
         $role = Role::create($validated);
-
         return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
     }
 
@@ -58,7 +67,6 @@ class RoleController extends Controller
             'permissions:id,name,guard_name',
         ]);
         $role->loadCount(['permissions', 'users']);
-
         return Inertia::render('backend/roles/show', ['role' => $role]);
     }
 
@@ -75,7 +83,6 @@ class RoleController extends Controller
         $this->rules['name'] = 'required|string|max:125|regex:/^[\pL\s\-]+$/u|unique:roles,name,'.$role->id;
         $validated = $request->validate($this->rules, $this->customMessages);
         $role->update($validated);
-
         return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
     }
 
@@ -87,7 +94,6 @@ class RoleController extends Controller
             return redirect()->route('admin.roles.index')->with('error', 'Cannot delete role that has users assigned to it.');
         }
         $role->delete();
-
         return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
     }
 
@@ -131,18 +137,14 @@ class RoleController extends Controller
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,id',
         ]);
-
         $permissionIds = $validated['permissions'] ?? [];
-
         // Sync role permissions
         $role->syncPermissions($permissionIds);
-
         // Update users with this role
         $users = User::role($role->name)->get();
         foreach ($users as $user) {
             $user->syncPermissions($permissionIds);
         }
-
         return redirect()->route('admin.roles.index')->with('success', 'Role permissions updated successfully.');
     }
 
@@ -150,7 +152,6 @@ class RoleController extends Controller
     public function stats(): JsonResponse
     {
         $systemRoles = get_system_roles();
-
         $stats = [
             'total' => Role::whereNotIn('name', $systemRoles)->count(),
             'with_permissions' => Role::whereNotIn('name', $systemRoles)
@@ -181,10 +182,8 @@ class RoleController extends Controller
         ], $this->customMessages);
 
         $validated['guard_name'] = $validated['guard_name'] ?? $role->guard_name;
-
         // Create new role
         $newRole = Role::create($validated);
-
         // Copy permissions
         $permissions = $role->permissions->pluck('id')->toArray();
         $newRole->syncPermissions($permissions);
@@ -202,7 +201,6 @@ class RoleController extends Controller
         $users = $role->users()
             ->select('id', 'first_name', 'last_name', 'email', 'status')
             ->paginate(20);
-
         return response()->json([
             'status' => 'success',
             'users' => $users,

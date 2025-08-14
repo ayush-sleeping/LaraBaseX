@@ -4,15 +4,15 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-
 /**
+ * CODE STRUCTURE SUMMARY:
  * Application exception handler.
  * Customize exception logging, reporting, and rendering here.
  * - Use $levels to set custom log levels for specific exceptions.
  * - Use $dontReport to prevent reporting certain exceptions.
  * - Use $dontFlash to prevent sensitive input from being flashed to the session.
  * You can also add custom renderable/reportable logic in register().
- */
+*/
 class Handler extends ExceptionHandler
 {
     /**

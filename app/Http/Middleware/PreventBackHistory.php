@@ -1,30 +1,21 @@
 <?php
 
 namespace App\Http\Middleware;
-
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
- * PreventBackHistory Middleware
- *
- * Prevents browser back navigation by setting appropriate cache headers.
- * This is essential for admin panels and secure pages to prevent cached access.
- *
- *  Proper key-value pairs for headers
- *  Modern PHP with proper type hints
- *  Comprehensive cache prevention headers
- *  Additional security headers (X-Frame-Options, etc.)
- *  Browser-specific cache control
- *  Better documentation and error handling
- */
+ * CODE STRUCTURE SUMMARY:
+ * PreventBackHistory Middleware ( Manage Inertia.js requests )
+ * Handle an incoming request
+ * Add browser-specific cache prevention headers
+*/
 class PreventBackHistory
 {
     /**
      * Handle an incoming request.
      *
-     * Old middleware logic (with fixes):
+     * middleware logic (with fixes):
      * - Set cache control headers to prevent browser caching
      * - Prevent back button access to sensitive pages
      * - Add expiration headers for old browser compatibility
@@ -34,7 +25,7 @@ class PreventBackHistory
         $response = $next($request);
 
         // Fixed headers array from old middleware (was broken before)
-        // Old had syntax errors: 'Pragma', 'no-cache', 'Expires', 'date' as separate elements
+        // had syntax errors: 'Pragma', 'no-cache', 'Expires', 'date' as separate elements
         // New: Proper key-value pairs
         $headers = [
             'Cache-Control' => 'no-cache, no-store, max-age=0, must-revalidate', // Fixed: was 'nocache'
@@ -64,9 +55,7 @@ class PreventBackHistory
         return $response;
     }
 
-    /**
-     * Add browser-specific cache prevention headers (new enhancement)
-     */
+    /* Add browser-specific cache prevention headers */
     protected function addBrowserSpecificHeaders(Response $response): void
     {
         // IE-specific cache prevention

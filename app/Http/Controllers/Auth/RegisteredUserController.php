@@ -12,7 +12,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Show the registration page
+ * Handle an incoming registration request
+*/
 class RegisteredUserController extends Controller
 {
     /* Show the registration page. */

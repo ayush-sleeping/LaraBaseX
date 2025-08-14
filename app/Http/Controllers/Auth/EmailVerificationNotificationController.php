@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Send a new email verification notification.
+*/
 class EmailVerificationNotificationController extends Controller
 {
     /* Send a new email verification notification. */
@@ -16,7 +19,6 @@ class EmailVerificationNotificationController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
         }
         $request->user()->sendEmailVerificationNotification();
-
         return back()->with('status', 'verification-link-sent');
     }
 }

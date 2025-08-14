@@ -5,19 +5,12 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
- * ForceHttps Middleware
- *
- * Redirects all HTTP requests to HTTPS in production environment.
- * This provides an additional layer of security beyond URL::forceScheme().
- *
- * Features:
- *  Environment-based HTTPS enforcement
- *  Configurable via APP_FORCE_HTTPS environment variable
- *  301 permanent redirect for SEO benefits
- *  Skip for local development
- */
+ * CODE STRUCTURE SUMMARY:
+ * ForceHttps Middleware ( Redirect HTTP requests to HTTPS and enforce HTTPS  )
+ * Handle an incoming request
+ * Determine if HTTPS should be enforced
+*/
 class ForceHttps
 {
     /**
@@ -35,9 +28,7 @@ class ForceHttps
         return $next($request);
     }
 
-    /**
-     * Determine if HTTPS should be enforced
-     */
+    /* Determine if HTTPS should be enforced */
     private function shouldForceHttps(Request $request): bool
     {
         // Skip if already HTTPS

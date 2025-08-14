@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-// Add other models as needed
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Home-related API endpoints.
+ * Get home page sliders
+ * Get home page content (Not Impmented)
+ * Get featured products (Not Impmented)
+ * Get testimonials (Not Impmented)
+ * Get FAQs (Not Impmented)
+*/
 class HomeController extends Controller
 {
     /**
@@ -51,6 +58,8 @@ class HomeController extends Controller
      *     )
      * )
      */
+
+    // Get home page sliders
     public function getSliders(Request $request): JsonResponse
     {
         // For example: getLanguages, getQuotes etc.

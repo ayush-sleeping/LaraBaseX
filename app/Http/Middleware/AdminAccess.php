@@ -9,26 +9,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
- * AdminAccess Middleware
- * Provides comprehensive permission-based access control for backend administration.
- *
- * Key Features :
- *  User authentication validation
- *  User status checking (ACTIVE/INACTIVE)
- *  Dynamic permission checking based on controller@method
- *  Route action parsing and controller matching
- *  Method-level permission validation
- *
- *  Type hints and modern PHP syntax
- *  Comprehensive logging and audit trail
- *  Better error handling and responses
- *  Support for API and web responses
- *  Emergency access for SuperAdmin/RootUser
- *  Detailed documentation and comments
- *  Security improvements and rate limiting consideration
- */
+ * CODE STRUCTURE SUMMARY:
+ * AdminAccess Middleware ( Handles permission-based access control for admin routes. )
+ * System roles that bypass permission checks
+ * Handle an incoming request
+ * Check if user has super admin privileges
+ * Extract route information
+ * Check if user has permission access
+ * Handle redirect to login
+ * Handle access denied
+ * Log successful access
+ * Log access denied
+*/
 class AdminAccess
 {
     /**
@@ -133,7 +126,7 @@ class AdminAccess
     /**
      * Extract route information (enhanced version of old middleware logic)
      *
-     * Old middleware logic:
+     * middleware logic:
      * $currentAction = \Route::currentRouteAction();
      * list($controller, $method) = explode('@', $currentAction);
      * $controller = str_replace('App\Http\Controllers\\','',$controller);
@@ -166,7 +159,7 @@ class AdminAccess
     /**
      * Check if user has permission access (exact same logic as old middleware)
      *
-     * Old middleware logic:
+     * middleware logic:
      * $allow_user = false;
      * $permissions = \Auth::user()->getAllPermissions()->pluck('id');
      * $permissions = \App\Models\Permission::whereIn('id',$permissions)->get();
@@ -216,7 +209,7 @@ class AdminAccess
     /**
      * Handle redirect to login (enhanced version of old middleware redirect)
      *
-     * Old middleware logic:
+     * middleware logic:
      * return \Redirect::back()->withErrors(['message']);
      */
     protected function redirectToLogin(Request $request, string $message): Response
@@ -237,7 +230,7 @@ class AdminAccess
     /**
      * Handle access denied (enhanced version of old middleware abort)
      *
-     * Old middleware logic:
+     * middleware logic:
      * return abort(403);
      */
     protected function accessDenied(Request $request, string $message): Response
@@ -253,7 +246,7 @@ class AdminAccess
     }
 
     /**
-     * Log successful access (new enhancement)
+     * Log successful access
      *
      * @param  mixed  $user
      */
@@ -275,7 +268,7 @@ class AdminAccess
     }
 
     /**
-     * Log access denied (new enhancement)
+     * Log access denied
      *
      * @param  mixed  $user
      */

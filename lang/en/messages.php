@@ -169,7 +169,7 @@ return [
         'file_created' => 'Backup file created: :filename',
         'no_backups' => 'No backups found.',
         'restored' => 'System restored from backup successfully.',
-        'cleanup_completed' => 'Old backup files cleaned up.',
+        'cleanup_completed' => 'backup files cleaned up.',
     ],
 
     // Activity Log Messages

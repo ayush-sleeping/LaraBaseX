@@ -10,6 +10,24 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * CODE STRUCTURE SUMMARY:
+ * name and signature of the console command
+ * console command description
+ * execute the console command
+ * Show comprehensive backup status
+ * Create backup with enhanced options
+ * Restore backup from file
+ * Verify backup integrity
+ * Clean old backups manually
+ * Monitor backup health
+ * Show latest backup information
+ * Show available backups for restore
+ * Verify latest backup integrity
+ * Perform custom health checks
+ * Format bytes to human readable format
+*/
+
 class BackupManagement extends Command
 {
     /* The name and signature of the console command */

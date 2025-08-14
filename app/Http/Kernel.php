@@ -3,12 +3,16 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Application HTTP kernel.
+ * Register global middleware
+ * Route middleware groups
+ * Route middleware here.
+ */
 class Kernel extends HttpKernel
 {
-    /**
-     * Global HTTP middleware stack run during every request.
-     */
+    /* Global HTTP middleware stack run during every request.*/
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class, // Uncomment if implemented
         \App\Http\Middleware\ForceHttps::class,
@@ -20,9 +24,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
     ];
 
-    /**
-     * Route middleware groups.
-     */
+    /* Route middleware groups.*/
     protected $middlewareGroups = [
         'web' => [
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
@@ -46,9 +48,7 @@ class Kernel extends HttpKernel
         // ],
     ];
 
-    /**
-     * Route middleware (assignable to groups or used individually).
-     */
+    /* Route middleware (assignable to groups or used individually). */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

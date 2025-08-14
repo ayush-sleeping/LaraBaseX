@@ -12,12 +12,21 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 /**
- * EmployeeController
- * Handles CRUD operations for employees with user management.
- * Integrates with roles and permissions system.
- */
+ * CODE STRUCTURE SUMMARY:
+ * EmployeeController ( Handles CRUD operations for employees with user management, Integrates with roles and permissions system. )
+ * Display a listing of employees
+ * Show the form for creating a new employee
+ * Store a newly created employee
+ * Display the specified employee
+ * Show the form for editing the specified employee
+ * Update the specified employee
+ * Remove the specified employee
+ * Change employee status (activate/deactivate)
+ * Sync user permissions based on assigned roles
+ * Validation rules
+ * Custom validation messages
+*/
 class EmployeeController extends Controller
 {
     /* Display a listing of employees :: */

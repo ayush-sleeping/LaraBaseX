@@ -9,7 +9,22 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * HealthController ( Handles health check endpoints for the application. )
+ * Basic health check endpoint.
+ * Comprehensive health check with detailed service status.
+ * Check database connectivity and performance
+ * Check cache service health
+ * Check storage systems
+ * Check specific storage disk
+ * Check disk space
+ * Check queue system
+ * Check application configuration and environment
+ * Check backup system health
+ * Get application uptime
+ * Format uptime in human readable format
+*/
 class HealthController extends Controller
 {
     /**
@@ -26,9 +41,7 @@ class HealthController extends Controller
         ], 200);
     }
 
-    /**
-     * Comprehensive health check with detailed service status
-     */
+    /* Comprehensive health check with detailed service status */
     public function detailed(): JsonResponse
     {
         $startTime = microtime(true);
@@ -114,9 +127,7 @@ class HealthController extends Controller
         return response()->json($response, $httpStatus);
     }
 
-    /**
-     * Check database connectivity and performance
-     */
+    /* Check database connectivity and performance */
     /**
      * @return array<string, mixed>
      */
@@ -160,9 +171,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check cache service health
-     */
+    /* Check cache service health */
     /**
      * @return array<string, mixed>
      */
@@ -212,9 +221,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check storage systems
-     */
+    /* Check storage systems */
     /**
      * @return array<string, mixed>
      */
@@ -268,9 +275,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check specific storage disk
-     */
+    /* Check specific storage disk */
     /**
      * @return array<string, mixed>
      */
@@ -308,9 +313,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check disk space
-     */
+    /* Check disk space */
     /**
      * @return array<string, mixed>
      */
@@ -352,9 +355,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check queue system
-     */
+    /* Check queue system */
     /**
      * @return array<string, mixed>
      */
@@ -400,9 +401,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check application configuration and environment
-     */
+    /* Check application configuration and environment */
     /**
      * @return array<string, mixed>
      */
@@ -476,9 +475,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Check backup system health
-     */
+    /* Check backup system health */
     /**
      * @return array<string, mixed>
      */
@@ -557,9 +554,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Get application uptime
-     */
+    /* Get application uptime */
     /**
      * @return array<string, mixed>
      */
@@ -594,9 +589,7 @@ class HealthController extends Controller
         }
     }
 
-    /**
-     * Format uptime in human readable format
-     */
+    /* Format uptime in human readable format */
     private function formatUptime(int $seconds): string
     {
         if ($seconds < 60) {

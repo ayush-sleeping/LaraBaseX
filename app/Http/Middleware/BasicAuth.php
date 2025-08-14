@@ -6,22 +6,17 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
+ * CODE STRUCTURE SUMMARY:
  * BasicAuth Middleware
- * Provides simple token-based authentication for API endpoints.
- *
- *  Environment-based token configuration
- *  Comprehensive security logging and audit trail
- *  Detailed error handling with rate limiting consideration
- *  Proper request header checking and validation
- *
- * Use Cases:
- * - API authentication before user registration/login
- * - Mobile app basic authentication
- * - Third-party API integrations
- * - Public API endpoints requiring basic protection
- */
+ * Handle an incoming request
+ * Get expected token from environment configuration
+ * Extract token from request
+ * Validate the provided token
+ * Return authentication failed response
+ * Log failed authentication attempt
+ * Log successful authentication
+*/
 class BasicAuth
 {
     /**
@@ -41,7 +36,6 @@ class BasicAuth
 
             return $this->authenticationFailed($request, 'Authentication not configured');
         }
-
         // Get token from request (multiple sources - enhancement)
         $providedToken = $this->extractTokenFromRequest($request);
 
@@ -58,9 +52,8 @@ class BasicAuth
             return $this->authenticationFailed($request, 'Invalid authentication token');
         }
 
-        // Log successful authentication (new enhancement)
+        // Log successful authentication
         $this->logSuccessfulAuth($request);
-
         return $next($request);
     }
 
@@ -77,7 +70,7 @@ class BasicAuth
     /**
      * Extract token from request (multiple sources)
      *
-     * Old middleware only checked: $request->authtoken
+     * middleware only checked: $request->authtoken
      * Enhanced: Check multiple possible sources
      */
     protected function extractTokenFromRequest(Request $request): ?string
@@ -150,9 +143,7 @@ class BasicAuth
         ], 401);
     }
 
-    /**
-     * Log failed authentication attempt (new enhancement)
-     */
+    /* Log failed authentication attempt */
     protected function logFailedAttempt(Request $request, string $reason): void
     {
         Log::warning('BasicAuth: Authentication failed', [
@@ -165,9 +156,7 @@ class BasicAuth
         ]);
     }
 
-    /**
-     * Log successful authentication (new enhancement)
-     */
+    /* Log successful authentication */
     protected function logSuccessfulAuth(Request $request): void
     {
         Log::info('BasicAuth: Authentication successful', [

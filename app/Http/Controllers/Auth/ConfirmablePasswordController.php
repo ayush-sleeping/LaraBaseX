@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Show the confirm password page.
+ * Confirm the user's password.
+*/
 class ConfirmablePasswordController extends Controller
 {
     /* Show the confirm password page. */
@@ -30,7 +34,6 @@ class ConfirmablePasswordController extends Controller
             ]);
         }
         $request->session()->put('auth.password_confirmed_at', time());
-
         return redirect()->intended(route('dashboard', absolute: false));
     }
 }

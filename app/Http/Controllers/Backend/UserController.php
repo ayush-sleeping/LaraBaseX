@@ -13,24 +13,33 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
 /**
- * UserController
- * Handles user management for the backend administration.
- * Provides CRUD operations, role/permission management, and data tables for users.
- */
+ * CODE STRUCTURE SUMMARY:
+ * UserController ( Handles user management for the backend administration, Provides CRUD operations, role/permission management, and data tables for users. )
+ * Display a listing of users
+ * Show the form for creating a new user
+ * Store a newly created user
+ * Display the specified user
+ * Show the form for editing the specified user
+ * Update the specified user
+ * Remove the specified user
+ * Change user status
+ * Get user statistics
+ * Reset user password
+ * Export users to CSV
+ * Validation rules for user operations
+ * Custom validation messages
+*/
 class UserController extends Controller
 {
     /* Display a listing of users :: */
     public function index(Request $request): Response
     {
         $query = User::query();
-
         // Apply status filter if provided
         if ($request->filled('status') && in_array($request->status, ['ACTIVE', 'INACTIVE'])) {
             $query->where('status', $request->status);
         }
-
         $users = $query->get();
 
         return Inertia::render('backend/users/index', [

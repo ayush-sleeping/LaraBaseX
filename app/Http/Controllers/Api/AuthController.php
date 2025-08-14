@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -12,7 +11,19 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+/**
+ * CODE STRUCTURE SUMMARY:
+ * Authentication-related API endpoints.
+ * Get application version and store URL
+ * Register a new user
+ * Login user
+ * Verify OTP for user login
+ * Resend OTP to user's mobile
+ * Logout user
+ * Get authenticated user details
+ * Update user details
+ * Update user profile photo
+*/
 class AuthController extends Controller
 {
     /**
@@ -35,11 +46,13 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Get application version and store URL
     public function getAppVersion(): JsonResponse
     {
         $data = [
             'app_version' => config('app.version', '1.0.0+0'),
-            'url' => config('app.play_store_url', 'https://play.google.com/store/apps/details?id=com.example.app'),
+            'url'         => config('app.play_store_url', 'https://play.google.com/store/apps/details?id=com.example.app'),
         ];
 
         return response()->json($data, 200);
@@ -91,30 +104,32 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Register a new user
     public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:191',
-            'email' => 'required|email',
-            'mobile' => 'required|numeric|unique:users,mobile|digits:10',
-            'device_id' => 'required|max:191',
+            'email'      => 'required|email',
+            'mobile'     => 'required|numeric|unique:users,mobile|digits:10',
+            'device_id'  => 'required|max:191',
         ], [
             'first_name.required' => 'Please enter name',
-            'first_name.max' => 'Name should not be more than 191 characters',
-            'email.required' => 'Please enter email',
-            'email.email' => 'Please enter valid email',
-            'mobile.required' => 'Please enter mobile',
-            'mobile.numeric' => 'Please enter valid mobile',
-            'mobile.unique' => 'Mobile number already exists',
-            'mobile.digits' => 'Please enter 10 digits mobile',
-            'device_id.required' => 'device_id is required',
+            'first_name.max'      => 'Name should not be more than 191 characters',
+            'email.required'      => 'Please enter email',
+            'email.email'         => 'Please enter valid email',
+            'mobile.required'     => 'Please enter mobile',
+            'mobile.numeric'      => 'Please enter valid mobile',
+            'mobile.unique'       => 'Mobile number already exists',
+            'mobile.digits'       => 'Please enter 10 digits mobile',
+            'device_id.required'  => 'device_id is required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->messages()], 400);
         }
 
-        $otp = (string) rand(1000, 9999);
+        $otp  = (string) rand(1000, 9999);
         $user = new User;
         $user->fill($request->all());
         $user->password = Hash::make($otp);
@@ -180,15 +195,17 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Login user
     public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'mobile' => 'required|numeric|digits:10',
+            'mobile'    => 'required|numeric|digits:10',
             'device_id' => 'required|max:191',
         ], [
-            'mobile.required' => 'Please enter mobile',
-            'mobile.numeric' => 'Please enter valid mobile',
-            'mobile.digits' => 'Please enter 10 digits mobile',
+            'mobile.required'    => 'Please enter mobile',
+            'mobile.numeric'     => 'Please enter valid mobile',
+            'mobile.digits'      => 'Please enter 10 digits mobile',
             'device_id.required' => 'device_id is required',
         ]);
 
@@ -198,8 +215,8 @@ class AuthController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         if ($user) {
-            $otp = (string) rand(1000, 9999);
-            $user->password = Hash::make($otp);
+            $otp             = (string) rand(1000, 9999);
+            $user->password  = Hash::make($otp);
             $user->device_id = $request->device_id;
             $user->save();
 
@@ -269,17 +286,19 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Verify OTP for user login
     public function verifyOTP(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|numeric|digits:10',
-            'otp' => 'required|digits:4',
+            'otp'    => 'required|digits:4',
         ], [
             'mobile.required' => 'Please enter mobile',
-            'mobile.numeric' => 'Please enter valid mobile',
-            'mobile.digits' => 'Please enter 10 digits mobile',
-            'otp.required' => 'Please enter OTP',
-            'otp.digits' => 'Please enter 4 digits for OTP',
+            'mobile.numeric'  => 'Please enter valid mobile',
+            'mobile.digits'   => 'Please enter 10 digits mobile',
+            'otp.required'    => 'Please enter OTP',
+            'otp.digits'      => 'Please enter 4 digits for OTP',
         ]);
 
         if ($validator->fails()) {
@@ -288,9 +307,9 @@ class AuthController extends Controller
 
         $credentials = ['mobile' => $request->mobile, 'password' => $request->otp];
         if (Auth::attempt($credentials)) {
-            $user = $request->user();
-            $tokenResult = $user->createToken('Personal Access Token');
-            $accessToken = method_exists($tokenResult, 'accessToken') ? $tokenResult->accessToken : (method_exists($tokenResult, 'token') ? $tokenResult->token : null);
+            $user          = $request->user();
+            $tokenResult   = $user->createToken('Personal Access Token');
+            $accessToken   = method_exists($tokenResult, 'accessToken') ? $tokenResult->accessToken : (method_exists($tokenResult, 'token') ? $tokenResult->token : null);
             $passportToken = method_exists($tokenResult, 'getToken') ? $tokenResult->getToken() : (property_exists($tokenResult, 'token') ? $tokenResult->token : null);
             if ($request->remember_me) {
                 $passportToken->expires_at = Carbon::now()->addWeeks(1);
@@ -298,10 +317,10 @@ class AuthController extends Controller
             }
 
             return response()->json([
-                'message' => api_message('otp_verified'),
+                'message'      => api_message('otp_verified'),
                 'access_token' => $accessToken,
-                'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse($passportToken->expires_at)->toDateTimeString(),
+                'token_type'   => 'Bearer',
+                'expires_at'   => Carbon::parse($passportToken->expires_at)->toDateTimeString(),
             ], 200);
         } else {
             return api_error_message('otp_invalid', 401);
@@ -359,14 +378,16 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Resend OTP to user's mobile
     public function resendOTP(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|numeric|digits:10',
         ], [
             'mobile.required' => 'Please enter mobile',
-            'mobile.numeric' => 'Please enter valid mobile',
-            'mobile.digits' => 'Please enter 10 digits mobile',
+            'mobile.numeric'  => 'Please enter valid mobile',
+            'mobile.digits'   => 'Please enter 10 digits mobile',
         ]);
 
         if ($validator->fails()) {
@@ -375,7 +396,7 @@ class AuthController extends Controller
 
         $user = User::where('mobile', $request->mobile)->first();
         if ($user) {
-            $otp = (string) rand(1000, 9999);
+            $otp            = (string) rand(1000, 9999);
             $user->password = Hash::make($otp);
             $user->save();
 
@@ -418,6 +439,8 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Logout user
     public function logout(Request $request): JsonResponse
     {
         $user = $request->user('api');
@@ -473,6 +496,8 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Get authenticated user details
     public function getUser(Request $request): JsonResponse
     {
         $user = $request->user('api');
@@ -537,21 +562,23 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Update user details
     public function updateUser(Request $request): JsonResponse
     {
-        $user = $request->user('api');
+        $user      = $request->user('api');
         $validator = Validator::make($request->all(), [
             'business_name' => 'required|max:50',
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:50',
-            'state' => 'required',
-            'city' => 'required',
+            'first_name'    => 'required|max:50',
+            'last_name'     => 'required|max:50',
+            'state'         => 'required',
+            'city'          => 'required',
         ], [
             'business_name.required' => 'Please enter business name',
-            'first_name.required' => 'Please enter first name',
-            'last_name.required' => 'Please enter last name',
-            'state.required' => 'Please select state',
-            'city.required' => 'Please select city',
+            'first_name.required'    => 'Please enter first name',
+            'last_name.required'     => 'Please enter last name',
+            'state.required'         => 'Please select state',
+            'city.required'          => 'Please select city',
         ]);
 
         if ($validator->fails()) {
@@ -618,6 +645,8 @@ class AuthController extends Controller
      *     )
      * )
      */
+
+    // Update user profile photo
     public function updateUserPhoto(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [

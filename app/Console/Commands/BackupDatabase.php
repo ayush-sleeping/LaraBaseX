@@ -1,8 +1,14 @@
 <?php
 
 namespace App\Console\Commands;
-
 use Illuminate\Console\Command;
+
+/**
+ * CODE STRUCTURE SUMMARY:
+ * name and signature of the console command
+ * console command description
+ * execute the console command
+*/
 
 class BackupDatabase extends Command
 {
@@ -26,7 +32,6 @@ class BackupDatabase extends Command
     public function handle(): int
     {
         $this->info('Starting backup process...');
-
         try {
             if ($this->option('only-db')) {
                 $this->call('backup:run', ['--only-db' => true]);

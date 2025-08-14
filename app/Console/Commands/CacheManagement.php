@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Console\Commands;
 
 use App\Services\CacheWarmupService;
@@ -7,6 +6,17 @@ use App\Services\QueryCacheService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+
+/**
+ * CODE STRUCTURE SUMMARY:
+ * name and signature of the console command
+ * console command description
+ * execute the console command
+ * Show current cache status
+ * Clear all caches
+ * Optimize caches for production
+ * Warm up caches
+ */
 
 class CacheManagement extends Command
 {
@@ -27,11 +37,10 @@ class CacheManagement extends Command
     protected $description = 'Comprehensive cache management for LaraBaseX';
 
     /* Execute the console command. */
-
     public function handle(): int
     {
         $action = $this->argument('action');
-        $force = $this->option('force');
+        $force  = $this->option('force');
 
         $this->info('🚀 LaraBaseX Cache Management System');
         $this->info('=====================================');
@@ -78,7 +87,7 @@ class CacheManagement extends Command
         if ($cacheDriver === 'redis') {
             $redisHost = config('database.redis.cache.host', 'N/A');
             $redisPort = config('database.redis.cache.port', 'N/A');
-            $redisDb = config('database.redis.cache.database', 'N/A');
+            $redisDb   = config('database.redis.cache.database', 'N/A');
             $this->info("🔗 Redis Connection: {$redisHost}:{$redisPort} (DB: {$redisDb})");
         }
 
@@ -94,7 +103,7 @@ class CacheManagement extends Command
                 $this->error('❌ Cache Connection: Failed (Read/Write Issue)');
             }
         } catch (\Exception $e) {
-            $this->error('❌ Cache Connection: Failed - '.$e->getMessage());
+            $this->error('❌ Cache Connection: Failed - ' . $e->getMessage());
         }
 
         // Check if caches are enabled
@@ -102,26 +111,26 @@ class CacheManagement extends Command
         $this->info('📋 Cache Status:');
 
         $configCached = file_exists(base_path('bootstrap/cache/config.php'));
-        $this->info('Config Cache: '.($configCached ? '✅ Enabled' : '❌ Disabled'));
+        $this->info('Config Cache: ' . ($configCached ? '✅ Enabled' : '❌ Disabled'));
 
         $routesCached = file_exists(base_path('bootstrap/cache/routes-v7.php'));
-        $this->info('Routes Cache: '.($routesCached ? '✅ Enabled' : '❌ Disabled'));
+        $this->info('Routes Cache: ' . ($routesCached ? '✅ Enabled' : '❌ Disabled'));
 
         $viewsCached = count(glob(storage_path('framework/views/*.php'))) > 0;
-        $this->info('Views Cache: '.($viewsCached ? '✅ Enabled' : '❌ Disabled'));
+        $this->info('Views Cache: ' . ($viewsCached ? '✅ Enabled' : '❌ Disabled'));
 
         // Query Cache Statistics
         $queryStats = QueryCacheService::getStats();
-        $this->info('Query Cache Driver: '.$queryStats['driver']);
-        $this->info('Query Cache Tags Support: '.($queryStats['supports_tags'] ? '✅ Yes' : '❌ No'));
-        $this->info('Query Cache Keys: '.$queryStats['query_cache_keys']);
+        $this->info('Query Cache Driver: ' . $queryStats['driver']);
+        $this->info('Query Cache Tags Support: ' . ($queryStats['supports_tags'] ? '✅ Yes' : '❌ No'));
+        $this->info('Query Cache Keys: ' . $queryStats['query_cache_keys']);
 
         // Cache Size (if Redis)
         if ($cacheDriver === 'redis') {
             try {
-                $this->info('Total Cache Keys: '.$queryStats['total_keys']);
+                $this->info('Total Cache Keys: ' . $queryStats['total_keys']);
             } catch (\Exception $e) {
-                $this->warn('⚠️  Could not get cache statistics: '.$e->getMessage());
+                $this->warn('⚠️  Could not get cache statistics: ' . $e->getMessage());
             }
         }
 
@@ -182,26 +191,26 @@ class CacheManagement extends Command
         $this->info('🔥 Warming up caches...');
 
         $warmupService = new CacheWarmupService;
-        $results = $warmupService->warmupAll();
+        $results       = $warmupService->warmupAll();
 
         $this->info('📊 Warmup Results:');
         foreach ($results as $cache => $success) {
             $status = $success ? '✅' : '❌';
-            $this->info("   {$status} ".ucfirst($cache).' cache');
+            $this->info("   {$status} " . ucfirst($cache) . ' cache');
         }
 
         $appResults = $warmupService->warmupApplicationCache();
-        $appStatus = $appResults ? '✅' : '❌';
+        $appStatus  = $appResults ? '✅' : '❌';
         $this->info("   {$appStatus} Application cache");
 
         $status = $warmupService->getWarmupStatus();
         $this->info("\n📈 Current Cache Status:");
-        $this->info('   Config Cached: '.($status['config_cached'] ? '✅' : '❌'));
-        $this->info('   Routes Cached: '.($status['routes_cached'] ? '✅' : '❌'));
-        $this->info('   Views Cached: '.($status['views_cached'] ? '✅' : '❌'));
+        $this->info('   Config Cached: ' . ($status['config_cached'] ? '✅' : '❌'));
+        $this->info('   Routes Cached: ' . ($status['routes_cached'] ? '✅' : '❌'));
+        $this->info('   Views Cached: ' . ($status['views_cached'] ? '✅' : '❌'));
 
         $queryStats = $status['query_cache_stats'];
-        $this->info('   Query Cache Keys: '.$queryStats['query_cache_keys']);
+        $this->info('   Query Cache Keys: ' . $queryStats['query_cache_keys']);
 
         return Command::SUCCESS;
     }
