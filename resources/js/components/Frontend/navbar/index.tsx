@@ -1,8 +1,8 @@
-('use client');
+'use client';
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronDownIcon, CircleAlert, HomeIcon, Key, LayersIcon, Mail, MoonIcon, NotebookText, SunIcon } from 'lucide-react';
 import * as React from 'react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
@@ -133,16 +133,11 @@ export interface NavbarNavItem {
 // Props for the Navbar component
 export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
     logo?: React.ReactNode;
-    logoHref?: string;
     navigationLinks?: NavbarNavItem[];
-    languages?: NavbarLanguage[];
-    defaultLanguage?: string;
     userName?: string;
     userEmail?: string;
     userAvatar?: string;
     loginText?: string;
-    onNavItemClick?: (href: string) => void;
-    onLanguageChange?: (language: string) => void;
     onThemeChange?: (theme: 'light' | 'dark') => void;
     onUserItemClick?: (item: string) => void;
 }
@@ -162,15 +157,11 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
         {
             className,
             logo = <Logo />,
-            logoHref = '#',
             navigationLinks = defaultNavigationLinks,
-            defaultLanguage = 'en',
             loginText = 'Login',
             userName = 'Root User',
             userEmail = 'root@example.com',
             userAvatar,
-            onNavItemClick,
-            onLanguageChange,
             onThemeChange,
             onUserItemClick,
             ...props
@@ -179,7 +170,6 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
     ) => {
         const [isMobile, setIsMobile] = useState(false);
         const containerRef = useRef<HTMLElement>(null);
-        const selectId = useId();
         const { url } = usePage();
 
         useEffect(() => {

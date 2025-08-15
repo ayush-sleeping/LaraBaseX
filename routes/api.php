@@ -15,13 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Health Check Routes (Public - No Authentication Required)
-// -------------------------------------------------------------------------------------------------------- ::
-Route::prefix('health')->group(function () {
-    Route::get('/', [HealthController::class, 'index'])->name('api.health');
-    Route::get('/detailed', [HealthController::class, 'detailed'])->name('api.health.detailed');
-});
-
 // Public API routes (with basic authentication)
 // -------------------------------------------------------------------------------------------------------- ::
 Route::middleware(['basic_auth'])->group(function () {

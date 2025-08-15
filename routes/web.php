@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\User;
+use Inertia\Inertia;
 use App\Services\QueryCacheService;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\HealthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,18 @@ use Inertia\Inertia;
 // Include route files
 // -------------------------------------------------------------------------------------------------------- ::
 
-require __DIR__.'/api.php';      // API routes
 require __DIR__.'/auth.php';        // Authentication routes
 require __DIR__.'/backend.php';   // Admin panel routes
 require __DIR__.'/channels.php';  // channels routes
 require __DIR__.'/console.php';  // console routes
 require __DIR__.'/frontend.php';  // Frontend routes
 require __DIR__.'/settings.php';    // User settings routes
+
+
+
+// Health Check Routes (Public - No Authentication Required)
+// -------------------------------------------------------------------------------------------------------- ::
+Route::prefix('health')->group(function () {
+    Route::get('/', [HealthController::class, 'index'])->name('api.health');
+    Route::get('/detailed', [HealthController::class, 'detailed'])->name('api.health.detailed');
+});
