@@ -135,7 +135,7 @@ class DashboardController extends Controller
             ],
         ];
 
-        return Inertia::render('dashboard', [
+        return Inertia::render('backend/dashboard/index', [
             'stats' => $stats,
             'latestEnquiries' => $latestEnquiries,
             'latestEmployees' => $latestEmployees,

@@ -96,7 +96,6 @@ export function AppSidebar() {
     const mainNavItems = allNavItems.filter((item) => {
         // If no permission required, show the item
         if (!item.permission) return true;
-
         // Check if user has the required permission
         return hasPermission(auth.user, item.permission);
     });

@@ -40,6 +40,9 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+
+// Breadcrumbs
+// ---------------------------------------------------------------------- ::
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -48,7 +51,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 // Chart data
-
+// ---------------------------------------------------------------------- ::
 const chartData = [
     { date: '2024-04-01', desktop: 222, mobile: 150 },
     { date: '2024-04-02', desktop: 97, mobile: 180 },
@@ -143,6 +146,8 @@ const chartData = [
     { date: '2024-06-30', desktop: 446, mobile: 400 },
 ];
 
+// Chart configuration
+// ---------------------------------------------------------------------- ::
 const chartConfig = {
     visitors: {
         label: 'Visitors',
@@ -158,6 +163,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 // Bar chart data
+// ---------------------------------------------------------------------- ::
 const barChartData = [
     { browser: 'chrome', visitors: 275, fill: 'hsl(217, 91%, 60%)' },
     { browser: 'safari', visitors: 200, fill: 'hsl(212, 95%, 68%)' },
@@ -166,6 +172,8 @@ const barChartData = [
     { browser: 'other', visitors: 90, fill: 'hsl(197, 77%, 85%)' },
 ];
 
+// Bar chart configuration
+// ---------------------------------------------------------------------- ::
 const barChartConfig = {
     visitors: {
         label: 'Visitors',
@@ -193,6 +201,7 @@ const barChartConfig = {
 } satisfies ChartConfig;
 
 // Custom labeled bar chart data
+// ---------------------------------------------------------------------- ::
 const customBarChartData = [
     { month: 'January', desktop: 186, mobile: 80 },
     { month: 'February', desktop: 305, mobile: 200 },
@@ -202,6 +211,8 @@ const customBarChartData = [
     { month: 'June', desktop: 214, mobile: 140 },
 ];
 
+// Custom bar chart configuration
+// ---------------------------------------------------------------------- ::
 const customBarChartConfig = {
     desktop: {
         label: 'Desktop',
@@ -217,6 +228,7 @@ const customBarChartConfig = {
 } satisfies ChartConfig;
 
 // Pie chart data
+// ---------------------------------------------------------------------- ::
 const pieChartData = [
     { browser: 'chrome', visitors: 275, fill: 'hsl(217, 91%, 60%)' },
     { browser: 'safari', visitors: 200, fill: 'hsl(212, 95%, 68%)' },
@@ -225,6 +237,8 @@ const pieChartData = [
     { browser: 'other', visitors: 90, fill: 'hsl(197, 77%, 85%)' },
 ];
 
+// Pie chart configuration
+// ---------------------------------------------------------------------- ::
 const pieChartConfig = {
     visitors: {
         label: 'Visitors',
@@ -252,6 +266,7 @@ const pieChartConfig = {
 } satisfies ChartConfig;
 
 // Radar chart data
+// ---------------------------------------------------------------------- ::
 const radarChartData = [
     { month: 'January', desktop: 186 },
     { month: 'February', desktop: 305 },
@@ -261,6 +276,8 @@ const radarChartData = [
     { month: 'June', desktop: 214 },
 ];
 
+// Radar chart configuration
+// ---------------------------------------------------------------------- ::
 const radarChartConfig = {
     desktop: {
         label: 'Desktop',
@@ -268,6 +285,8 @@ const radarChartConfig = {
     },
 } satisfies ChartConfig;
 
+// Radar chart component
+// ---------------------------------------------------------------------- ::
 function RadarChartComponent() {
     return (
         <Card>
@@ -304,6 +323,7 @@ function RadarChartComponent() {
 }
 
 // Sample data for metrics cards
+// ---------------------------------------------------------------------- ::
 const metricsData = [
     {
         title: 'Total Revenue',
@@ -340,6 +360,7 @@ const metricsData = [
 ];
 
 // Sample data for the table
+// ---------------------------------------------------------------------- ::
 type User = {
     id: number;
     name: string;
@@ -349,6 +370,8 @@ type User = {
     joinDate: string;
 };
 
+// Sample user data
+// ---------------------------------------------------------------------- ::
 const sampleUsers: User[] = [
     { id: 1, name: 'John Doe', email: 'john@example.com', status: 'Active', role: 'Admin', joinDate: '2024-01-15' },
     { id: 2, name: 'Jane Smith', email: 'jane@example.com', status: 'Active', role: 'User', joinDate: '2024-02-20' },
@@ -357,6 +380,8 @@ const sampleUsers: User[] = [
     { id: 5, name: 'Charlie Wilson', email: 'charlie@example.com', status: 'Pending', role: 'User', joinDate: '2024-05-12' },
 ];
 
+// Column definitions for the user table
+// ---------------------------------------------------------------------- ::
 const columns: ColumnDef<User>[] = [
     {
         accessorKey: 'name',
@@ -425,6 +450,8 @@ const columns: ColumnDef<User>[] = [
     },
 ];
 
+// DataTable component
+// ---------------------------------------------------------------------- ::
 function DataTable() {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -526,6 +553,8 @@ function DataTable() {
     );
 }
 
+// Visitors chart component
+// ---------------------------------------------------------------------- ::
 function VisitorsChart() {
     const isMobile = useIsMobile();
     const [timeRange, setTimeRange] = useState('90d');
@@ -644,8 +673,11 @@ function VisitorsChart() {
     );
 }
 
+// Dashboard component
+// ---------------------------------------------------------------------- ::
 export default function Dashboard() {
     return (
+        // Using app-layout -> app-sidebar-layout -> app-sidebar
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-6">
