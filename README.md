@@ -6,6 +6,7 @@ This is a secure, modular, production-ready base project using Laravel 12 with R
 ## Overview
 
 What LaraBaseX Is
+
 A starter kit for developers who want to skip repetitive setup work and start building features right away.
 - Laravel 12 backend → clean REST API architecture, ready for production.
 - ReactJS frontend → Vite-based, integrated with API, UI ready with Shadcn.
@@ -43,7 +44,7 @@ Included Major Features
 | No.     | Topics                                                                                  |
 | ------- | --------------------------------------------------------------------------------------- |
 | 0.      | [Tech Stack](#tech-stack)                                                               |
-| 1       | [Why LaraBaseX](#why-larabasex)                                                         |
+| 1       | [Features and Integrations](#features-and-integrations)                                                         |
 | 2       | [Getting Started](#getting-started)                                                     |
 | 3       | [Documentations](#documentations)                                                       |
 | 4       | [Folder Structure](#folder-structure)                                                 |
@@ -71,10 +72,8 @@ Included Major Features
 
 #
 
-## Why LaraBaseX
-LaraBaseX is designed for developers and teams who want to build and ship secure, scalable, and sophisticated web solutions quickly. It provides a modular, production-ready foundation with all essential integrations out of the box, so you can focus on your business logic and ship faster.
+## Features and Integrations
 
-**Key Features & Integrations:**
 | Category         | Integrations & Features                                                                 |
 |------------------|---------------------------------------------------------------------------------------|
 | RDBMS            | MySQL, SQLite (default)                                                               |
