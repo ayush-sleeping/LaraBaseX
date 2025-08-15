@@ -1,75 +1,93 @@
 // resources/js/pages/frontend/contact.tsx
+
 import { Navbar } from '@/components/Frontend/navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
-export default function ContactPage() {
-    return (
-        <div className="relative min-h-screen w-full bg-white">
-            <Navbar />
+interface ContactProps {
+    title?: string;
+    description?: string;
+    phone?: string;
+    email?: string;
+    web?: { label: string; url: string };
+}
 
-            <div className="container mx-auto px-4 py-16">
-                <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2">
-                    {/* Left content */}
-                    <div>
-                        <h1 className="mb-4 text-4xl font-bold">Contact Us</h1>
-                        <p className="mb-8 max-w-md text-gray-600">
-                            We are available for questions, feedback, or collaboration opportunities. Let us know how we can help!
-                        </p>
-                        <div>
-                            <h2 className="mb-2 text-lg font-semibold">Contact Details</h2>
-                            <ul className="space-y-2 text-gray-700">
+export const Contact = ({
+    title = 'Contact Us',
+    description = 'We are available for questions, feedback, or collaboration opportunities. Let us know how we can help!',
+    phone = '(123) 34567890',
+    email = 'email@example.com',
+    web = { label: 'shadcnblocks.com', url: 'https://shadcnblocks.com' },
+}: ContactProps) => {
+    return (
+        <section className="py-32">
+            <div className="container">
+                <div className="mx-auto flex max-w-screen-xl flex-col justify-between gap-10 lg:flex-row lg:gap-20">
+                    <div className="mx-auto flex max-w-sm flex-col justify-between gap-10">
+                        <div className="text-center lg:text-left">
+                            <h1 className="mb-2 text-5xl font-semibold lg:mb-1 lg:text-6xl">{title}</h1>
+                            <p className="text-muted-foreground">{description}</p>
+                        </div>
+                        <div className="mx-auto w-fit lg:mx-0">
+                            <h3 className="mb-6 text-center text-2xl font-semibold lg:text-left">Contact Details</h3>
+                            <ul className="ml-4 list-disc">
                                 <li>
-                                    <strong>Phone:</strong> (123) 34567890
+                                    <span className="font-bold">Phone: </span>
+                                    {phone}
                                 </li>
                                 <li>
-                                    <strong>Email:</strong>{' '}
-                                    <a href="mailto:email@example.com" className="text-blue-600 hover:underline">
-                                        email@example.com
+                                    <span className="font-bold">Email: </span>
+                                    <a href={`mailto:${email}`} className="underline">
+                                        {email}
                                     </a>
                                 </li>
                                 <li>
-                                    <strong>Web:</strong>{' '}
-                                    <a href="https://shadcnblocks.com" className="text-blue-600 hover:underline">
-                                        shadcnblocks.com
+                                    <span className="font-bold">Web: </span>
+                                    <a href={web.url} target="_blank" className="underline">
+                                        {web.label}
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
-                    {/* Right form */}
-                    <form className="space-y-4 rounded-lg border p-6 shadow-sm">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label htmlFor="first_name">First Name</Label>
-                                <Input id="first_name" placeholder="First Name" />
+                    <div className="mx-auto flex max-w-screen-md flex-col gap-6 rounded-lg border p-10">
+                        <div className="flex gap-4">
+                            <div className="grid w-full items-center gap-1.5">
+                                <Label htmlFor="firstname">First Name</Label>
+                                <Input type="text" id="firstname" placeholder="First Name" />
                             </div>
-                            <div>
-                                <Label htmlFor="last_name">Last Name</Label>
-                                <Input id="last_name" placeholder="Last Name" />
+                            <div className="grid w-full items-center gap-1.5">
+                                <Label htmlFor="lastname">Last Name</Label>
+                                <Input type="text" id="lastname" placeholder="Last Name" />
                             </div>
                         </div>
-                        <div>
+                        <div className="grid w-full items-center gap-1.5">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" placeholder="Email" type="email" />
+                            <Input type="email" id="email" placeholder="Email" />
                         </div>
-                        <div>
+                        <div className="grid w-full items-center gap-1.5">
                             <Label htmlFor="subject">Subject</Label>
-                            <Input id="subject" placeholder="Subject" />
+                            <Input type="text" id="subject" placeholder="Subject" />
                         </div>
-                        <div>
+                        <div className="grid w-full gap-1.5">
                             <Label htmlFor="message">Message</Label>
-                            <Textarea id="message" placeholder="Type your message here." />
+                            <Textarea placeholder="Type your message here." id="message" />
                         </div>
-                        <Button type="submit" className="w-full">
-                            Send Message
-                        </Button>
-                    </form>
+                        <Button className="w-full">Send Message</Button>
+                    </div>
                 </div>
             </div>
+        </section>
+    );
+};
+
+export default function ContactPage() {
+    return (
+        <div className="relative min-h-screen w-full bg-white">
+            <Navbar />
+            <Contact />
         </div>
     );
 }

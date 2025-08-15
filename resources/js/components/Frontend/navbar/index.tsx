@@ -1,12 +1,11 @@
 ('use client');
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronDownIcon, CircleAlert, HomeIcon, Key, LayersIcon, Mail, MoonIcon, NotebookText, SunIcon, UsersIcon } from 'lucide-react';
+import { ChevronDownIcon, CircleAlert, HomeIcon, Key, LayersIcon, Mail, MoonIcon, NotebookText, SunIcon } from 'lucide-react';
 import * as React from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -131,12 +130,6 @@ export interface NavbarNavItem {
     active?: boolean;
 }
 
-// Language options for the Navbar
-export interface NavbarLanguage {
-    value: string;
-    label: string;
-}
-
 // Props for the Navbar component
 export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
     logo?: React.ReactNode;
@@ -157,20 +150,10 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
 // Navigation links with icons
 const defaultNavigationLinks: NavbarNavItem[] = [
     { href: '/', label: 'Home', icon: HomeIcon },
-    { href: '#', label: 'Services', icon: LayersIcon },
-    { href: '#', label: 'Blogs', icon: NotebookText },
-    { href: '#', label: 'About', icon: CircleAlert },
-    { href: '#', label: 'Team', icon: UsersIcon },
+    { href: '/services', label: 'Services', icon: LayersIcon },
+    { href: '/blogs', label: 'Blogs', icon: NotebookText },
+    { href: '/about', label: 'About', icon: CircleAlert },
     { href: '/contact', label: 'Contact', icon: Mail },
-];
-
-// Default language options
-const defaultLanguages: NavbarLanguage[] = [
-    { value: 'en', label: 'En' },
-    { value: 'es', label: 'Es' },
-    { value: 'fr', label: 'Fr' },
-    { value: 'de', label: 'De' },
-    { value: 'ja', label: 'Ja' },
 ];
 
 // Navbar component
@@ -181,7 +164,6 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
             logo = <Logo />,
             logoHref = '#',
             navigationLinks = defaultNavigationLinks,
-            languages = defaultLanguages,
             defaultLanguage = 'en',
             loginText = 'Login',
             userName = 'Root User',
