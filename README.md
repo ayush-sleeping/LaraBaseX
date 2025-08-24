@@ -1,7 +1,9 @@
-# 🚀  &nbsp; LaraBaseX
+## 🚀  &nbsp; LaraBaseX
 > A Laravel 12 + ReactJS Full Stack Starter Boilerplate.
 This is a secure, modular, production-ready base project using Laravel 12 with ReactJS frontend, ideal for building scalable web applications without Blade.
 
+
+[![Product Name Screen Shot](public/backend%20output%20screenshot.png)](https://example.com)
 
 ## Overview
 
