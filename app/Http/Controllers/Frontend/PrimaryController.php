@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Mail;
+use App\Mail\EnquiryMail;
 use Inertia\Inertia;
+use App\Models\Enquiry;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class PrimaryController extends Controller
 {
@@ -74,5 +78,38 @@ class PrimaryController extends Controller
     public function contact()
     {
         return Inertia::render('frontend/contact/index');
+    }
+
+    // Store contact enquiry
+    public function ContactEnquiryStore(Request $request)
+    {
+        //dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'mobile' => 'nullable',
+            'subject' => 'required',
+            'message' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $enquiry = Enquiry::create($request->all());
+        // Send an email to the person who submitted the form
+        Mail::to($enquiry->email)->send(new EnquiryMail([
+            'first_name' => $enquiry->first_name,
+            'last_name' => $enquiry->last_name,
+            'email' => $enquiry->email,
+            'subject' => $request->input('subject'),
+            'description' => $request->input('message'),
+        ]));
+
+        return redirect('/thankyou');
+    }
+
+    public function thankYou()
+    {
+        return Inertia::render('frontend/contact/thankYou');
     }
 }
