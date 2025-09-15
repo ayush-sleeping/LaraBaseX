@@ -5,24 +5,24 @@ export default function ServicesPage() {
     // Data for the service cards
     const services = [
         {
-            title: 'Web Development',
-            image: 'https://framerusercontent.com/images/PGqhbyNizzg0WF0Ff8Ct1xJCz4.png?scale-down-to=512',
-            overlayImage: 'https://framerusercontent.com/images/R8KAWJ8XJ7xyTu7ucAu7MwYY.png?scale-down-to=512',
+            title: 'Full-Stack Development',
+            description: 'Complete web applications built with Laravel backend and React frontend, featuring modern architecture and best practices.',
+            icon: '⚡',
         },
         {
-            title: 'Creative Design',
-            image: 'https://framerusercontent.com/images/icQGsV71x2rSlISc1VdMnw1qP0.png?scale-down-to=512',
-            overlayImage: 'https://framerusercontent.com/images/lXJpgpSzhcdgjAHyzQ8gL6xZio.png?scale-down-to=512',
+            title: 'API Development',
+            description: 'Robust RESTful APIs with authentication, rate limiting, and comprehensive documentation for seamless integration.',
+            icon: '🔗',
         },
         {
-            title: 'Branding',
-            image: 'https://framerusercontent.com/images/fDuEIn62K1IFn5Ej7fSyTMA71og.png?scale-down-to=512',
-            overlayImage: 'https://framerusercontent.com/images/swGfymsPbpYnmJh0xWYUDsjYEVw.png?scale-down-to=512',
+            title: 'Admin Dashboard',
+            description: 'Powerful admin panels with role-based permissions, user management, and comprehensive data visualization tools.',
+            icon: '📊',
         },
         {
-            title: 'Product Design',
-            image: 'https://framerusercontent.com/images/fTivRAMCNvUFDAp9M0oddRMjk.png?scale-down-to=512',
-            overlayImage: 'https://framerusercontent.com/images/ykQMkxdWQtCI1O7dEHnQs9vQmME.png?scale-down-to=512',
+            title: 'Authentication System',
+            description: 'Secure user authentication with JWT tokens, email verification, password reset, and social login integration.',
+            icon: '🔐',
         },
     ];
     return (
@@ -41,48 +41,29 @@ export default function ServicesPage() {
                     {/* Section Header */}
                     <div className="mb-12 text-center sm:mb-16">
                         <h2 className="mb-3 text-4xl font-bold tracking-tight text-gray-900 sm:mb-4 sm:text-5xl lg:text-6xl dark:text-white">
-                            How Can I Help?
+                            What LaraBaseX Offers
                         </h2>
                         <p className="text-lg font-light text-gray-500 sm:text-xl dark:text-gray-400">
-                            Let's turn your vision into something amazing.
+                            A comprehensive starter kit with everything you need to build modern web applications.
                         </p>
                     </div>
-
                     {/* Services Grid */}
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-8">
+                    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:gap-10">
                         {services.map((service, index) => (
                             <div
                                 key={index}
-                                className="group flex h-[320px] flex-col rounded-3xl bg-gray-50 p-6 transition-all duration-300 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
+                                className="group flex flex-col rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/50 dark:hover:bg-gray-800"
                             >
-                                {/* Image Container */}
-                                <div className="relative mb-4 flex flex-grow items-center justify-center">
-                                    {/* Back Image */}
-                                    <img
-                                        src={service.image}
-                                        alt={`${service.title} showcase`}
-                                        className="absolute h-auto w-44 -rotate-6 transform rounded-lg shadow-md transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-[-10deg]"
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement;
-                                            target.onerror = null;
-                                            target.src = 'https://placehold.co/512x512/e2e8f0/4a5568?text=Image+1';
-                                        }}
-                                    />
-                                    {/* Front Image */}
-                                    <img
-                                        src={service.overlayImage}
-                                        alt={`${service.title} example`}
-                                        className="absolute h-auto w-44 rotate-3 transform rounded-lg shadow-lg transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-[5deg]"
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement;
-                                            target.onerror = null;
-                                            target.src = 'https://placehold.co/512x512/cbd5e0/2d3748?text=Image+2';
-                                        }}
-                                    />
+                                {/* Icon */}
+                                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl bg-gray-100 text-3xl transition-all duration-300 group-hover:bg-gray-900 group-hover:text-white dark:bg-gray-700">
+                                    {service.icon}
                                 </div>
 
-                                {/* Service Title */}
-                                <h3 className="mt-auto text-left text-lg font-medium text-gray-800 dark:text-gray-100">{service.title}</h3>
+                                {/* Content */}
+                                <div className="flex-1">
+                                    <h3 className="mb-3 text-xl font-semibold text-gray-900 dark:text-gray-100">{service.title}</h3>
+                                    <p className="leading-relaxed text-gray-600 dark:text-gray-300">{service.description}</p>
+                                </div>
                             </div>
                         ))}
                     </div>

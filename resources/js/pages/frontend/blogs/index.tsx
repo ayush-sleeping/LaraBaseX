@@ -15,9 +15,11 @@ export default function BlogsPage({ blogs }: { blogs: Blog[] }) {
         <div className="relative min-h-screen w-full bg-white">
             <Navbar />
             <section className="mx-auto max-w-6xl px-4 py-12 text-center">
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">Latest Updates</span>
-                <h1 className="mt-4 text-4xl font-bold">Blog Posts</h1>
-                <p className="mt-2 text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig doloremque mollitia fugiat omnis!</p>
+                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">Learning Resources</span>
+                <h1 className="mt-4 text-4xl font-bold">Master the Stack</h1>
+                <p className="mt-2 text-gray-500">
+                    Discover the best resources to learn Laravel, React, TypeScript, and Inertia.js - everything you need to excel with LaraBaseX.
+                </p>
 
                 <Link href="/blogs" className="mt-4 inline-flex items-center text-primary hover:underline">
                     Explore all posts <ArrowRight className="ml-2 h-4 w-4" />
@@ -34,9 +36,14 @@ export default function BlogsPage({ blogs }: { blogs: Blog[] }) {
                                 <p className="mt-2 text-sm text-gray-500">{blog.excerpt}</p>
                             </CardContent>
                             <CardFooter className="p-4 pt-0">
-                                <Link href={blog.link} className="flex items-center text-primary hover:underline">
+                                <a
+                                    href={blog.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center text-primary hover:underline"
+                                >
                                     Read more <ArrowRight className="ml-1 h-4 w-4" />
-                                </Link>
+                                </a>
                             </CardFooter>
                         </Card>
                     ))}

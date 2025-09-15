@@ -154,10 +154,69 @@ export const About3 = ({
 };
 
 export default function AboutPage() {
+    const laraBaseXProps = {
+        title: 'About LaraBaseX',
+        description:
+            'A comprehensive Laravel 12 + ReactJS starter boilerplate that eliminates weeks of setup time and provides everything you need to build modern, scalable web applications.',
+        mainImage: {
+            src: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            alt: 'Modern development workspace',
+        },
+        secondaryImage: {
+            src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+            alt: 'Team collaboration',
+        },
+        breakout: {
+            src: '/logo.svg',
+            alt: 'LaraBaseX Logo',
+            title: 'Production-Ready Frontend Pages Included',
+            description:
+                'Get beautiful, responsive frontend pages out of the box. Simply modify the content to match your project needs - no need to build from scratch.',
+            buttonText: 'View Documentation',
+            buttonUrl: 'https://github.com/ayush-sleeping/LaraBaseX/tree/main/documentation',
+        },
+        companiesTitle: 'Built with industry-standard technologies',
+        companies: [
+            {
+                src: 'https://laravel.com/img/logotype.min.svg',
+                alt: 'Laravel',
+            },
+            {
+                src: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+                alt: 'React',
+            },
+            {
+                src: 'https://www.typescriptlang.org/images/branding/ts-lettermark-blue.svg',
+                alt: 'TypeScript',
+            },
+            {
+                src: 'https://tailwindcss.com/_next/static/media/tailwindcss-mark.3c5441fc7a190fb1800d4a5c7f07ba4b1345a9c8.svg',
+                alt: 'Tailwind CSS',
+            },
+            {
+                src: 'https://vitejs.dev/logo.svg',
+                alt: 'Vite',
+            },
+            {
+                src: 'https://www.mysql.com/common/logos/logo-mysql-170x115.png',
+                alt: 'MySQL',
+            },
+        ],
+        achievementsTitle: 'What LaraBaseX Delivers',
+        achievementsDescription:
+            'Skip months of boilerplate development and focus on building your unique features. LaraBaseX provides a solid foundation with enterprise-grade security and scalability.',
+        achievements: [
+            { label: 'Setup Time Saved', value: '2+ Weeks' },
+            { label: 'Ready-to-Use Features', value: '12+' },
+            { label: 'Documentation Sections', value: '16' },
+            { label: 'Security Features', value: '6+' },
+        ],
+    };
+
     return (
         <div className="relative min-h-screen w-full bg-white">
             <Navbar />
-            <About3 />
+            <About3 {...laraBaseXProps} />
         </div>
     );
 }

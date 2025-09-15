@@ -14,12 +14,6 @@ class PrimaryController extends Controller
         return Inertia::render('frontend/home/index');
     }
 
-    // Show the contact page
-    public function contact()
-    {
-        return Inertia::render('frontend/contact/index');
-    }
-
     // show the services page
     public function services()
     {
@@ -31,22 +25,40 @@ class PrimaryController extends Controller
     {
         $blogs = [
             [
-                'title' => 'Build websites in minutes with shadcn/ui',
-                'excerpt' => 'Pellentesque eget quam ligula. Sed felis ante, consequat nec ultrices ut, ornare quis metus...',
-                'image' => 'https://framerusercontent.com/images/R8KAWJ8XJ7xyTu7ucAu7MwYY.png?scale-down-to=512',
-                'link' => '#',
+                'title' => 'Laravel Official Documentation',
+                'excerpt' => 'The comprehensive guide to Laravel. Learn everything from basics to advanced topics with clear examples and best practices.',
+                'image' => 'https://laravel.com/img/logotype.min.svg',
+                'link' => 'https://laravel.com/docs/12.x',
             ],
             [
-                'title' => 'Easily copy code to build your website',
-                'excerpt' => 'Pellentesque eget quam ligula. Sed felis ante, consequat nec ultrices ut, ornare quis metus...',
-                'image' => 'https://framerusercontent.com/images/lXJpgpSzhcdgjAHyzQ8gL6xZio.png?scale-down-to=512',
-                'link' => '#',
+                'title' => 'Laracasts - Laravel Video Tutorials',
+                'excerpt' => 'Premium video tutorials for Laravel developers. Master Laravel, PHP, and modern web development with Jeffrey Way.',
+                'image' => 'https://assets.laracasts.com/images/secondary-logo.svg',
+                'link' => 'https://laracasts.com/',
             ],
             [
-                'title' => 'The future of web design',
-                'excerpt' => 'Pellentesque eget quam ligula. Sed felis ante, consequat nec ultrices ut, ornare quis metus...',
-                'image' => 'https://framerusercontent.com/images/swGfymsPbpYnmJh0xWYUDsjYEVw.png?scale-down-to=512',
-                'link' => '#',
+                'title' => 'Laravel News & Community',
+                'excerpt' => 'Stay updated with the latest Laravel news, tutorials, packages, and community insights from Laravel experts.',
+                'image' => 'https://picperf.io/https://laravel-news.com/images/logo.svg',
+                'link' => 'https://laravel-news.com',
+            ],
+            [
+                'title' => 'React Official Documentation',
+                'excerpt' => 'Learn React from the ground up. Interactive tutorials, guides, and API references for building modern user interfaces.',
+                'image' => 'https://react.dev/images/home/conf2021/cover.svg',
+                'link' => 'https://react.dev',
+            ],
+            [
+                'title' => 'TypeScript Handbook',
+                'excerpt' => 'Master TypeScript with the official handbook. Learn static typing, advanced features, and best practices.',
+                'image' => 'https://www.typescriptlang.org/images/branding/ts-lettermark-blue.svg',
+                'link' => 'https://www.typescriptlang.org/docs',
+            ],
+            [
+                'title' => 'Shadcn/ui Components',
+                'excerpt' => 'Beautiful, accessible UI components built with Radix UI and Tailwind CSS. Copy, paste, and customize for your projects.',
+                'image' => 'https://ui.shadcn.com/og.jpg',
+                'link' => 'https://ui.shadcn.com',
             ],
         ];
         return Inertia::render('frontend/blogs/index', compact('blogs'));
@@ -56,5 +68,11 @@ class PrimaryController extends Controller
     public function about()
     {
         return Inertia::render('frontend/about/index');
+    }
+
+    // Show the contact page
+    public function contact()
+    {
+        return Inertia::render('frontend/contact/index');
     }
 }
