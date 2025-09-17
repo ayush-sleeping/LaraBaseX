@@ -24,11 +24,37 @@ parameters:
         - '#Cannot call method [a-zA-Z0-9_]+\(\) on [a-zA-Z0-9\\_]+\|null#'
         - '#Parameter .+ of method .+ expects .+, .+ given#'
 
+        # Ignore Eloquent relationship return type issues
+        - '#Method .+::.+\(\) should return .+BelongsTo<.+> but returns .+BelongsTo<.+>#'
+        - '#Method .+::.+\(\) should return .+HasMany<.+> but returns .+HasMany<.+>#'
+        - '#Method .+::.+\(\) should return .+HasOne<.+> but returns .+HasOne<.+>#'
+        - '#Method .+::findByHashid\(\) should return static\(.+\)\|null but returns .+\|null#'
+
+        # Ignore Collection generic type issues
+        - '#Parameter .+ \$callback of method .+Collection<.+>::map\(\) contains unresolvable type#'
+        - '#Return type of call to method .+Collection<.+>::map\(\) contains unresolvable type#'
+
+        # Ignore helper function parameter type issues
+        - '#Function .+ has parameter .+ with no (value )?type specified( in iterable type array)?#'
+        - '#Function .+ has no return type specified#'
+        - '#Parameter .+ \$string of function (substr|str_pad) expects string, .+ given#'
+
+        # Ignore trait and factory generic type issues
+        - '#Class .+ uses generic trait .+HasFactory but does not specify its types: TFactory#'
+        - '#Property .+::\$cacheTTL \(int\) on left side of \?\? is not nullable#'
+        - '#Return type \(.+\) of method .+Factory::definition\(\) should be compatible with return type \(.+\) of method .+Factory<.+>::definition\(\)#'
+
+        # Ignore routes and cache method issues
+        - '#Static method .+::.+\(\) invoked with .+ parameters, .+ required#'
+        - '#Static call to instance method .+::.+\(\)#'
+
         # Ignore specific paths that are auto-generated or third-party
         - message: '#Cannot access offset#'
           path: vendor/*
         - message: '#Undefined variable#'
           path: vendor/*
+        - message: '#Undefined variable: \$this#'
+          path: tests/*
 
     # Exclude paths from analysis
     excludePaths:

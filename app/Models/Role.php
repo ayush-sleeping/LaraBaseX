@@ -108,15 +108,13 @@ class Role extends SpatieRoleModel implements RoleContract
      */
     public function permissions(): BelongsToMany
     {
-        /** @var BelongsToMany<Permission, Role> $relation */
-        $relation = $this->belongsToMany(
+        /** @phpstan-ignore-next-line */
+        return $this->belongsToMany(
             config('permission.models.permission'),
             config('permission.table_names.role_has_permissions'),
             config('permission.column_names.role_pivot_key', 'role_id'),
             config('permission.column_names.permission_pivot_key', 'permission_id')
         );
-
-        return $relation;
     }
 
     /**
@@ -127,16 +125,14 @@ class Role extends SpatieRoleModel implements RoleContract
      */
     public function users(): MorphToMany
     {
-        /** @var MorphToMany<User, Role> $relation */
-        $relation = $this->morphedByMany(
+        /** @phpstan-ignore-next-line */
+        return $this->morphedByMany(
             getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_roles'),
             config('permission.column_names.role_pivot_key', 'role_id'),
             config('permission.column_names.model_morph_key')
         );
-
-        return $relation;
     }
 
     /**

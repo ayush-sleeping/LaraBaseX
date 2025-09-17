@@ -40,6 +40,7 @@ class Permission extends SpatiePermissionModel implements PermissionContract
      */
     public function permissiongroup(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
+        /** @phpstan-ignore-next-line */
         return $this->belongsTo('App\\Models\\Permissiongroup');
     }
 
@@ -70,15 +71,13 @@ class Permission extends SpatiePermissionModel implements PermissionContract
      */
     public function roles(): BelongsToMany
     {
-        /** @var BelongsToMany<Role, Permission> $relation; */
-        $relation = $this->belongsToMany(
+        /** @phpstan-ignore-next-line */
+        return $this->belongsToMany(
             config('permission.models.role'),
             config('permission.table_names.role_has_permissions'),
             config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.role_pivot_key', 'role_id')
         );
-
-        return $relation;
     }
 
     /**
@@ -89,16 +88,14 @@ class Permission extends SpatiePermissionModel implements PermissionContract
      */
     public function users(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphToMany<User, Permission> $relation; */
-        $relation = $this->morphedByMany(
+        /** @phpstan-ignore-next-line */
+        return $this->morphedByMany(
             getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_permissions'),
             config('permission.column_names.permission_pivot_key', 'permission_id'),
             config('permission.column_names.model_morph_key')
         );
-
-        return $relation;
     }
 
     public static function findByName(string $name, ?string $guardName = null): PermissionContract

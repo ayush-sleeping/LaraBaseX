@@ -28,6 +28,6 @@ require __DIR__.'/settings.php';    // User settings routes
 // Health Check Routes (Public - No Authentication Required)
 // -------------------------------------------------------------------------------------------------------- ::
 Route::prefix('health')->group(function () {
-    Route::get('/', [HealthController::class, 'index'])->name('api.health');
-    Route::get('/detailed', [HealthController::class, 'detailed'])->name('api.health.detailed');
+    Route::get('/', [HealthController::class, 'index'])->name('web.health');
+    Route::get('/detailed', [HealthController::class, 'detailed'])->name('web.health.detailed');
 });

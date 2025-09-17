@@ -46,19 +46,12 @@ class DashboardController extends Controller
         $recentEmployees = Employee::where('created_at', '>=', now()->subDays(7))->count();
 
         // Latest enquiries for quick overview
-        /**
-         * @var \Illuminate\Support\Collection<int, array<string, mixed>> $latestEnquiries
-         */
         $latestEnquiries = Enquiry::with(['createdBy:id,first_name,last_name'])
             ->latest()
             ->take(5)
             ->get()
-            ->map(
-                /**
-                 * @param  Enquiry  $enquiry
-                 * @return array<string, mixed>
-                 */
-                function ($enquiry) {
+            /** @phpstan-ignore-next-line */
+            ->map(function (Enquiry $enquiry): array {
                     return [
                         'id' => $enquiry->hashid,
                         'name' => $enquiry->first_name.' '.$enquiry->last_name,

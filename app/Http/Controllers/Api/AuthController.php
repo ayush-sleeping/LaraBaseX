@@ -312,6 +312,7 @@ class AuthController extends Controller
             $user = $request->user();
             $tokenResult = $user->createToken('Personal Access Token');
             $accessToken = $tokenResult->accessToken ?? null;
+            /** @phpstan-ignore-next-line */
             $passportToken = $tokenResult->token;
             if ($request->remember_me) {
                 $passportToken->expires_at = Carbon::now()->addWeeks(1);

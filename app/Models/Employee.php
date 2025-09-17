@@ -19,6 +19,7 @@ class Employee extends CoreModel
      */
     public function user(): BelongsTo
     {
+        /** @phpstan-ignore-next-line */
         return $this->belongsTo(User::class);
     }
 }

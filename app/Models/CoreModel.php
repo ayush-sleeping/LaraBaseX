@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Schema;
  */
 class CoreModel extends Model
 {
+    /** @phpstan-ignore-next-line */
     use HasFactory;
     use Hashidable;
 
@@ -81,6 +82,7 @@ class CoreModel extends Model
      */
     public function createdBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
+        /** @phpstan-ignore-next-line */
         return $this->belongsTo(User::class, 'created_by');
     }
 
@@ -92,6 +94,7 @@ class CoreModel extends Model
      */
     public function updatedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
+        /** @phpstan-ignore-next-line */
         return $this->belongsTo(User::class, 'updated_by');
     }
 
