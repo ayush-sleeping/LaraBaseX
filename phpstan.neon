@@ -48,6 +48,10 @@ parameters:
         - '#Static method .+::.+\(\) invoked with .+ parameters, .+ required#'
         - '#Static call to instance method .+::.+\(\)#'
 
+        # Ignore stub file issues
+        - '#Class .+ declared multiple times:#'
+        - '#Class .+ has @implements tag, but does not implement any interface#'
+
         # Ignore specific paths that are auto-generated or third-party
         - message: '#Cannot access offset#'
           path: vendor/*
@@ -81,10 +85,6 @@ parameters:
 
     # Error format and output
     errorFormat: table
-
-    # Custom stub files for better Laravel support
-    stubFiles:
-        - stubs/common.stub
 
     # Bootstrap file for Laravel
     bootstrapFiles:
