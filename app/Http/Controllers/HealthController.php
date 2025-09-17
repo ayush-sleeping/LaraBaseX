@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * HealthController ( Handles health check endpoints for the application. )
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Storage;
  * Check backup system health
  * Get application uptime
  * Format uptime in human readable format
-*/
+ */
 class HealthController extends Controller
 {
     /**

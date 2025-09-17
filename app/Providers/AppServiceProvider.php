@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
  * AppServiceProvider
  * - Registers application services
  * - Bootstraps application services
-*/
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /* Register any application services. */

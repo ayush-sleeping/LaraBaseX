@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
  * - Bootstraps route services
  * Define your route model bindings, pattern filters, etc.
  * Configure the rate limiters for the application.
-*/
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /*

@@ -141,16 +141,11 @@ const ContactForm = () => {
 interface ContactProps {
     title?: string;
     description?: string;
-    phone?: string;
-    email?: string;
-    web?: { label: string; url: string };
 }
 
 export const Contact = ({
     title = 'Contact Us',
     description = 'We are available for questions, feedback, or collaboration opportunities. Let us know how we can help!',
-    email = 'email@example.com',
-    web = { label: 'larabasex.com', url: 'https://github.com/ayush-sleeping/LaraBaseX' },
 }: ContactProps) => {
     return (
         <section className="py-32">
@@ -209,9 +204,6 @@ export default function ContactPage() {
     const laraBaseXContactProps = {
         title: 'Get Support',
         description: "Need help with LaraBaseX? Found a bug or have suggestions? We're here to help you get the most out of your starter kit.",
-        phone: 'GitHub Issues (Preferred)',
-        email: 'support@larabasex.dev',
-        web: { label: 'github.com/ayush-sleeping/LaraBaseX', url: 'https://github.com/ayush-sleeping/LaraBaseX' },
     };
 
     return (

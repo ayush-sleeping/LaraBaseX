@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Storage;
  * Get backup statistics for dashboard
  * Calculate overall health score
  * Format bytes to human readable format
-*/
+ */
 class BackupMonitoringService
 {
     /* Monitor backup health and send alerts if needed */
@@ -131,18 +131,18 @@ class BackupMonitoringService
 
         $latest = $backups->first();
         $lastBackupTime = Carbon::createFromTimestamp($latest->getMTime());
-        $hours= (int) $lastBackupTime->diffInHours(now());
+        $hours = (int) $lastBackupTime->diffInHours(now());
 
         // Consider unhealthy if backup is older than 25 hours (daily backup + 1 hour grace)
-        $isHealthy = $hours<= 25;
+        $isHealthy = $hours <= 25;
 
         return [
             'healthy' => $isHealthy,
             'message' => $isHealthy
-                ? "Latest backup is {$hoursOld} hours old"
-                : "Latest backup is {$hoursOld} hours old (too old)",
+                ? "Latest backup is {$hours} hours old"
+                : "Latest backup is {$hours} hours old (too old)",
             'last_backup' => $lastBackupTime->toISOString(),
-            'hours_old' => $hoursOld,
+            'hours_old' => $hours,
         ];
     }
 
@@ -211,8 +211,8 @@ class BackupMonitoringService
         $path = storage_path();
         $freeSpaceRaw = disk_free_space($path);
         $totalSpaceRaw = disk_total_space($path);
-        $freeSpace = is_int($freeSpaceRaw) ? $freeSpaceRaw : 0;
-        $totalSpace = is_int($totalSpaceRaw) ? $totalSpaceRaw : 0;
+        $freeSpace = $freeSpaceRaw !== false ? (int) $freeSpaceRaw : 0;
+        $totalSpace = $totalSpaceRaw !== false ? (int) $totalSpaceRaw : 0;
         $usedSpace = $totalSpace - $freeSpace;
         $usagePercentage = $totalSpace > 0 ? round(($usedSpace / $totalSpace) * 100, 2) : 0.0;
 

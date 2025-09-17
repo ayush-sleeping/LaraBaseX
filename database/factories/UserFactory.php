@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
-*/
+ */
 class UserFactory extends Factory
 {
     /* The current password being used by the factory */
@@ -17,7 +17,7 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array<model property of \App\Models\User, mixed>
+     * @return array<string, mixed>
      */
     public function definition(): array
     {

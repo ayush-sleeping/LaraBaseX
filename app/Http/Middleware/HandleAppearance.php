@@ -6,11 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * HandleAppearance Middleware ( Manage user appearance preferences )
  * Handle an incoming request
-*/
+ */
 class HandleAppearance
 {
     /**

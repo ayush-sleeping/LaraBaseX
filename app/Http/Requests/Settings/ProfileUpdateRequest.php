@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
  * CODE STRUCTURE SUMMARY:
  * ProfileUpdateRequest handles the validation of profile update requests.
  * Get the validation rules that apply to the request
-*/
+ */
 class ProfileUpdateRequest extends FormRequest
 {
     /**

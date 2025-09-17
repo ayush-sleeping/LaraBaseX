@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
  * Check if routes are cached
  * Check if views are cached
  * Clear all caches before warming up
-*/
+ */
 class CacheWarmupService
 {
     /* Warm up all caches */
@@ -52,9 +52,11 @@ class CacheWarmupService
         try {
             Artisan::call('config:cache');
             Log::info('Configuration cache warmed up successfully');
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up config cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -65,9 +67,11 @@ class CacheWarmupService
         try {
             Artisan::call('route:cache');
             Log::info('Route cache warmed up successfully');
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up route cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -78,9 +82,11 @@ class CacheWarmupService
         try {
             Artisan::call('view:cache');
             Log::info('View cache warmed up successfully');
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up view cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
@@ -122,9 +128,11 @@ class CacheWarmupService
                 'recent_users_count' => $recentUsers->count(),
                 'active_users_count' => $activeUsers,
             ]);
+
             return true;
         } catch (\Exception $e) {
             Log::error('Failed to warm up query cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }

@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * EnquiryController ( Handles enquiry management for the backend administration, Provides CRUD operations and data tables for enquiries. )
@@ -17,7 +18,7 @@ use Inertia\Response;
  * Update remark for the specified enquiry
  * Remove the specified enquiry from storage
  * Get enquiry statistics
-*/
+ */
 class EnquiryController extends Controller
 {
     /* Display a listing of enquiries :: */
@@ -90,6 +91,7 @@ class EnquiryController extends Controller
     public function destroy(Enquiry $enquiry): RedirectResponse
     {
         $enquiry->delete();
+
         return redirect()->route('admin.enquiries.index')->with('success', 'Enquiry deleted successfully.');
     }
 

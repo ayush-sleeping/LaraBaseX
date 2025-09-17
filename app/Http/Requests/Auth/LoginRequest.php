@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
  * Attempt to authenticate the request's credentials
  * Ensure the login request is not rate limited
  * Get the rate limiting throttle key for the request
-*/
+ */
 class LoginRequest extends FormRequest
 {
     /* Determine if the user is authorized to make this request */

@@ -8,10 +8,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Show the email verification prompt page
-*/
+ */
 class EmailVerificationPromptController extends Controller
 {
     /* Show the email verification prompt page. */

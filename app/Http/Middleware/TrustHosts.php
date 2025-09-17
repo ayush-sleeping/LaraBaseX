@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Middleware\TrustHosts as Middleware;
@@ -52,6 +53,7 @@ class TrustHosts extends Middleware
         if (empty($envHosts)) {
             return [];
         }
+
         return array_map('trim', explode(',', $envHosts));
     }
 

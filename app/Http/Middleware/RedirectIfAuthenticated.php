@@ -6,11 +6,12 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * RedirectIfAuthenticated Middleware
  * Redirect authenticated users away from guest-only routes
-*/
+ */
 class RedirectIfAuthenticated
 {
     // Redirect authenticated users away from guest-only routes
@@ -23,6 +24,7 @@ class RedirectIfAuthenticated
                 return redirect(RouteServiceProvider::HOME);
             }
         }
+
         return $next($request);
     }
 }

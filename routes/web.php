@@ -1,10 +1,8 @@
 <?php
 
-use App\Models\User;
-use Inertia\Inertia;
-use App\Services\QueryCacheService;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +15,6 @@ use App\Http\Controllers\HealthController;
 |
 */
 
-
 // Include route files
 // -------------------------------------------------------------------------------------------------------- ::
 
@@ -27,8 +24,6 @@ require __DIR__.'/channels.php';  // channels routes
 require __DIR__.'/console.php';  // console routes
 require __DIR__.'/frontend.php';  // Frontend routes
 require __DIR__.'/settings.php';    // User settings routes
-
-
 
 // Health Check Routes (Public - No Authentication Required)
 // -------------------------------------------------------------------------------------------------------- ::

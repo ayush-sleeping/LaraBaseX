@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Token Middleware ( Validates user authentication via API guard (usually token-based like Passport/Sanctum) )
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Log failed authentication attempt
  * Log successful API access
  * Get safe headers for logging (exclude sensitive data)
-*/
+ */
 class Token
 {
     /**
@@ -82,6 +83,7 @@ class Token
                 return $token->expires_at->isFuture();
             }
         }
+
         // If no expiry mechanism, consider valid
         return true;
     }
@@ -149,6 +151,7 @@ class Token
         unset($headers['cookie']);
         unset($headers['x-api-key']);
         unset($headers['x-auth-token']);
+
         return $headers;
     }
 }

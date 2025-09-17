@@ -1,15 +1,17 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * PreventBackHistory Middleware ( Manage Inertia.js requests )
  * Handle an incoming request
  * Add browser-specific cache prevention headers
-*/
+ */
 class PreventBackHistory
 {
     /**

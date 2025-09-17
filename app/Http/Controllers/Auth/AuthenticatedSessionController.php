@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Show the login page.
  * Handle an incoming authentication request.
  * Destroy an authenticated session.
-*/
+ */
 class AuthenticatedSessionController extends Controller
 {
     /* Show the login page. */
@@ -33,6 +34,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -42,6 +44,7 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

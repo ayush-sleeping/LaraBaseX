@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * ProfileController ( Handles user profile management, including profile update and validation. )

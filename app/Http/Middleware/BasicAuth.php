@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * BasicAuth Middleware
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Return authentication failed response
  * Log failed authentication attempt
  * Log successful authentication
-*/
+ */
 class BasicAuth
 {
     /**
@@ -54,6 +55,7 @@ class BasicAuth
 
         // Log successful authentication
         $this->logSuccessfulAuth($request);
+
         return $next($request);
     }
 

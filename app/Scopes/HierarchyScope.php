@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Scope;
  * - Excluded models can be configured via constructor or config.
  * Create a new HierarchyScope instance
  * Apply the scope to a given Eloquent query builder
-*/
+ */
 class HierarchyScope implements Scope
 {
     /**

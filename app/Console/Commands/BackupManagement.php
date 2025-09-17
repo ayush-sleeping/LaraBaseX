@@ -26,8 +26,7 @@ use Illuminate\Support\Facades\Storage;
  * Verify latest backup integrity
  * Perform custom health checks
  * Format bytes to human readable format
-*/
-
+ */
 class BackupManagement extends Command
 {
     /* The name and signature of the console command */

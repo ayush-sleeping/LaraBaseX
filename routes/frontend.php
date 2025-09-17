@@ -1,9 +1,7 @@
 <?php
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\PrimaryController;
-
+use Illuminate\Support\Facades\Route;
 
 // Home page route
 // -------------------------------------------------------------------------------------------------------- ::

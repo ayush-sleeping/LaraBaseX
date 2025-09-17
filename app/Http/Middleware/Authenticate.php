@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Authenticate Middleware ( Handles user authentication )
  * Redirect path for unauthenticated users
-*/
+ */
 class Authenticate extends Middleware
 {
     // Redirect path for unauthenticated users

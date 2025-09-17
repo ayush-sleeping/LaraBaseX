@@ -5,12 +5,13 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * ForceHttps Middleware ( Redirect HTTP requests to HTTPS and enforce HTTPS  )
  * Handle an incoming request
  * Determine if HTTPS should be enforced
-*/
+ */
 class ForceHttps
 {
     /**

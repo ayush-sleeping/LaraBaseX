@@ -11,7 +11,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
  * EventServiceProvider
  * - Registers event services
  * - Determine if events and listeners should be automatically discovered
-*/
+ */
 class EventServiceProvider extends ServiceProvider
 {
     /*

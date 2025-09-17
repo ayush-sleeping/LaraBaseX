@@ -13,13 +13,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * DashboardController ( Handles the main dashboard/control panel for the backend administration, Provides overview statistics and main navigation for admins )
  * Display the main dashboard with system statistics
  * Get dashboard statistics for AJAX requests
  * Get system information for admin panel
-*/
+ */
 class DashboardController extends Controller
 {
     /* Display the main dashboard with system statistics. */

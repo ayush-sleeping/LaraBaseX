@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 /**
  * CODE STRUCTURE SUMMARY:
  * Middleware to verify CSRF tokens, with support for excepted URIs
-*/
+ */
 class VerifyCsrfToken extends Middleware
 {
     /**

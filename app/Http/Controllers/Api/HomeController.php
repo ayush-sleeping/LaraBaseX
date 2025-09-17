@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Home-related API endpoints.
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * Get featured products (Not Impmented)
  * Get testimonials (Not Impmented)
  * Get FAQs (Not Impmented)
-*/
+ */
 class HomeController extends Controller
 {
     /**

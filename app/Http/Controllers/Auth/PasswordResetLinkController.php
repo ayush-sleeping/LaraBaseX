@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Show the password reset link request page
  * Handle an incoming password reset link request
-*/
+ */
 class PasswordResetLinkController extends Controller
 {
     /* Show the password reset link request page. */

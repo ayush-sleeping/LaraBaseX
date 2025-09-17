@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\Employee;
@@ -12,41 +13,41 @@ use Illuminate\Support\Facades\Hash;
  * CODE STRUCTURE SUMMARY:
  * SampleDataSeeder
  * This seeder is responsible for creating sample data for the application
-*/
+ */
 class SampleDataSeeder extends Seeder
 {
     public function run(): void
     {
         // 1. Get existing permission groups and permissions (created by PermissionSeeder)
-        $rootRole  = Role::where('name', 'RootUser')->first();
+        $rootRole = Role::where('name', 'RootUser')->first();
         $adminRole = Role::where('name', 'Admin')->first();
-        $userRole  = Role::where('name', 'User')->first();
+        $userRole = Role::where('name', 'User')->first();
 
         // 2. Create sample users and assign roles
         $users = [
             [
                 'first_name' => 'Alice',
-                'last_name'  => 'Root',
-                'email'      => 'alice.root@example.com',
-                'mobile'     => '9000000001',
-                'password'   => Hash::make('password'),
-                'status'     => 'ACTIVE',
+                'last_name' => 'Root',
+                'email' => 'alice.root@example.com',
+                'mobile' => '9000000001',
+                'password' => Hash::make('password'),
+                'status' => 'ACTIVE',
             ],
             [
                 'first_name' => 'Bob',
-                'last_name'  => 'Admin',
-                'email'      => 'bob.admin@example.com',
-                'mobile'     => '9000000002',
-                'password'   => Hash::make('password'),
-                'status'     => 'ACTIVE',
+                'last_name' => 'Admin',
+                'email' => 'bob.admin@example.com',
+                'mobile' => '9000000002',
+                'password' => Hash::make('password'),
+                'status' => 'ACTIVE',
             ],
             [
                 'first_name' => 'Charlie',
-                'last_name'  => 'User',
-                'email'      => 'charlie.user@example.com',
-                'mobile'     => '9000000003',
-                'password'   => Hash::make('password'),
-                'status'     => 'ACTIVE',
+                'last_name' => 'User',
+                'email' => 'charlie.user@example.com',
+                'mobile' => '9000000003',
+                'password' => Hash::make('password'),
+                'status' => 'ACTIVE',
             ],
         ];
         $userModels = [];
@@ -60,22 +61,22 @@ class SampleDataSeeder extends Seeder
         // 3. Create employees linked to users
         $employees = [
             [
-                'user_id'        => $userModels[0]->id,
-                'emp_id'         => 'EMP001',
+                'user_id' => $userModels[0]->id,
+                'emp_id' => 'EMP001',
                 'personal_email' => 'alice.personal@company.com',
-                'designation'    => 'RootUser',
+                'designation' => 'RootUser',
             ],
             [
-                'user_id'        => $userModels[1]->id,
-                'emp_id'         => 'EMP002',
+                'user_id' => $userModels[1]->id,
+                'emp_id' => 'EMP002',
                 'personal_email' => 'bob.personal@company.com',
-                'designation'    => 'Admin',
+                'designation' => 'Admin',
             ],
             [
-                'user_id'        => $userModels[2]->id,
-                'emp_id'         => 'EMP003',
+                'user_id' => $userModels[2]->id,
+                'emp_id' => 'EMP003',
                 'personal_email' => 'charlie.personal@company.com',
-                'designation'    => 'User',
+                'designation' => 'User',
             ],
         ];
         foreach ($employees as $empData) {
@@ -86,19 +87,19 @@ class SampleDataSeeder extends Seeder
         $enquiries = [
             [
                 'first_name' => 'John',
-                'last_name'  => 'Doe',
-                'email'      => 'john.doe@example.com',
-                'mobile'     => '9000000010',
-                'message'    => 'How do I reset my password?',
-                'remark'     => 'General enquiry',
+                'last_name' => 'Doe',
+                'email' => 'john.doe@example.com',
+                'mobile' => '9000000010',
+                'message' => 'How do I reset my password?',
+                'remark' => 'General enquiry',
             ],
             [
                 'first_name' => 'Jane',
-                'last_name'  => 'Smith',
-                'email'      => 'jane.smith@example.com',
-                'mobile'     => '9000000011',
-                'message'    => 'Can I get access to the dashboard?',
-                'remark'     => 'Access request',
+                'last_name' => 'Smith',
+                'email' => 'jane.smith@example.com',
+                'mobile' => '9000000011',
+                'message' => 'Can I get access to the dashboard?',
+                'remark' => 'Access request',
             ],
         ];
         foreach ($enquiries as $enqData) {

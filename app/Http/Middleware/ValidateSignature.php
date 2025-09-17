@@ -7,7 +7,7 @@ use Illuminate\Routing\Middleware\ValidateSignature as Middleware;
 /**
  * CODE STRUCTURE SUMMARY:
  *  Middleware to validate signed URLs, with support for excepted query parameters (e.g. fbclid, utm_campaign, etc.)
-*/
+ */
 class ValidateSignature extends Middleware
 {
     /**

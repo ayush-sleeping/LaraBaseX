@@ -46,6 +46,7 @@ use Illuminate\Support\Str;
 if (! function_exists('str_ends_with')) {
     /**
      * Check if a string ends with a given substring.
+     * @param array<string> $needles
      */
     function str_ends_with(string $haystack, string|array $needles): bool
     {
@@ -173,9 +174,9 @@ if (! function_exists('send_sms')) {
     /**
      * Send an SMS using Fast2SMS API.
      */
-    function send_sms($numbers, string $message): bool
+    function send_sms(string|array $numbers, string $message): bool
     {
-        $apiKey = env('FAST2SMS_API_KEY');
+        $apiKey = config('services.fast2sms.api_key');
         if (! $apiKey) {
             return false;
         }
@@ -236,7 +237,7 @@ if (! function_exists('in_rupee')) {
     /**
      * Format a number as Indian Rupees.
      */
-    function in_rupee($num, bool $symbol = true, bool $pdf = false): string
+    function in_rupee(int|float|string $num, bool $symbol = true, bool $pdf = false): string
     {
         $nums = explode('.', $num);
         $num = $nums[0];
@@ -291,7 +292,7 @@ if (! function_exists('json_response')) {
     /**
      * Return a JSON response for APIs.
      */
-    function json_response($data = [], int $status = 200)
+    function json_response(mixed $data = [], int $status = 200): \Illuminate\Http\JsonResponse
     {
         return response()->json($data, $status);
     }
@@ -301,9 +302,9 @@ if (! function_exists('get_env')) {
     /**
      * Safe access to .env values.
      */
-    function get_env($key, $default = null)
+    function get_env(string $key, mixed $default = null): mixed
     {
-        return env($key, $default);
+        return config($key, $default);
     }
 }
 
@@ -430,9 +431,9 @@ if (! function_exists('current_user')) {
     /**
      * Get the authenticated user (API guard).
      */
-    function current_user()
+    function current_user(): ?\App\Models\User
     {
-        return auth()->user();
+        return auth('api')->user();
     }
 }
 
@@ -440,7 +441,7 @@ if (! function_exists('file_size_readable')) {
     /**
      * Convert bytes to human-readable file size.
      */
-    function file_size_readable($bytes, int $decimals = 2): string
+    function file_size_readable(int|float $bytes, int $decimals = 2): string
     {
         $size = ['B', 'KB', 'MB', 'GB', 'TB'];
         $factor = floor((strlen((string) $bytes) - 1) / 3);

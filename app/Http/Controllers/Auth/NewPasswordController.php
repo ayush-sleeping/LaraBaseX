@@ -14,11 +14,12 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Show the password reset page
  * Handle an incoming new password request
-*/
+ */
 class NewPasswordController extends Controller
 {
     /* Show the password reset page. */

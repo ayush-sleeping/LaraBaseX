@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Password;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * Update the authenticated user's password
-*/
+ */
 class PasswordController extends Controller
 {
     /**

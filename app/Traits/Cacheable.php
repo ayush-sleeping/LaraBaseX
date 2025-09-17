@@ -25,7 +25,7 @@ use App\Services\QueryCacheService;
  * Clear cache when model is saved
  * Clear cache for this model
  * Get cache statistics for this model
-*/
+ */
 trait Cacheable
 {
     /* Get cache TTL for this model */
@@ -167,6 +167,7 @@ trait Cacheable
     public static function cachedPluck(string $column, ?string $key = null, ?int $ttl = null)
     {
         $key = $key ?? "pluck.{$column}";
+
         return static::cacheRemember($key, fn () => static::pluck($column), $ttl);
     }
 

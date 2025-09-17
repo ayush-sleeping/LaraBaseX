@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * AnalyticsController
-*/
+ */
 class AnalyticsController extends Controller
 {
     /* Display a listing of Analytics :: */
@@ -19,5 +18,4 @@ class AnalyticsController extends Controller
     {
         return Inertia::render('backend/analytics/index');
     }
-
 }

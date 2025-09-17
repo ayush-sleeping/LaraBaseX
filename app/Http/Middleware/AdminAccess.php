@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * AdminAccess Middleware ( Handles permission-based access control for admin routes. )
@@ -21,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Handle access denied
  * Log successful access
  * Log access denied
-*/
+ */
 class AdminAccess
 {
     /**

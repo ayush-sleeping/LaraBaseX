@@ -10,7 +10,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
  * AuthServiceProvider
  * - Registers authentication / authorization services
  * - Bootstraps authentication / authorization services
-*/
+ */
 class AuthServiceProvider extends ServiceProvider
 {
     /*

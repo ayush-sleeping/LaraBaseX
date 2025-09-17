@@ -38,7 +38,7 @@ class Role extends SpatieRoleModel implements RoleContract
     /** @var array<string> */
     protected $guarded = [];
 
-    /** @var string[] */
+    /** @var list<string> */
     protected $fillable = [
         'name',
         'guard_name',

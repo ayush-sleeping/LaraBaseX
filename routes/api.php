@@ -37,3 +37,7 @@ Route::middleware(['basic_auth'])->group(function () {
         Route::post('sliders', [HomeController::class, 'getSliders'])->name('api.sliders');
     });
 });
+
+// Health Check Routes (Public - No Authentication Required)
+Route::get('health', [HealthController::class, 'index'])->name('api.health');
+Route::get('health/detailed', [HealthController::class, 'detailed'])->name('api.health.detailed');

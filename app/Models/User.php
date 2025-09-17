@@ -16,7 +16,8 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements OAuthenticatable
 {
-    use Cacheable, HasApiTokens, HasFactory /* @phpstan-use HasFactory<User> */, Hashidable, HasRoles, LogsActivity, Notifiable;
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use Cacheable, HasApiTokens, HasFactory, Hashidable, HasRoles, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -57,9 +58,8 @@ class User extends Authenticatable implements OAuthenticatable
     /**
      * The attributes that should be appended to model's array form.
      *
-     * @var array<string>
+     * @var list<string>
      */
-    /** @var string[] */
     protected $appends = [
         'name',
         'full_name',
@@ -147,6 +147,7 @@ class User extends Authenticatable implements OAuthenticatable
      */
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, User>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, static>
      */
     public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -157,7 +158,7 @@ class User extends Authenticatable implements OAuthenticatable
      * Get the user who last updated this record.
      */
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, User>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, static>
      */
     public function updator(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

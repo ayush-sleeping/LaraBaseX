@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
  * Clear all query cache
  * Generate cache key from query and parameters
  * Cache a model query
-*/
+ */
 class QueryCacheService
 {
     /**
@@ -133,6 +133,7 @@ class QueryCacheService
                 'tags' => $tags,
                 'error' => $e->getMessage(),
             ]);
+
             return false;
         }
     }
@@ -141,6 +142,7 @@ class QueryCacheService
     public static function supportsTags(): bool
     {
         $driver = config('cache.default');
+
         return in_array($driver, ['redis', 'memcached']);
     }
 
@@ -195,9 +197,11 @@ class QueryCacheService
             }
             // For other drivers, we'd need to clear the entire cache
             Cache::flush();
+
             return true;
         } catch (\Exception $e) {
             Log::warning('Failed to clear query cache', ['error' => $e->getMessage()]);
+
             return false;
         }
     }

@@ -6,13 +6,14 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+
 /**
  * CODE STRUCTURE SUMMARY:
  * HandleInertiaRequests Middleware ( Manage Inertia.js requests )
  * root template that's loaded on the first page visit
  * Determines the current asset version
  * Define the props that are shared by default
-*/
+ */
 class HandleInertiaRequests extends Middleware
 {
     /**

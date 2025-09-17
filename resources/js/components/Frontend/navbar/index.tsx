@@ -1,6 +1,6 @@
 'use client';
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronDownIcon, CircleAlert, HomeIcon, Key, LayersIcon, Mail, MoonIcon, NotebookText, SunIcon } from 'lucide-react';
+import { ChevronDownIcon, CircleAlert, HomeIcon, Key, LayersIcon, Mail, NotebookText } from 'lucide-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../../lib/utils';
@@ -60,22 +60,22 @@ const HamburgerIcon = ({ className, ...props }: React.SVGAttributes<SVGElement>)
 );
 
 // Theme Toggle Component
-const ThemeToggle = ({ onThemeChange }: { onThemeChange?: (theme: 'light' | 'dark') => void }) => {
-    const [theme, setTheme] = useState<'light' | 'dark'>('light');
+// const ThemeToggle = ({ onThemeChange }: { onThemeChange?: (theme: 'light' | 'dark') => void }) => {
+//     const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-    const toggleTheme = () => {
-        const newTheme = theme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-        if (onThemeChange) onThemeChange(newTheme);
-    };
+//     const toggleTheme = () => {
+//         const newTheme = theme === 'light' ? 'dark' : 'light';
+//         setTheme(newTheme);
+//         onThemeChange?.(newTheme);
+//     };
 
-    return (
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggleTheme}>
-            {theme === 'light' ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
-            <span className="sr-only">Toggle theme</span>
-        </Button>
-    );
-};
+//     return (
+//         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggleTheme}>
+//             {theme === 'light' ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+//             <span className="sr-only">Toggle theme</span>
+//         </Button>
+//     );
+// };
 
 // User Menu Component
 const UserMenu = ({
@@ -138,7 +138,7 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
     userEmail?: string;
     userAvatar?: string;
     loginText?: string;
-    onThemeChange?: (theme: 'light' | 'dark') => void;
+    // onThemeChange?: (theme: 'light' | 'dark') => void;
     onUserItemClick?: (item: string) => void;
 }
 
@@ -162,7 +162,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
             userName = 'Root User',
             userEmail = 'root@example.com',
             userAvatar,
-            onThemeChange,
+            // onThemeChange,
             onUserItemClick,
             ...props
         },
@@ -338,4 +338,4 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
 );
 
 Navbar.displayName = 'Navbar';
-export { HamburgerIcon, Logo, ThemeToggle, UserMenu };
+export { HamburgerIcon, Logo, UserMenu };

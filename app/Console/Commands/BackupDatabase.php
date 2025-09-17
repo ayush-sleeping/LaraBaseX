@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
+
 use Illuminate\Console\Command;
 
 /**
@@ -8,8 +9,7 @@ use Illuminate\Console\Command;
  * name and signature of the console command
  * console command description
  * execute the console command
-*/
-
+ */
 class BackupDatabase extends Command
 {
     /**

@@ -80,7 +80,16 @@ jobs:
       - name: Test Health Endpoints
         run: |
           php artisan serve --port=8000 &
-          sleep 5
+          sleep 10
+          # Wait for server to be ready
+          for i in {1..30}; do
+            if curl -f http://localhost:8000/api/health >/dev/null 2>&1; then
+              echo "✅ Server is ready"
+              break
+            fi
+            echo "⏳ Waiting for server... ($i/30)"
+            sleep 1
+          done
           curl -f http://localhost:8000/api/health || exit 1
           curl -f http://localhost:8000/api/health/detailed || exit 1
         env:

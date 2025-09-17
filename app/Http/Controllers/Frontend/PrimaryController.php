@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use Mail;
+use App\Http\Controllers\Controller;
 use App\Mail\EnquiryMail;
-use Inertia\Inertia;
 use App\Models\Enquiry;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 
 class PrimaryController extends Controller
 {
     // Show the home page
-    public function home()
+    public function home(): Response
     {
         return Inertia::render('frontend/home/index');
     }
 
     // show the services page
-    public function services()
+    public function services(): Response
     {
         return Inertia::render('frontend/services/index');
     }
 
     // show the blogs page
-    public function blogs()
+    public function blogs(): Response
     {
         $blogs = [
             [
@@ -65,25 +67,26 @@ class PrimaryController extends Controller
                 'link' => 'https://ui.shadcn.com',
             ],
         ];
+
         return Inertia::render('frontend/blogs/index', compact('blogs'));
     }
 
     // show the about page
-    public function about()
+    public function about(): Response
     {
         return Inertia::render('frontend/about/index');
     }
 
     // Show the contact page
-    public function contact()
+    public function contact(): Response
     {
         return Inertia::render('frontend/contact/index');
     }
 
     // Store contact enquiry
-    public function ContactEnquiryStore(Request $request)
+    public function ContactEnquiryStore(Request $request): RedirectResponse
     {
-        //dd($request->all());
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
             'last_name' => 'required',
@@ -108,7 +111,7 @@ class PrimaryController extends Controller
         return redirect('/thankyou');
     }
 
-    public function thankYou()
+    public function thankYou(): Response
     {
         return Inertia::render('frontend/contact/thankYou');
     }

@@ -13,7 +13,7 @@ use Laravel\Telescope\TelescopeApplicationServiceProvider;
  * - Register any application services
  * - Prevent sensitive request details from being logged by Telescope.
  * - Register the Telescope gate
-*/
+ */
 class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 {
     /* Register any application services. */

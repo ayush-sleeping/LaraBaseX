@@ -1,14 +1,14 @@
 <?php
 
+use App\Http\Controllers\Backend\AnalyticsController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\EmployeeController;
-use App\Http\Controllers\Backend\AnalyticsController;
 use App\Http\Controllers\Backend\EnquiryController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
-use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Services\QueryCacheService;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /*
@@ -70,8 +70,6 @@ Route::middleware(['auth', 'verified', 'admin', 'preventBackHistory'])->group(fu
         // End of File
     });
 });
-
-
 
 // Cache test route
 // -------------------------------------------------------------------------------------------------------- ::
