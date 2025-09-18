@@ -99,8 +99,13 @@ class EmployeeController extends Controller
     /* Display the specified employee :: */
     public function show(Employee $employee): Response
     {
-        // Load the user relationship if not already loaded
-        $employee->load('user.roles');
+        // Load the user relationship with roles and permissions
+        $employee->load([
+            'user.roles:id,name',
+            'user.permissions:id,name',
+            'user.creator:id,first_name,last_name',
+            'user.updator:id,first_name,last_name'
+        ]);
 
         return Inertia::render('backend/employees/show', compact('employee'));
     }

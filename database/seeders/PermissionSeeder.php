@@ -145,7 +145,6 @@ class PermissionSeeder extends Seeder
     // Predefined system roles with assigned permissions
     public array $roles = [
         'RootUser' => [
-
             // Dashboard
             'dashboard-view',
 
@@ -178,7 +177,6 @@ class PermissionSeeder extends Seeder
             // End of Role Permission
         ],
         'Admin' => [
-
             // Dashboard
             'dashboard-view',
 

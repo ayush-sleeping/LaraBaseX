@@ -55,7 +55,8 @@ class UserController extends Controller
     public function create(): Response
     {
         $systemRoles = get_system_roles();
-        $roles = Role::whereNotIn('name', $systemRoles)->select('id', 'name')->orderBy('name')->get();
+        // $roles = Role::whereNotIn('name', $systemRoles)->select('id', 'name')->orderBy('name')->get();
+        $roles = Role::whereNotIn('name', ['Admin', 'RootUser'])->select('id', 'name')->orderBy('name')->get();
 
         return Inertia::render('backend/users/create', compact('roles'));
     }

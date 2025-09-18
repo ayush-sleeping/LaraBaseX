@@ -181,6 +181,7 @@ A package for recording user actions and changes for auditing.
 **Because of this, files of code:**
 - `config/activitylog.php`: Activity log configuration.
 - `app/Models/User.php`: Associates activity logs with users.
+- `app/Models/Role.php`: Tracks role creation/updates with creator information.
 - `app/Http/Controllers/*`: Logs actions in controllers.
 
 

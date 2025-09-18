@@ -290,4 +290,22 @@ class Role extends SpatieRoleModel implements RoleContract
     {
         return $query->withCount('permissions');
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * Get the creator's name for display purposes.
+     */
+    public function creatorName(): ?string
+    {
+        return $this->createdBy?->name;
+    }
 }

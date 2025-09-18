@@ -62,21 +62,15 @@ class SampleDataSeeder extends Seeder
         $employees = [
             [
                 'user_id' => $userModels[0]->id,
-                'emp_id' => 'EMP001',
+                'emp_id' => 'EMP-0001',
                 'personal_email' => 'alice.personal@company.com',
                 'designation' => 'RootUser',
             ],
             [
                 'user_id' => $userModels[1]->id,
-                'emp_id' => 'EMP002',
+                'emp_id' => 'EMP-0002',
                 'personal_email' => 'bob.personal@company.com',
                 'designation' => 'Admin',
-            ],
-            [
-                'user_id' => $userModels[2]->id,
-                'emp_id' => 'EMP003',
-                'personal_email' => 'charlie.personal@company.com',
-                'designation' => 'User',
             ],
         ];
         foreach ($employees as $empData) {
